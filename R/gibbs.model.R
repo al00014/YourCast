@@ -38,44 +38,44 @@
 
 gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
   
-   ebase    <- get("env.base", env=parent.frame())
+   ebase    <- get("env.base", envir=parent.frame())
    env.base <- ebase
-   ewho <- get("env.who", env=ebase)
-   verbose <- get("verbose", env=ebase)
+   ewho <- get("env.who", envir=ebase)
+   verbose <- get("verbose", envir=ebase)
    messout("Running Bayes model", verbose)
    lst <- cxc();
    
    
-   ecxc <- get("env.cxc", env=ebase)
+   ecxc <- get("env.cxc", envir=ebase)
    
-   who.age.digits <- get("who.age.digits", env=ewho)
+   who.age.digits <- get("who.age.digits", envir=ewho)
    if(length(nsample) <= 0)
-    nsample <- get("nsample", env=ewho)
-   XX <- get("XX", env=ewho)
+    nsample <- get("nsample", envir=ewho)
+   XX <- get("XX", envir=ewho)
    ### the following is necessary because we need to subtract the mean of the prior from whoinsampy
    Xy <- Xy.only(env.base)
 
    
-   sigma.hat.csid <- get("sigma.ols", env=ecxc)
-   who.Ha.sigma   <- get("who.Ha.sigma", env=ewho)
-   who.Ha.sigma.sd   <- get("who.Ha.sigma.sd", env=ewho)
-   who.Hat.sigma  <- get("who.Hat.sigma", env=ewho)
-   who.Hat.sigma.sd   <- get("who.Hat.sigma.sd", env=ewho)
-   who.Ht.sigma   <- get("who.Ht.sigma", env=ewho)
-   who.Ht.sigma.sd   <- get("who.Ht.sigma.sd", env=ewho)
-   who.Hct.sigma  <- get("who.Hct.sigma", env=ewho)
-   who.Hct.sigma.sd   <- get("who.Hct.sigma.sd", env=ewho)
-   who.zero.mean <- get("who.zero.mean", env=ewho)
-   whoinsampx <- get("whoinsampx", env=ewho)
-   whoutsampx <- get("whoutsampx", env=ewho)
-   whoinsampy <- get("whoinsampy",env=ewho);
-   whoutsampy <- get("whoutsampy", env=ewho) 
-   age.vec   <- get("age.vec", env=ewho)
-   cntry.vec <- get("cntry.vec", env=ewho)
-   whoyrest <- get("whoyrest", env=ewho)
-   cntry.names.lst <- get("cntry.names.lst", env=ewho)
-   tol <- get("solve.tol", env=ewho)
-   verbose <- get("verbose", env=ebase)
+   sigma.hat.csid <- get("sigma.ols", envir=ecxc)
+   who.Ha.sigma   <- get("who.Ha.sigma", envir=ewho)
+   who.Ha.sigma.sd   <- get("who.Ha.sigma.sd", envir=ewho)
+   who.Hat.sigma  <- get("who.Hat.sigma", envir=ewho)
+   who.Hat.sigma.sd   <- get("who.Hat.sigma.sd", envir=ewho)
+   who.Ht.sigma   <- get("who.Ht.sigma", envir=ewho)
+   who.Ht.sigma.sd   <- get("who.Ht.sigma.sd", envir=ewho)
+   who.Hct.sigma  <- get("who.Hct.sigma", envir=ewho)
+   who.Hct.sigma.sd   <- get("who.Hct.sigma.sd", envir=ewho)
+   who.zero.mean <- get("who.zero.mean", envir=ewho)
+   whoinsampx <- get("whoinsampx", envir=ewho)
+   whoutsampx <- get("whoutsampx", envir=ewho)
+   whoinsampy <- get("whoinsampy",envir=ewho);
+   whoutsampy <- get("whoutsampy", envir=ewho) 
+   age.vec   <- get("age.vec", envir=ewho)
+   cntry.vec <- get("cntry.vec", envir=ewho)
+   whoyrest <- get("whoyrest", envir=ewho)
+   cntry.names.lst <- get("cntry.names.lst", envir=ewho)
+   tol <- get("solve.tol", envir=ewho)
+   verbose <- get("verbose", envir=ebase)
    if (!is.logical(who.zero.mean)) {
      who.mean.age.profile <- who.zero.mean;
      func <- function(x,param){x-param};
@@ -112,7 +112,7 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
   age.prior <- (!is.na(who.Ha.sigma) || !is.na(who.Ht.sigma) || !is.na(who.Hat.sigma) )
 
    if (age.prior == T){
-    evage <- try(get("env.gibbs.age", env= ebase), silent=T)
+    evage <- try(get("env.gibbs.age", envir= ebase), silent=T)
   
     if (class(evage) == "try-error" || bool == F )
       evage <- try(gibbs.age.cnst(ebase))
@@ -123,32 +123,32 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
 ### cntry prior
  
   if (!is.na(who.Hct.sigma)){
-    evcntry <-  try(get("env.gibbs.cntry", env= ebase), silent=T)
+    evcntry <-  try(get("env.gibbs.cntry", envir= ebase), silent=T)
     if (class(evcntry) == "try-error" ||  bool== F)
       evcntry <- gibbs.cntry.cnst(ebase)
-    isle.cntry    <- get("isle.cntry", env = evcntry)
+    isle.cntry    <- get("isle.cntry", envir= evcntry)
     messout("Isolated cntry's are ", verbose, obj=isle.cntry)
-    cntry.related <- get("cntry.related", env=evcntry)
+    cntry.related <- get("cntry.related", envir=evcntry)
     messout("Related cntry's are ", verbose, obj=cntry.related)
    
      }
 ###
   cntry.char <- as.character(cntry.vec)
   
-  age.char  <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+  age.char  <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
   if ( age.prior == T){
     
-    Ltheta.agprior.csid.lst <- get("Ltheta.agprior.csid.lst", env=evage)
+    Ltheta.agprior.csid.lst <- get("Ltheta.agprior.csid.lst", envir=evage)
       
-    Ltheta.tmprior.csid.lst <- get("Ltheta.tmprior.csid.lst", env=evage)
-    Ltheta.agtmprior.csid.lst <- get("Ltheta.agtmprior.csid.lst", env=evage)
+    Ltheta.tmprior.csid.lst <- get("Ltheta.tmprior.csid.lst", envir=evage)
+    Ltheta.agtmprior.csid.lst <- get("Ltheta.agtmprior.csid.lst", envir=evage)
   }
     
   if (!is.na(who.Hct.sigma))
-    Ltheta.ctprior.csid.lst <- get("Ltheta.ctprior.csid.lst", env=evcntry)
+    Ltheta.ctprior.csid.lst <- get("Ltheta.ctprior.csid.lst", envir=evcntry)
   
   if(length(cxc.beta) <=0 )
-     beta.hat.csid  <- get("coeff", env=ecxc)
+     beta.hat.csid  <- get("coeff", envir=ecxc)
   else
      beta.hat.csid <- cxc.beta
 
@@ -172,7 +172,7 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
             next; }
      for(a in 1:length(age.vec)){
      if (!is.na(who.Ha.sigma) || !is.na(who.Hat.sigma))  
-      betas <- gibbs.age.beta(cntry =cntry.char[c], age= age.char[a],
+      betas <- gibbs.age.beta(cntry =cntry.char[c], age.select= age.char[a],
                               cxc.beta=beta.hat.csid, sigma.ols= sigma.hat.csid,
                               Ha.theta=Ha.theta,Ht.theta=Ht.theta,Hat.theta=Hat.theta)    
       beta.bar.age.ca <-  0
@@ -194,7 +194,7 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
           messout(paste("Isolated cntry ",cntry.vec[c], " and age group ", age.vec[a], sep=""),verbose)
        }
        if( is.na(is.isle)){
-         betac <- gibbs.cntry.beta(age=age.char[a], cntry=cntry.char[c],
+         betac <- gibbs.cntry.beta(age=age.char[a], cntry.select=cntry.char[c],
                                    cxc.beta=beta.hat.csid, Hct.theta=Hct.theta)
          beta.bar.cntry.ca <- (betac$btheta.bar.cntry.ca) * Hct.theta}
        }
@@ -215,7 +215,7 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
       n3 <- length(row.vec3)
       if(n3 > n) row.vec <- row.vec3
     }else{
-      coeff <- get("coeff", env=ecxc)
+      coeff <- get("coeff", envir=ecxc)
       inx <- grep(csid,names(coeff))
       row.vecn <- rownames(coeff[[inx]])
       nn <- length(row.vecn)
@@ -421,7 +421,7 @@ gibbs.sampler <- function(nsample=NULL,cxc.beta=NULL,bool=TRUE ){
  lst <- list(yrest=whoyrest,model=model,age.vec=age.vec, cntry.lst=cntry.names.lst,
               coeff=coeff,yhatin=yhatin,yhatout=yhatout,std=V.csid,
               insampy =whoinsampy,outsampy=whoutsampy)
-  assign("lst.output", lst, env=ewho)
+  assign("lst.output", lst, envir=ewho)
  return(invisible(lst))
 ###  return(beta.hat.csid);
 ## end function gibbs.sampler

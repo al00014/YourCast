@@ -36,27 +36,27 @@
 ## ************************************************************************
 
 glm.poisson <- function(ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  verbose <- get("verbose", envir=ebase)
   messout("Running Poisson with glm-modified", verbose)
   ttmp <- proc.time()
 
-  whoinsampy <- get("whoinsampy", env=ewho)
-  whoutsampy <- get("whoutsampy", env=ewho)
-  whopopul   <- get("whopopul", env=ewho)
-  whopopulos <- get("whopopulos", env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  whoutsampx <- get("whoutsampx", env=ewho)
-  whocov   <- get("whocov", env=ewho)
-  whoyrest <- get("sample.frame", env=ewho)[2]
-  age.vec  <- get("age.vec", env=ewho)
-  delta.tol <- get("delta.tol", env=ewho)
-  tol <- get("tol", env=ewho)
-  cntry.names.lst <- try(get("cntry.names.lst", env=ewho), silent=T) 
-  log.p <- try(get("log.poiss", env=ewho), silent=T)
-  ff <- try(get("formula", env=ewho), silent=T)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  whoutsampy <- get("whoutsampy", envir=ewho)
+  whopopul   <- get("whopopul", envir=ewho)
+  whopopulos <- get("whopopulos", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  whoutsampx <- get("whoutsampx", envir=ewho)
+  whocov   <- get("whocov", envir=ewho)
+  whoyrest <- get("sample.frame", envir=ewho)[2]
+  age.vec  <- get("age.vec", envir=ewho)
+  delta.tol <- get("delta.tol", envir=ewho)
+  tol <- get("tol", envir=ewho)
+  cntry.names.lst <- try(get("cntry.names.lst", envir=ewho), silent=T) 
+  log.p <- try(get("log.poiss", envir=ewho), silent=T)
+  ff <- try(get("formula", envir=ewho), silent=T)
   ls <- as.character(ff)[2]
   ixdiv <- grep("/", ls)
   linx <- (length(ixdiv) > 0)
@@ -171,15 +171,15 @@ glm.poisson <- function(ebase=env.base){
     }
 ###   print("Time spent with ols-glm: "); print(proc.time() - ttmp)
   rm(ttmp)
-   assign("whocov", whocov, env= ewho)
-   assign("whoinsampx", whoinsampx, env= ewho)
-   assign("whoutsampx", whoutsampx, env=ewho)
+   assign("whocov", whocov, envir= ewho)
+   assign("whoinsampx", whoinsampx, envir= ewho)
+   assign("whoutsampx", whoutsampx, envir=ewho)
    model <- model.string()  
    lst <- list(yrest=whoyrest,
               model=model, age.vec=age.vec, cntry.lst=cntry.names.lst,
               coeff=coeff,yhatin=yhatin,yhatout=yhatout,std=std,
                insampy=whoinsampy,outsampy=whoutsampy)
-   assign("lst.output", lst, env=ewho)
+   assign("lst.output", lst, envir=ewho)
    return(lst)
         
 }

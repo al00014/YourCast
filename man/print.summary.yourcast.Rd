@@ -5,7 +5,7 @@
 
 \description{summary.yourcast class print function}
 
-\usage{print.summary.yourcast(x, ...)}
+\usage{\method{print}{summary.yourcast}(x, ...)}
 
 \arguments{
   \item{x}{\code{\link{summary.yourcast}} output object to be printed}

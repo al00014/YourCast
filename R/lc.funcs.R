@@ -1,31 +1,31 @@
 lc <- function(ebase){
  
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase);
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase);
+  verbose <- get("verbose", envir=ebase)
  
-  age.vec <- get("age.vec", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
 
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  whoyrest <- try(get("whoyrest", env=ewho), silent=T)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  whoyrest <- try(get("whoyrest", envir=ewho), silent=T)
   if(class(whoyrest)=="try-error"){
-    yrest <- get("yrest", env=ebase)
+    yrest <- get("yrest", envir=ebase)
     whoyrest <- yrest
   }
   
-  whoinsampy <- get("whoinsampy", env = ewho)
-  whoutsampy <- get("whoutsampy", env=ewho)
+  whoinsampy <- get("whoinsampy", envir= ewho)
+  whoutsampy <- get("whoutsampy", envir=ewho)
  
 ### to otput with model 
  
-  cntry.vec <- get("cntry.vec", env=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
   n.cntry <- length(cntry.vec)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.names.lst <- get("cntry.names.lst", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.names.lst <- get("cntry.names.lst", envir=ewho)
   
 ### the structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
@@ -58,7 +58,7 @@ lc <- function(ebase){
     model <- model.string()
     lst <- list(yrest=whoyrest,model=model,age.vec=age.vec, cntry.lst=cntry.names.lst,
                 coeff=coeff,yhatin=yhatin,yhatout=yhatout, insampy =whoinsampy, outsampy=whoutsampy)
-    assign("lst.output", lst, env=ewho)
+    assign("lst.output", lst, envir=ewho)
     return(lst);
 }
 

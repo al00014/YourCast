@@ -34,18 +34,18 @@
 ## ************************************************************************
 
 build.C.age.time <- function(W.age,time.prior.param, env.base) {
-  ebase <- get("env.base", env=parent.frame())
-  ewho <- get("env.who", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  verbose <- get("verbose", env=ewho)
+  ebase <- get("env.base", envir=parent.frame())
+  ewho <- get("env.who", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  verbose <- get("verbose", envir=ewho)
   n.cntry <- length(cntry.vec)
   n.age <- length(age.vec)
  
-  who.digit.first  <-  get("who.digit.first", env=ewho)
-  who.cntry.digits <-  get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  whocov <- get("whocov", env=ewho)
+  who.digit.first  <-  get("who.digit.first", envir=ewho)
+  who.cntry.digits <-  get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
  
 ### structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
@@ -53,7 +53,7 @@ build.C.age.time <- function(W.age,time.prior.param, env.base) {
   digit.age.begin   <- digit.cntry.end + 1
   digit.age.end     <- digit.cntry.end + who.age.digits
 
-  age.char <- formatC(age.vec,wid= who.age.digits, format="d", flag="0")
+  age.char <- formatC(age.vec,width= who.age.digits, format="d", flag="0")
   paste.char <- function(x, y){ paste(x, y, sep="")}
   age.comb <- kronecker(age.char, age.char, FUN=paste.char)
 ### check Wij to store only those elements of age.comb, for which Wij != 0
@@ -115,16 +115,16 @@ build.C.age.time <- function(W.age,time.prior.param, env.base) {
 ## ************************************************************************
 
 cov.age.time.cor <- function(cntry, W,time.prior.param, age.char,age.comb, ebase){
-  ebase <- get("env.base", env=parent.frame())
-  ewho <- get("env.who", env=ebase)
-  verbose <- get("verbose", env=ewho)
+  ebase <- get("env.base", envir=parent.frame())
+  ewho <- get("env.who", envir=ebase)
+  verbose <- get("verbose", envir=ewho)
   env.base <- ebase
   
-  age.vec <- get("age.vec", env=ewho)
-  who.digit.first  <-  get("who.digit.first", env=ewho)
-  who.cntry.digits <-  get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  whocov <- get("whocov", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  who.digit.first  <-  get("who.digit.first", envir=ewho)
+  who.cntry.digits <-  get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
 ### structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -146,7 +146,7 @@ cov.age.time.cor <- function(cntry, W,time.prior.param, age.char,age.comb, ebase
   whocov[indx] <- lapply(whocov[indx], na.omit)
 ### to pass as a reference ord in/out, create the nev to save it
   etrial <- environment(); 
-  assign("indx0",vector( ,length=0), env=etrial)
+  assign("indx0",vector( ,length=0), envir=etrial)
   ages <- substr(names(whocov[indx]),digit.age.begin,digit.age.end)
 ### f.age <- sort(ages)[1])
   f.age <- min(as.numeric(ages))
@@ -181,15 +181,15 @@ cov.age.time.cor <- function(cntry, W,time.prior.param, age.char,age.comb, ebase
       if( x %% n.age == 0) x1 <- x1 + n.age 
 ### matrices indexing  dx; just counts element of whocov with cntry 
       dx <- x1 + n.ind * (y1 -1)
-      indx0 <- get("indx0", env=etrial, inherits =T)
+      indx0 <- get("indx0", envir=etrial, inherits =T)
 ### if symmetry, do not calculate matrices that belongs to inds
       if (is.element(x,inds) && ny != f.age){  ##if1 symmetry
         cxy <- NA
-        assign("indx0",c(indx0, dx), env=etrial)
+        assign("indx0",c(indx0, dx), envir=etrial)
       }else{  ##if1 symmetry
 ###  do not store matrices for W=0; just for the extra space    
         if (W[dx] == 0) {  ##if2 W=0
-          assign("indx0",c(indx0, dx), env=etrial)
+          assign("indx0",c(indx0, dx), envir=etrial)
           cxy <- NA  
         } else  {cxy <- C.matrix(whocov[[x]],whocov[[y]],time.prior.param)} ##if2 W != 0 
       } ## end if1 symmetry
@@ -204,7 +204,7 @@ cov.age.time.cor <- function(cntry, W,time.prior.param, age.char,age.comb, ebase
   },time.prior.param,etrial) ##closing fun1
   
    names(C.list) <- vnm
-   indx0 <- get("indx0", env=etrial, inherits=T)
+   indx0 <- get("indx0", envir=etrial, inherits=T)
    rm(etrial)
 ### check the right names
   if( any(names(C.list) != attr(C.list,"names"[1])))
@@ -229,12 +229,12 @@ return(invisible(C.list))}
 ###                     return(x)})}
 ### this function is not actually needed, instead
 conv.char <- function(agx, dg=NULL,ebase=env.base){
-             ebase <- get("env.base", env=parent.frame())
+             ebase <- get("env.base", envir=parent.frame())
              env.base <- ebase
           
              if (length(dg) <= 0)
-               dg <- get("who.age.digits", env=get("env.who", env=ebase))
-             return (formatC(agx,wid=dg,format="d", flag="0"))}
+               dg <- get("who.age.digits", envir=get("env.who", envir=ebase))
+             return (formatC(agx,width=dg,format="d", flag="0"))}
 
 
 ## ************************************************************************
@@ -276,13 +276,13 @@ conv.char <- function(agx, dg=NULL,ebase=env.base){
     
   
 cntry.Xprime.X <- function(cntry,Xmat, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <-  get("who.digit.first", env=ewho)
-  who.cntry.digits <-  get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  who.year.digits <- get("who.year.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <-  get("who.digit.first", envir=ewho)
+  who.cntry.digits <-  get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  who.year.digits <- get("who.year.digits", envir=ewho)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -360,11 +360,11 @@ cntry.Xprime.X <- function(cntry,Xmat, ebase=env.base){
     
     
 cntry.Xprime.Y <- function(cntry,X,Y, ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
    env.base <- ebase
-   ewho <- get("env.who", env=ebase)
-   age.vec <- get("age.vec", env=ewho)
-   who.age.digits <- get("who.age.digits", env=ewho)
+   ewho <- get("env.who", envir=ebase)
+   age.vec <- get("age.vec", envir=ewho)
+   who.age.digits <- get("who.age.digits", envir=ewho)
    ctr  <- paste("^", cntry, sep="")
    indx <- grep(ctr, names(X))
    indy <- grep(ctr, names(Y))
@@ -372,25 +372,25 @@ cntry.Xprime.Y <- function(cntry,X,Y, ebase=env.base){
       stop("build.Y: X(y) no match")
    whoyg <- Y[indy]
    whoxg <- X[indy]
-   age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+   age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
    names(whoyg) <- age.char
    names(whoxg) <- age.char
 ### create etrial so that whoyg and whoxg are stored
    etrial <- environment()
-   assign("whoyg", whoyg, env=etrial)
-   assign("whoxg", whoxg, env=etrial)
+   assign("whoyg", whoyg, envir=etrial)
+   assign("whoxg", whoxg, envir=etrial)
 ### assuming that whoyg may have years with NA's; remove them
 ### for dth (whoyg) and covariates (whoxg) 
    isna <- lapply(1:length(indy), function(y, etrial){
                 mat  <- Y[[indy[y]]]
                 isna <- unique.default(row(mat)[is.na(mat)])
                 if(length(isna) > 0){
-                  whoyg <- get("whoyg", env=etrial, inherits=T)
-                  whoxg <- get("whoxg", env=etrial, inherits=T)
+                  whoyg <- get("whoyg", envir=etrial, inherits=T)
+                  whoxg <- get("whoxg", envir=etrial, inherits=T)
                 whoyg[[y]] <- whoyg[[y]][-isna,] 
                 whoxg[[y]] <- whoxg[[y]][-isna,]} ##end ifisna
-                assign("whoyg", whoyg, env=etrial)
-                assign("whoxg", whoxg, env=etrial)
+                assign("whoyg", whoyg, envir=etrial)
+                assign("whoxg", whoxg, envir=etrial)
                 bool <- nrow(whoxg[[y]]) != length(whoyg[[y]]) &&
                 length(whoxg[[y]]) > 0 && length(whoyg[[y]]) > 0
                   bool <- na.omit(bool)
@@ -399,10 +399,10 @@ cntry.Xprime.Y <- function(cntry,X,Y, ebase=env.base){
                 if (length(whoxg[[y]]) > 0 && length(whoyg[[y]]) > 0)
                   whoxg[[y]] <- data.frame(t(whoyg[[y]]) %*% whoxg[[y]])
                 
-                assign("whoxg", whoxg, env=etrial)
+                assign("whoxg", whoxg, envir=etrial)
                 
                 },etrial)
-   yb <- get("whoxg", env=etrial) 
+   yb <- get("whoxg", envir=etrial) 
    yb <- unlist(yb,recursive=T, use.names=T)
    vnm <- names(yb)
    yb <- as.matrix(yb)
@@ -418,13 +418,13 @@ cntry.Xprime.Y <- function(cntry,X,Y, ebase=env.base){
 ###
 ### Driver test0 
 all.test0.D <- function(wmat=NULL,ebase=env.base){
-ebase <- get("env.base", env=parent.frame())
+ebase <- get("env.base", envir=parent.frame())
 env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-               cntry.vec <- get("cntry.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+               cntry.vec <- get("cntry.vec", envir=ewho)
                n.cntry <- length(cntry.vec)
-               who.C.age <- get("who.C.age", env =ewho)
-               age.vec <- get("age.vec", env=ewho)
+               who.C.age <- get("who.C.age", envir=ewho)
+               age.vec <- get("age.vec", envir=ewho)
                for(i in 1:n.cntry){
  
                Di <- make.age.time.prior.matrix(cntry.vec[i],age.vec,wmat,who.C.age, env.base)
@@ -446,13 +446,13 @@ else
 ### wmat <- t(M) %*% M, where M <- first(17) or M <- n.diff(2, 17)
 ### see last test for more details on how to set only 1st and 2nd
 all.test1.D <- function(wmat=NULL, ebase= env.base){
-              ebase <- get("env.base", env=parent.frame())
+              ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-              ewho <- get("env.who", env=ebase)
-               cntry.vec <- get("cntry.vec", env=ewho)
+              ewho <- get("env.who", envir=ebase)
+               cntry.vec <- get("cntry.vec", envir=ewho)
                n.cntry <- length(cntry.vec)
-                who.C.age <- get("who.C.age", env =ewho)
-               age.vec <- get("age.vec", env=ewho)
+                who.C.age <- get("who.C.age", envir=ewho)
+               age.vec <- get("age.vec", envir=ewho)
                for(i in 1:n.cntry){
  
                Di <- make.age.time.prior.matrix(cntry.vec[i],age.vec,wmat,who.C.age, env.base)
@@ -460,16 +460,16 @@ all.test1.D <- function(wmat=NULL, ebase= env.base){
                test1.D(Di, cntry.vec[i])}}
 
 test1.D <- function(D=NULL, cntry=NULL,ebase=parent.frame()){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
    env.base <- ebase
   ###identical(.GlobalEnv, environment())
   print(environment())
-  ewho <- get("env.who", env=ebase)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
-   who.C.age <- try(get("who.C.age", env=ewho))
+  ewho <- get("env.who", envir=ebase)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+   who.C.age <- try(get("who.C.age", envir=ewho))
    if(class(who.C.age) == "try-error")
-     who.C.age <- get("who.C.age", env=ebase)
+     who.C.age <- get("who.C.age", envir=ebase)
  if(class(who.C.age) == "try-error")
    {
      print("Missing who.C.age")
@@ -508,10 +508,10 @@ test1.D <- function(D=NULL, cntry=NULL,ebase=parent.frame()){
 ###
 ### Driver for test2.C
 all.test2.C <- function(ebase=env.base){
-              ebase <- get("env.base", env=parent.frame())
+              ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-               ewho <- get("env.who", env=ebase)
-               cntry.vec <- get("cntry.vec", env=ewho)
+               ewho <- get("env.who", envir=ebase)
+               cntry.vec <- get("cntry.vec", envir=ewho)
                n.cntry <- length(cntry.vec)
                print("test done with W matrix all 1; for all ages combo")
                for(i in 1:n.cntry){
@@ -519,13 +519,13 @@ all.test2.C <- function(ebase=env.base){
                print("if no messages previous to this you did well")}
 
 test2.C <- function(cntry=NULL, ebase=parent.frame()){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  cntry.vec <- get("cntry.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  cntry.vec <- get("cntry.vec", envir=ewho)
   n.cntry <- length(cntry.vec)
-  age.vec <- get("age.vec", env=ewho)
-  whocov <- get("whocov", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
   ctr <- paste("^", as.character(cntry),sep="")
 ### can only grep one value or element at a time 
   indx <- grep(ctr, names(whocov))
@@ -545,7 +545,7 @@ test2.C <- function(cntry=NULL, ebase=parent.frame()){
 ### need to be global, otherwise cov.age.cor do not see them
   whostore <- whocov
   whocov[indx] <- Qcov
-  assign("whocov", whocov, env=ewho)
+  assign("whocov", whocov, envir=ewho)
   wmat <- matrix(1, nrow=length(age.char), ncol=length(age.char))
   res <- cov.age.time.cor(cntry, wmat, age.char,age.comb)
   res <- lapply(res, function(x){
@@ -561,26 +561,26 @@ test2.C <- function(cntry=NULL, ebase=parent.frame()){
               return(x)})
 ### go back to the good values
   whocov <- whostore
-  assign("whocov", whocov, env=ewho)
+  assign("whocov", whocov, envir=ewho)
   return(invisible(res))
                             }
 ### Driver for test3.X
 all.test3.X <- function(ebase=env.base){
-              ebase <- get("env.base", env=parent.frame())
+              ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-               ewho <- get("env.who", env=ebase)
-               cntry.vec <- get("cntry.vec", env=ewho)
+               ewho <- get("env.who", envir=ebase)
+               cntry.vec <- get("cntry.vec", envir=ewho)
                n.cntry <- length(cntry.vec)
                for(i in 1:n.cntry){
                test3.X(cntry.vec[i])}
               print("if no messages previous to this you did well")}
 
 test3.X <- function(cntry=NULL, ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
  ctr <- paste("^", as.character(cntry),sep="")
 ### can only grep one value or element at a time 
   indx <- grep(ctr, names(whoinsampx))
@@ -626,11 +626,11 @@ test3.X <- function(cntry=NULL, ebase=env.base){
 ### 1st and 2nd derivatives, which are explicitly defined here
 ###
 all.test4.D <- function(derivative=NULL, ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-                 ewho <- get("env.who", env=ebase)
-                 cntry.vec <- get("cntry.vec", env=ewho)
-                 who.C.age <- get("who.C.age", env =ewho)
+                 ewho <- get("env.who", envir=ebase)
+                 cntry.vec <- get("cntry.vec", envir=ewho)
+                 who.C.age <- get("who.C.age", envir=ewho)
                  n.cntry <- length(cntry.vec)
                  if(derivative==2){
                  M  <- n.diff(2,17)
@@ -648,25 +648,25 @@ all.test4.D <- function(derivative=NULL, ebase=env.base){
                  cat("derivative must be 1 or 2; you gave me:  ")
                  print(derivative)
                  stop("enter correct derivative")}
-   age.vec <- get("age.vec", env=ewho)
+   age.vec <- get("age.vec", envir=ewho)
                for(i in 1:n.cntry){
                    Di <- make.age.time.prior.matrix(cntry.vec[i],age.vec,wmat,who.C.age, env.base)
            
                test4.D(Di, cntry.vec[i],derivative=derivative)}}
 
 test4.D <- function(D=NULL, cntry=NULL,derivative=NULL, ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
               env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
   identical(.GlobalEnv, environment())
   print(environment())
   ctr  <- paste("^", cntry, sep="")
   indx <- grep(ctr, names(who.C.age))
   age.char <- conv.char(age.vec)
-   who.C.age <- try(get("who.C.age", env=ewho))
+   who.C.age <- try(get("who.C.age", envir=ewho))
    if(class(who.C.age) == "try-error")
-     who.C.age <- get("who.C.age", env=ebase)
+     who.C.age <- get("who.C.age", envir=ebase)
  if(class(who.C.age) == "try-error")
    {
      print("Missing who.C.age")
@@ -725,9 +725,9 @@ test4.D <- function(D=NULL, cntry=NULL,derivative=NULL, ebase=env.base){
 
 
 make.sigma <- function(param=list(sigma.bar=1,use.deaths=FALSE,average=TRUE,model.based=FALSE), ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   sigma.bar <- param$sigma.bar;
   use.deaths <- param$use.deaths;
   average <- param$average;
@@ -740,8 +740,8 @@ make.sigma <- function(param=list(sigma.bar=1,use.deaths=FALSE,average=TRUE,mode
   if (is.null(use.deaths)) use.deaths <- FALSE;
   if (is.null(average)) average <- TRUE;
   if (is.null(sigma.bar)) sigma.bar <-  1;
-   whoinsampy <- get("whoinsampy", env=ewho)
-   whopopul <- get("whopopul", env=ewho)
+   whoinsampy <- get("whoinsampy", envir=ewho)
+   whopopul <- get("whopopul", envir=ewho)
   ### First some sanity checks
   ### We have to be clear about which model we use
   if (use.deaths == TRUE && model.based == TRUE)
@@ -865,16 +865,16 @@ C.matrix <- function(Zi,Zj,time.prior.param){
 ## ************************************************************************
 
 make.age.time.prior.matrix <- function(cntry,age.vec=NULL, wmat,C.mat, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   if(length(age.vec) <= 0)
-    age.vec <- get("age.vec", env=ewho)
-  who.digit.first <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits <- get("who.year.digits", env=ewho)
-  verbose <- get("verbose", env=ebase)
+    age.vec <- get("age.vec", envir=ewho)
+  who.digit.first <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits <- get("who.year.digits", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -888,7 +888,7 @@ make.age.time.prior.matrix <- function(cntry,age.vec=NULL, wmat,C.mat, ebase=env
 ### select only one country from cntry.vec
     ctr  <- paste("^", cntry, sep="")
     indx <- grep(ctr, names(C.mat))
-    age.char <- formatC(age.vec,wid=who.age.digits,format="d", flag="0")
+    age.char <- formatC(age.vec,width=who.age.digits,format="d", flag="0")
 ### find indeces of submatrices correlation for same age groups, i.e. 
 ### itage are indeces of C.mat whose corresponding matrices
 ### are the diagonal sub-matrices of the block matrix
@@ -988,12 +988,12 @@ make.age.time.prior.matrix <- function(cntry,age.vec=NULL, wmat,C.mat, ebase=env
 ## ************************************************************************
 
   omega.cntry.all <- function(){
-    ebase <- get("env.base", env=parent.frame())
+    ebase <- get("env.base", envir=parent.frame())
     env.base <- ebase
-    verbose <- get("verbose", env=ebase)
-     ewho <- get("env.who", env=ebase)
-     Hct.c.deriv <- get("who.Hct.c.deriv", env=ewho)
-     c.vec  <- get("cntry.vec", env=ewho)
+    verbose <- get("verbose", envir=ebase)
+     ewho <- get("env.who", envir=ebase)
+     Hct.c.deriv <- get("who.Hct.c.deriv", envir=ewho)
+     c.vec  <- get("cntry.vec", envir=ewho)
   
 ###    print(dim(Hct.c.deriv))
      cntry.weight <- (build.priors(Hct.c.deriv,c.vec))$cntry.weight
@@ -1024,9 +1024,9 @@ make.age.time.prior.matrix <- function(cntry,age.vec=NULL, wmat,C.mat, ebase=env
 ## it is a different version of function build.adjacency.mat
 
 build.adjacency <- function(cntry.vec=NULL, Wcntry=NULL,verbose=T){
- env.base <- try(get("env.base", env=parent.frame()),silent=T)
+ env.base <- try(get("env.base", envir=parent.frame()),silent=T)
  if(class(env.base)!="try-error")
-   verbose <- get("verbose", env=env.base)
+   verbose <- get("verbose", envir=env.base)
   if (length(Wcntry) <= 0)
     Wcntry <- omega.cntry.all()
  
@@ -1035,10 +1035,10 @@ build.adjacency <- function(cntry.vec=NULL, Wcntry=NULL,verbose=T){
       messout("All countries in data set are included in correlation matrix.", verbose)
       return(Wcntry)
     }else if(length(cntry.vec) <= 0 ){
-      ebase <- get("env.base", env=parent.frame())
+      ebase <- get("env.base", envir=parent.frame())
       env.base <- ebase
-      ewho <- get("env.who", env=ebase)
-      cntry.vec <- get("cntry.vec", env=ewho)}
+      ewho <- get("env.who", envir=ebase)
+      cntry.vec <- get("cntry.vec", envir=ewho)}
  ind.row <- match(cntry.vec, rownames(Wcntry))
  ind.col <- match(cntry.vec, colnames(Wcntry))
  Wcntry <- Wcntry[ind.row, ind.col]
@@ -1076,9 +1076,9 @@ build.adjacency <- function(cntry.vec=NULL, Wcntry=NULL,verbose=T){
 ## ************************************************************************
 
 cntry.lst.correlation <- function(cntry,cntry.vec=NULL,verbose=T){
-  ebase <- try(get("env.base", env=parent.frame()),silent=T)
+  ebase <- try(get("env.base", envir=parent.frame()),silent=T)
   if(class(ebase)!="try-error")
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
   if(length(cntry.vec) <=0){
     m <- paste("Correlation for cntry-code=", cntry, "and all available cntrys in data set.", sep="")
     messout(m, verbose)
@@ -1137,20 +1137,20 @@ cntry.lst.correlation <- function(cntry,cntry.vec=NULL,verbose=T){
     
 build.C.cntry.time <- function(cntry.vec,time.prior.param, ebase=env.base) {
   
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
    env.base <- ebase
-   ewho <- get("env.who", env=ebase)
-   age.vec <- get("age.vec", env=ewho)
-   cntry.vec <- get("cntry.vec", env=ewho)
-   who.age.digits <- get("who.age.digits", env=ewho)
-   who.cntry.digits <- get("who.cntry.digits", env=ewho)
-   verbose <- get("verbose", env=ebase)
+   ewho <- get("env.who", envir=ebase)
+   age.vec <- get("age.vec", envir=ewho)
+   cntry.vec <- get("cntry.vec", envir=ewho)
+   who.age.digits <- get("who.age.digits", envir=ewho)
+   who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+   verbose <- get("verbose", envir=ebase)
     omega.cntry <- build.adjacency(cntry.vec)
  
   if(identical(omega.cntry, 0*omega.cntry)){
     messout("Correlation no existent for this set of countries", verbose)
     messout("Setting who.Hct.sigma = NA", verbose)
-    assign("who.Hct.sigma", NA, env=get("env.who", env=env.base))
+    assign("who.Hct.sigma", NA, envir=get("env.who", envir=env.base))
     return (NULL)}
     
   ind.row <- match(cntry.vec, rownames(omega.cntry))
@@ -1186,7 +1186,7 @@ build.C.cntry.time <- function(cntry.vec,time.prior.param, ebase=env.base) {
     return(n.gi)})
 
   who.C.cntry <- who.C.cntry
-###  assign("who.C.cntry",who.C.cntry,env=get("env.who",env=env.base))
+###  assign("who.C.cntry",who.C.cntry,envir=get("env.who",envir=env.base))
   if(any(n.g != n.g1))
       messout("Error in build.Caa, number of matrices for countries not agree",verbose)
   lst <- list(omega.cntry=omega.cntry, W.cntry=W.cntry, who.C.cntry= who.C.cntry)
@@ -1226,16 +1226,16 @@ build.C.cntry.time <- function(cntry.vec,time.prior.param, ebase=env.base) {
 ## ************************************************************************
 
 cov.cntry.age.cor <- function(agech, W,time.prior.param, cntry.char,cntry.comb, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  who.digit.first <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits <- get("who.year.digits", env=ewho)
-  whocov <- get("whocov", env=ewho)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  who.digit.first <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits <- get("who.year.digits", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
 ### structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1252,7 +1252,7 @@ cov.cntry.age.cor <- function(agech, W,time.prior.param, cntry.char,cntry.comb, 
   vnm <- paste(cntry.comb,agech, sep="")
   whocov[indx] <- lapply(whocov[indx], na.omit)
   etrial <- new.env(TRUE,parent.frame())
-  assign("indx0",vector( ,length=0), env=etrial)
+  assign("indx0",vector( ,length=0), envir=etrial)
   cntrys <- substr(names(whocov[indx]),digit.cntry.begin,digit.cntry.end)
   f.cntry <- min(as.numeric(cntrys))
   f.cntry <- as.character(f.cntry)
@@ -1279,13 +1279,13 @@ cov.cntry.age.cor <- function(agech, W,time.prior.param, cntry.char,cntry.comb, 
 ### if symmetry, do not calculate matrices that belongs to inds
       if (is.element(x,inds) && ny != f.cntry){  ##if1 symmetry
         cxy <- NA
-        indx0 <- get("indx0", env=etrial)
-        assign("indx0", c(indx0, dx), env=etrial)
+        indx0 <- get("indx0", envir=etrial)
+        assign("indx0", c(indx0, dx), envir=etrial)
       }else{  ##if1 symmetry
 ###  do not store matrices for W=0; just for the extra space    
         if (W[dx] == 0) {  ##if2 W=0
-            indx0 <- get("indx0", env=etrial)
-            assign("indx0", c(indx0, dx), env=etrial)
+            indx0 <- get("indx0", envir=etrial)
+            assign("indx0", c(indx0, dx), envir=etrial)
             cxy <- NA  
         } else  {
     
@@ -1307,7 +1307,7 @@ cov.cntry.age.cor <- function(agech, W,time.prior.param, cntry.char,cntry.comb, 
     messout("Wrong naming", verbose)
 ### remove unnecessary matrices that are either repetition (for symmetry)
 ### or do not contribute because W==0
-  indx0 <- get("indx0", env= etrial)
+  indx0 <- get("indx0", envir= etrial)
   if (length(indx0) > 0 ) C.list <- C.list[-indx0]
 ### We have no pointers or references to work with,do some cleaning
   rm(indx0)
@@ -1380,17 +1380,17 @@ cntry.to.age.order <-  function(whocov,who.age.digits,who.cntry.digits){
 ## ************************************************************************
 
 make.cntry.time.prior.matrix <- function(age,cntry.vec=NULL, wmat,C.mat, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   if(length(cntry.vec) <= 0)
-    cntry.vec <- get("cntry.vec", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
-  who.digit.first <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits <- get("who.year.digits", env=ewho)
-  verbose <- get("verbose", env=ebase)
+    cntry.vec <- get("cntry.vec", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  who.digit.first <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits <- get("who.year.digits", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1401,11 +1401,11 @@ make.cntry.time.prior.matrix <- function(age,cntry.vec=NULL, wmat,C.mat, ebase=e
   
 ### the countries in the data set that need to be correlated  
   cntry.vec <- sort(cntry.vec)
-  assign("cntry.vec", cntry.vec, env=ewho)
+  assign("cntry.vec", cntry.vec, envir=ewho)
   n.cntry <- length(cntry.vec)
   cntry.ind <- 1:n.cntry
   names(cntry.ind) <- cntry.vec
-  cntry.char <- formatC(cntry.vec,wid=who.cntry.digits,format="d", flag="0")
+  cntry.char <- formatC(cntry.vec,width=who.cntry.digits,format="d", flag="0")
 ### assume that who.C.cntry is a global
 ### who.C.cntry <- build.C.cntry.time(wmat)
 ### select only one age from age.vec and from who.C.cntry
@@ -1442,14 +1442,14 @@ make.cntry.time.prior.matrix <- function(age,cntry.vec=NULL, wmat,C.mat, ebase=e
         each <- paste(cntry.char[i], cntry.char[x],agech, sep="")
         dx <- grep(each, names(C.mat))
         if (length(dx) > 0 ){
-           vec <- get("vec", env=e)
-           assign("vec", c(vec,x), env=e)
+           vec <- get("vec", envir=e)
+           assign("vec", c(vec,x), envir=e)
           break;}
       }
       }
       if (length(dx) <= 0 ){
-        torem <- get("torem", env=e)
-        assign("torem", c(torem,x), env=e)
+        torem <- get("torem", envir=e)
+        assign("torem", c(torem,x), envir=e)
      ###   if (age == age.vec[1])
        ###   cat("Country", cntry.char[x],"no correlated with any of country selection.", "\n")
       }
@@ -1507,7 +1507,7 @@ make.cntry.time.prior.matrix <- function(age,cntry.vec=NULL, wmat,C.mat, ebase=e
     messout("Error building D cntry smoothing: make.cntry.time.prior.matrix", verbose)
 ###  cat("For age group",age,", the cntry subset after eliminating isolated cntry's is", "\n")
 ###  cat (cntry.subset,"\n")
-  assign("cntry.subset", cntry.subset,env=ewho)
+  assign("cntry.subset", cntry.subset,envir=ewho)
 ### for naming the rows of D 
     nm.row <- sapply(cntry.ind, function(x,C.mat,cntry.subset){
       if(!is.element(x, vec))
@@ -1560,7 +1560,7 @@ make.cntry.time.prior.matrix <- function(age,cntry.vec=NULL, wmat,C.mat, ebase=e
      isle.cntry  <- cntry.del
    else
      isle.cntry  <- NULL
-    assign("isle.cntry", isle.cntry, env=ewho)
+    assign("isle.cntry", isle.cntry, envir=ewho)
     lst <- list(D = D, isle.cntry=isle.cntry)
     return(invisible(lst))}
 
@@ -1579,17 +1579,17 @@ rmv.cntry <- function(isle.cntry, Xmat){
 ### age is agechar; Xmat is whocov
 ### age version 
 age.Xprime.X <- function(ag,Xmat, isle.cntry =NULL, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <-  get("who.digit.first", env=ewho)
-  who.cntry.digits <-  get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <-  get("who.digit.first", envir=ewho)
+  who.cntry.digits <-  get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
   if(length(isle.cntry) <= 0)
-    isle.cntry <- get("isle.cntry", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
+    isle.cntry <- get("isle.cntry", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
    
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
@@ -1603,7 +1603,7 @@ age.Xprime.X <- function(ag,Xmat, isle.cntry =NULL, ebase=env.base){
   Xmat <- rmv.cntry(isle.cntry, Xmat)
 ###
   Xmat <- cntry.to.age.order(Xmat, who.age.digits, who.cntry.digits)
-  agech <- formatC(ag, wid=who.age.digits, format="d", flag="0")
+  agech <- formatC(ag, width=who.age.digits, format="d", flag="0")
   agech  <- paste(agech,"$", sep="")
    indx <- grep(agech, names(Xmat))
    xage   <- lapply(Xmat[indx], function(x) t(x) %*% x)
@@ -1671,17 +1671,17 @@ age.Xprime.X <- function(ag,Xmat, isle.cntry =NULL, ebase=env.base){
     
     
 age.Xprime.Y <- function(ag,X,Y, isle.cntry=NULL,ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
    env.base <- ebase
-   ewho <- get("env.who", env=ebase)
-   cntry.vec <- get("cntry.vec", env=ewho)
-  who.digit.first  <-  get("who.digit.first", env=ewho)
-  who.cntry.digits <-  get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
-  ebase <- get("verbose", env=ebase)
+   ewho <- get("env.who", envir=ebase)
+   cntry.vec <- get("cntry.vec", envir=ewho)
+  who.digit.first  <-  get("who.digit.first", envir=ewho)
+  who.cntry.digits <-  get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
+  ebase <- get("verbose", envir=ebase)
    if (length(isle.cntry) <= 0)
-     isle.cntry <- get("isle.cntry", env=ewho)
+     isle.cntry <- get("isle.cntry", envir=ewho)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1697,7 +1697,7 @@ age.Xprime.Y <- function(ag,X,Y, isle.cntry=NULL,ebase=env.base){
 ### re-order Y (=whoinsampy) according to age groups so a given age follows
 ### with all the countries group together for each age group
   Y <- cntry.to.age.order(Y, who.age.digits, who.cntry.digits) 
-   agech <- formatC(ag, wid=who.age.digits, format="d", flag="0")
+   agech <- formatC(ag, width=who.age.digits, format="d", flag="0")
    agech  <- paste(agech,"$", sep="")
    indx <- grep(agech, names(X))
    indy <- grep(agech, names(Y))
@@ -1709,25 +1709,25 @@ age.Xprime.Y <- function(ag,X,Y, isle.cntry=NULL,ebase=env.base){
    cntry.related <- cntry.vec
    if(length(indisle) > 0)
      cntry.related <- cntry.vec[-indisle]
-   cntry.char <- formatC(cntry.related, wid=who.cntry.digits, format="d", flag="0")
+   cntry.char <- formatC(cntry.related, width=who.cntry.digits, format="d", flag="0")
    names(whoyg) <- cntry.char
    names(whoxg) <- cntry.char
 ### create etrial so that whoyg and whoxg are stored
    etrial <- environment()
-   assign("whoyg", whoyg, env=etrial)
-   assign("whoxg", whoxg, env=etrial)
+   assign("whoyg", whoyg, envir=etrial)
+   assign("whoxg", whoxg, envir=etrial)
 ### assuming that whoyg may have years with NA's; remove them
 ### for dth (whoyg) and covariates (whoxg) 
    isna <- lapply(1:length(indy), function(y, etrial){
                 mat  <- Y[[indy[y]]]
                 isna <- unique.default(row(mat)[is.na(mat)])
                 if(length(isna) > 0){
-                  whoyg <- get("whoyg", env=etrial, inherits=T)
-                  whoxg <- get("whoxg", env=etrial, inherits=T)
+                  whoyg <- get("whoyg", envir=etrial, inherits=T)
+                  whoxg <- get("whoxg", envir=etrial, inherits=T)
                 whoyg[[y]] <- whoyg[[y]][-isna,] 
                 whoxg[[y]] <- whoxg[[y]][-isna,]} ##end ifisna
-                assign("whoyg", whoyg, env=etrial)
-                assign("whoxg", whoxg, env=etrial)
+                assign("whoyg", whoyg, envir=etrial)
+                assign("whoxg", whoxg, envir=etrial)
                 bool <- nrow(whoxg[[y]]) != length(whoyg[[y]])&&
                 length(whoxg[[y]]) > 0 && length(whoyg[[y]])
                 bool <- na.omit(bool)
@@ -1736,10 +1736,10 @@ age.Xprime.Y <- function(ag,X,Y, isle.cntry=NULL,ebase=env.base){
                  
                 if(length(whoxg[[y]]) > 0 && length(whoyg[[y]]) > 0)
                     whoxg[[y]] <- data.frame(t(whoyg[[y]]) %*% whoxg[[y]])
-                assign("whoxg", whoxg, env=etrial)
+                assign("whoxg", whoxg, envir=etrial)
                 
                 },etrial)
-   yb <- get("whoxg", env=etrial) 
+   yb <- get("whoxg", envir=etrial) 
 
    if(length(yb) > 0){
      yb <- unlist(yb,recursive=T, use.names=T)

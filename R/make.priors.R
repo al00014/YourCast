@@ -117,9 +117,9 @@ expand.matrix <- function(proxac){
   
   ##cntry.cor becomes a pointer
   ccorr <- lapply(ccorr, function(mat, ev){
-    exp.mat <- get("exp.mat", env=ev)
+    exp.mat <- get("exp.mat", envir=ev)
     exp.mat <- rbind(exp.mat,mat)
-    assign("exp.mat", exp.mat, env=ev)
+    assign("exp.mat", exp.mat, envir=ev)
     return(mat)}, ev)
   lst <- list(mat=exp.mat, proxac=proxac)
   return(lst)
@@ -202,13 +202,13 @@ check.expansion <- function(cntry.weight, cvec)
 build.adjacency.mat <- function( c.vec=NULL, ebase){
 ### given a set of cntry's from whousercntrylist or cntry.vec  
 ### search for  cntry.vec in data cntry.weight and get submatrix
-  ebase <- get("env.base", env=parent.frame());
+  ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase; 
-ewho <- get("env.who", env=ebase)
+ewho <- get("env.who", envir=ebase)
 if (length(c.vec) <= 0)
-  c.vec <- get("cntry.vec", env=ewho)
+  c.vec <- get("cntry.vec", envir=ewho)
 
-c.weight <-build.priors(proxac=get("Hct.c.deriv", env=ewho), c.vec)$cntry.weight
+c.weight <-build.priors(proxac=get("Hct.c.deriv", envir=ewho), c.vec)$cntry.weight
 ind1 <- is.element(c.weight[,1],c.vec)
 ind2 <- is.element(c.weight[,2],c.vec)
 ind  <- ind1 & ind2
@@ -258,11 +258,11 @@ return(invisible(cntry.vec.weight))}
 laplacian.from.adjacency <- function(c.vec=NULL,Wcntry=NULL){
 ### calculate sum of cols elements for every row
 ### turn vector sum.col of length=nrow(s.cntry)
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env =env.base)
+  ewho <- get("env.who", envir=env.base)
   if(length(c.vec) <= 0)
-    c.vec <- get("cntry.vec", env=ewho)
+    c.vec <- get("cntry.vec", envir=ewho)
   if(length(Wcntry) <= 0)
     s.cntry <- build.adjacency.mat( c.vec)
   else
@@ -356,11 +356,11 @@ return(invisible(adj.cntry)) }
 find.correlation <- function(cntry.code, ebase){
 ### finding correlated cntry's (3rd col=1,2) of cntry.code
 ### given cntry.code find its correlated neighbors
-  ewho <- get("env.who", env=ebase)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  c.vec <- get("cntry.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  c.vec <- get("cntry.vec", envir=ewho)
  
-  cntry.cor <- build.priors(proxac=get("Hct.c.deriv", env=ewho), c.vec)$cntry.cor
+  cntry.cor <- build.priors(proxac=get("Hct.c.deriv", envir=ewho), c.vec)$cntry.cor
 c1 <- paste("^", as.character(cntry.code), sep="")
 ### ind1 for cntry.code at beginning of string 
 ind1 <- grep(c1, rownames(cntry.cor)) 
@@ -543,9 +543,9 @@ find.zero.eigen <- function(wcntry,only.values=T, eps= .Machine$double.eps){
 ##########################################################################################
  
 sample.improper.normal <- function(wmat, theta, n.sample, dim.null=NA,verbose=T) {
-  ebase <- try(get("env.base", env=parent.frame()),silent=T)
+  ebase <- try(get("env.base", envir=parent.frame()),silent=T)
   if(class(ebase)!="try-error")
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
   
   dim <- nrow(wmat)
   if (theta <= 0)
@@ -721,9 +721,9 @@ W <- W*ave.var/sigma^2;
 
 
 mean.age.profile <- function(ebase){
-  ewho <- get("env.who", env=ebase)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
   n.age <- length(age.vec)
   insampy <- list.by.cntry(whoinsampy);
   ap.mean <- rep(0,n.age);
@@ -859,8 +859,8 @@ derivative.prior <- function(d,der.v=c(0,0,1),weight=NA){
 
 
 sm.func.age.time.mu <- function(y,prior,n.age,prior.mean.by.cntry=NA, ebase){
-  ewho <- get("env.who", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
   n.age <- length(age.vec)
     
     if (!is.na(prior.mean.by.cntry)){
@@ -1146,7 +1146,8 @@ smooth.vector <- function(y,prior,m=NA,trace.factor=1,vector.only=FALSE){
   ### which is faster.
   
   W <- derivative.prior(n,prior.deriv,prior.weight);
-  w <- La.eigen(W,symmetric=TRUE);
+  #w <- La.eigen(W,symmetric=TRUE);
+  w <- list(vectors=NULL, values=NULL)
   R <- w$vectors;
   e <- w$values;
   rank <- qr(W)$rank;
@@ -1270,9 +1271,9 @@ gcv <- function(lambda,e,ty,trace.factor=1){
 
 
 smooth.csts.time <- function(y,time.prior=list(deriv=c(0,0,1),weight=0),trace.factor=1, verbose=T){
-  ebase <- try(get("env.base", env=parent.frame()),silent=T)
+  ebase <- try(get("env.base", envir=parent.frame()),silent=T)
   if(class(ebase)!="try-error")
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
   messout("Smoothing over time", verbose);      
 ################# BEGIN LOCALLY DEFINED FUNCTION #############################
 ###
@@ -1344,9 +1345,9 @@ smooth.csts.time <- function(y,time.prior=list(deriv=c(0,0,1),weight=0),trace.fa
 
 smooth.csts.ages <- function(y,age.prior=list(deriv=c(0,0,1),weight=0),m=NA,
                              trace.factor=1, verbose=T){
-  ebase <- try(get("env.base", env=parent.frame()),silent=T)
+  ebase <- try(get("env.base", envir=parent.frame()),silent=T)
   if(class(ebase)!="try-error")
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
 messout("Smoothing over age", verbose);      
 ################# BEGIN LOCALLY DEFINED FUNCTION #############################
 ###
@@ -1362,7 +1363,8 @@ messout("Smoothing over age", verbose);
     prior.weight <- a.prior$weight;
     n <- ncol(y);
     W <- derivative.prior(n,prior.deriv,prior.weight);
-    w <- La.eigen(W,symmetric=TRUE);
+    # w <- La.eigen(W,symmetric=TRUE);
+  w <- list(vectors=NULL, values=NULL)
     R <- w$vectors;
     e <- w$values;
     rank <- qr(W)$rank;
@@ -1489,12 +1491,12 @@ smooth.csts.age.time <- function(y,
                                  prior=list(a.deriv=c(0,0,1),a.weight=0,t.deriv=c(0,0,1),t.weight=0),
                                  prior.mean.by.cntry=NA,
                                  trace.factor=1, ebase){
-  ewho <- get("env.who", env=ebase);
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-   who.age.digits  <- get("who.age.digits", env=ewho)
-   who.year.digits <- get("who.year.digits", env=ewho) 
-  verbose <- get("verbose", env=ewho)
+  ewho <- get("env.who", envir=ebase);
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+   who.age.digits  <- get("who.age.digits", envir=ewho)
+   who.year.digits <- get("who.year.digits", envir=ewho) 
+  verbose <- get("verbose", envir=ewho)
   messout("Smoothing over age/time",verbose);      
     digit.cntry.begin <- who.digit.first + 1 
     digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1509,12 +1511,12 @@ smooth.csts.age.time <- function(y,
 ###
   env.bae <- ebase
   func <- function(y,prior,trace.factor,n.age, ebase = env.bae){
-  ewho <- get("env.who", env=ebase);
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-   who.age.digits  <- get("who.age.digits", env=ewho)
-   who.year.digits <- get("who.year.digits", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase);
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+   who.age.digits  <- get("who.age.digits", envir=ewho)
+   who.year.digits <- get("who.year.digits", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
 
     digit.cntry.begin <- who.digit.first + 1 
     digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1753,11 +1755,11 @@ smooth.csts.gcv <- function(y,std=NA,prior=list(a.deriv=c(0,0,1),a.weight=0,
                                                 t.deriv=c(0,0,1),t.weight=0),
                             prior.mean.by.cntry=NA,pool.lambda=TRUE,trace.factor=1,
                             outdir="OUTPUT/",compact=TRUE, ebase){
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1897,8 +1899,8 @@ lst <- list(yhatin=y.smooth,insampy=insampy,lambda=lambda,outsapmy = NULL)
 ### If we saved to ps files and the option compact is TRUE we condense all the printed files
 ### in one, multipage ps file, with 8 ps files in each page and delete the single files
 ###
-    whodisease <- get("whodisease", env=ewho)
-    whogender <- get("whogender", env=ewho)
+    whodisease <- get("whodisease", envir=ewho)
+    whogender <- get("whogender", envir=ewho)
     
     if (compact==TRUE){
       outps <- paste(outdir,whodisease,"g",whogender,"_SMOOTH*",".ps",sep="");
@@ -1972,7 +1974,7 @@ return(invisible(lst))
 smooth.csts.iterative <- function(y,prior.list,n.iter,std=NA,prior.mean.by.cntry=NA,
                                   pool.lambda=FALSE,trace.factor=1, ebase){
   
-### ewho <- get("env.who", env=ebase)
+### ewho <- get("env.who", envir=ebase)
 
   for (i in 1:n.iter){
     for (j in 1:length(prior.list)){
@@ -1991,9 +1993,9 @@ return(lst)
 ## ######################################################################################
 
 prior.matrix.age.time <- function(prior,n.age=NULL,n.time, ebase){
-    ewho <- get("env.who", env=ebase)
+    ewho <- get("env.who", envir=ebase)
     if(length(n.age) <= 0)
-    n.age <- length(get("age.vec", env=ewho))
+    n.age <- length(get("age.vec", envir=ewho))
          
     W.age <- derivative.prior(n.age,prior$a.deriv,prior$a.weight)
     W.time <- derivative.prior(n.time,prior$t.deriv,prior$t.weight)

@@ -182,7 +182,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
   
   if(length(guirun) <= 0  || !is.environment(guirun)){
     env.who <- WHO.yourcast(args, env.base)
-    sims <- get("N", env=env.who)
+    sims <- get("N", envir=env.who)
     
   }else 
   env.who <- guirun
@@ -245,7 +245,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
      dataobj$data <- data
      aux <- dataobj[-grep("data", names(dataobj))]
      aux$sample.frame <- sample.frame
-     assign("aux", aux, env=env.who)
+     assign("aux", aux, envir=env.who)
 
    }
 ###sanity checks
@@ -271,7 +271,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
   if(length(formula) > 0)
     {
       log.poiss <- check.depvar(formula)    
-      assign("log.poiss", log.poiss, env=env.who)
+      assign("log.poiss", log.poiss, envir=env.who)
     
     }
    
@@ -334,12 +334,12 @@ yourcast <- function(formula=NULL, dataobj=NULL,
   if((model=="MAP" || model=="EBAYES") && !is.na(Hct.sigma) ){
     messout("Setting Hct.sigma = NA...",verbose)
     Hct.sigma <- NA
-    assign("who.Hct.sigma", Hct.sigma, env=env.who)
+    assign("who.Hct.sigma", Hct.sigma, envir=env.who)
   }
     
     
   if((model=="BAYES" || model=="MAP" || model=="EBAYES") && !is.na(Hct.sigma))
-    who.Hct.c.deriv <- proximity.fill(dataobj,get("who.Hct.c.deriv", env=env.who))
+    who.Hct.c.deriv <- proximity.fill(dataobj,get("who.Hct.c.deriv", envir=env.who))
     
    
   if(model=="MAP" || model=="EBAYES"){
@@ -348,11 +348,11 @@ yourcast <- function(formula=NULL, dataobj=NULL,
  
     autoset <- find.all.args()
     autoset <- unlist(autoset)
-    assign("autoset", autoset, env=env.who)
+    assign("autoset", autoset, envir=env.who)
     summary.measures <- NULL
     if(length(autoset) > 0){
       summary.measures <- names(autoset)
-      assign("summary.measures", summary.measures, env=env.who)
+      assign("summary.measures", summary.measures, envir=env.who)
       messout("Printing autoset....",verbose, obj=unlist(autoset))
      
     }
@@ -374,24 +374,24 @@ yourcast <- function(formula=NULL, dataobj=NULL,
     smooth <- smooth1
  
  
-  dfirst  <- get("who.digit.first", env=env.who)
-  cdigits <- get("who.cntry.digits", env=env.who)
-  whoinsampy  <- get("whoinsampy", env=env.who)
+  dfirst  <- get("who.digit.first", envir=env.who)
+  cdigits <- get("who.cntry.digits", envir=env.who)
+  whoinsampy  <- get("whoinsampy", envir=env.who)
  
   count.cntry <- unique.default(unlist(sapply(names(whoinsampy), substr, dfirst, cdigits)))
   G <- rbind(NULL, smooth1)
 
   final.sigmas <- NULL
   if(length(indbayes) > 0 && length(smooth) < 3){
-      Ha.sigma.vec <- try(get("Ha.sigma.vec", env=env.who), silent=T)
+      Ha.sigma.vec <- try(get("Ha.sigma.vec", envir=env.who), silent=T)
       if(class(Ha.sigma.vec) == "try-error")
-        Ha.sigma.vec <- try(get("Ha.sigma.vec", env=env.base), silent=T)
-      Ht.sigma.vec <- try(get("Ht.sigma.vec", env=env.who), silent=T)
+        Ha.sigma.vec <- try(get("Ha.sigma.vec", envir=env.base), silent=T)
+      Ht.sigma.vec <- try(get("Ht.sigma.vec", envir=env.who), silent=T)
       if(class(Ht.sigma.vec) == "try-error")
-        Ht.sigma.vec <- try(get("Ht.sigma.vec", env=env.base), silent=T)
-      Hat.sigma.vec <- try(get("Hat.sigma.vec", env=env.who), silent=T)
+        Ht.sigma.vec <- try(get("Ht.sigma.vec", envir=env.base), silent=T)
+      Hat.sigma.vec <- try(get("Hat.sigma.vec", envir=env.who), silent=T)
       if(class(Hat.sigma.vec) == "try-error")
-        Hat.sigma.vec <- try(get("Hat.sigma.vec", env=env.base), silent=T)
+        Hat.sigma.vec <- try(get("Hat.sigma.vec", envir=env.base), silent=T)
       
       G <- build.prior.param(smooth,count.cntry, Ha.sigma.vec, Ht.sigma.vec, Hat.sigma.vec, sims,
                              stats=c(d1.a=d1.a.stat,d1.t=d1.t.stat,dtda=dt.da.stat),
@@ -413,7 +413,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
    
     m <- try(switch(modeltopass, OLS=ols(env.base),LC=lc(env.base),POISSON=glm.poisson(env.base),
                        MAP=cxc(ebase=env.base),
-                       BAYES=gibbs.sampler(), model="", NULL), silen=F);
+                       BAYES=gibbs.sampler(), model="", NULL), silent=F);
     params <- NULL
   }else{
     ### runs one for one cntry and model MAP
@@ -437,7 +437,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
 ### EBAYES specific; calling Federico code
   if(identical(model, "EBAYES")){
  
-    formula <- get("formula", env=env.who)
+    formula <- get("formula", envir=env.who)
    
     mebayes <- model.ebayes(autoset,formula,m,summary.measures,
                             depvar,graphics.file=NA,env.who)
@@ -461,7 +461,7 @@ yourcast <- function(formula=NULL, dataobj=NULL,
   
    outputlist <- c(outputlist, list(params=params))
    
-  if(get("save.output", env=env.who)  && !is.na(model)){
+  if(get("save.output", envir=env.who)  && !is.na(model)){
     messout("Saving output file (option save.output = TRUE", verbose)
     depvar <- leftside.formula(formula)
     build.file.output(outputlist,model, depvar);
@@ -524,9 +524,9 @@ conversion.rownames <- function(data, ydigits){
 ######################################################################################
 call.dataobj1 <- function(callst, model.frame, env.who)
   {
-    ebase <- try(get("env.base", env=parent.frame()),silent=T)
+    ebase <- try(get("env.base", envir=parent.frame()),silent=T)
     ix <- grep("dataobj", names(callst))
- ###   verbose <- get("verbose", env=parent.frame())
+ ###   verbose <- get("verbose", envir=parent.frame())
     indc <- 1:length(callst)
     names(indc) <- names(callst) 
     if(length(ix) <= 0)
@@ -542,8 +542,8 @@ call.dataobj1 <- function(callst, model.frame, env.who)
       dobj <- dbj$dataobj$dataname
     }
     if(length(dobj) > 0){  
-      assign("dobj", dobj, env=env.who)
-      assign("dobj", dobj, env=ebase)
+      assign("dobj", dobj, envir=env.who)
+      assign("dobj", dobj, envir=ebase)
     }
     return(callst)  
     }
@@ -558,15 +558,15 @@ call.dataobj1 <- function(callst, model.frame, env.who)
 
 update.args <- function(input.lst,userfile= NULL, ebase=NULL){
   
-  ebase <- get("env.base", env=parent.frame())
-  ewho <- get("env.who", env=ebase)
-  sample.frame <- get("sample.frame", env=ebase)
-  whoyrest <- get("yrest", env=ebase)
+  ebase <- get("env.base", envir=parent.frame())
+  ewho <- get("env.who", envir=ebase)
+  sample.frame <- get("sample.frame", envir=ebase)
+  whoyrest <- get("yrest", envir=ebase)
   env.base <- ebase;
   env.who <- ewho
   if(length(userfile) <= 0)
     {
-      userfile <- get("userfile", env=ewho)
+      userfile <- get("userfile", envir=ewho)
       filename <- userfile
     }else 
     filename <- read.file.input(userfile, ebase);
@@ -588,17 +588,17 @@ update.args <- function(input.lst,userfile= NULL, ebase=NULL){
           yrest <- find.yrest(sample.frame)
           year.digits <- as.character(nchar(yrest))
        
-          assign("yrest", as.numeric(yrest), env=ebase)
-          assign("whoyrest", as.numeric(whoyrest), env=ewho)
-          assign("year.digits", as.numeric(year.digits), env=ebase)
-          assign("who.year.digits", as.numeric(year.digits), env=ewho)
+          assign("yrest", as.numeric(yrest), envir=ebase)
+          assign("whoyrest", as.numeric(whoyrest), envir=ewho)
+          assign("year.digits", as.numeric(year.digits), envir=ebase)
+          assign("who.year.digits", as.numeric(year.digits), envir=ewho)
           next; 
         }
       if(class(val) != "try-error" && inlsti =="dataobj")
         {
  ###         print(dataobj)
           dataobj <- parse.dataobj(val, ebase)
-          assign("dataobj", dataobj, env=ebase)
+          assign("dataobj", dataobj, envir=ebase)
          
           if(length(dataobj$index.code) > 0 )
             {
@@ -608,35 +608,35 @@ update.args <- function(input.lst,userfile= NULL, ebase=NULL){
           if(length(dataobj$proximity) >0)
             {
               Hct.c.deriv <- dataobj$proximity
-              assign("Hct.c.deriv", Hct.c.deriv, env=ebase)
-              assign("who.Hct.c.deriv", Hct.c.deriv, env=ewho)
+              assign("Hct.c.deriv", Hct.c.deriv, envir=ebase)
+              assign("who.Hct.c.deriv", Hct.c.deriv, envir=ewho)
             }
         
           next;
         }
       if (class(val)!=  "try-error" && inlsti=="model")
         {
-          assign("model", val, env=ebase) 
-          assign("whomodel", val, env=ewho)
+          assign("model", val, envir=ebase) 
+          assign("whomodel", val, envir=ewho)
           next; 
         }
       if(class(val) != "try-error" && inlsti=="formula")
         {
-          assign("formula", val, env=ebase)
-          assign("formula", val, env=ewho) 
+          assign("formula", val, envir=ebase)
+          assign("formula", val, envir=ewho) 
           next;
         }
       if(class(val) != "try-error" && inlsti=="savetmp"){
-          assign(inlsti, val, env=ebase)
+          assign(inlsti, val, envir=ebase)
        
           next; 
         }
       if (class(val)!=  "try-error" && !is.null(val))
         {
          
-          ind <- grep(inlsti, ls(env=ewho))
-          ch <- ls(env=ewho)[ind]
-          assign(inlsti, val, env=ebase)
+          ind <- grep(inlsti, ls(envir=ewho))
+          ch <- ls(envir=ewho)[ind]
+          assign(inlsti, val, envir=ebase)
         }
     }
   
@@ -653,10 +653,10 @@ update.args <- function(input.lst,userfile= NULL, ebase=NULL){
   ev <- environment()
    
   source(file=userfile, local=T)
-  param <- ls(env=ev)
+  param <- ls(envir=ev)
  
   lst <- lapply(param, function(ch, ev) {
-    val <- try(get(ch, env=ev), silent=T)
+    val <- try(get(ch, envir=ev), silent=T)
     if(class(val)!= "try-error")
       return(val)
     else
@@ -685,23 +685,23 @@ update.args <- function(input.lst,userfile= NULL, ebase=NULL){
 ##############################################
    assign.number.digits <- function(ix.code, ebase)
     {
-      ebase <- get("env.base", env=parent.frame())
-      ewho <- try(get("env.who", env=ebase), silent=T)
+      ebase <- get("env.base", envir=parent.frame())
+      ewho <- try(get("env.who", envir=ebase), silent=T)
       env.base <- ebase
       cdigits <- ix.code["cntry.digits"]
-      try(assign("cntry.digits", cdigits, env=ebase), silent=T)
+      try(assign("cntry.digits", cdigits, envir=ebase), silent=T)
       adigits <- ix.code["age.digits"]
-      try(assign("age.digits", adigits, env=ebase), silent=T)
+      try(assign("age.digits", adigits, envir=ebase), silent=T)
       ydigits <- ix.code["year.digits"]
-      try(assign("year.digits", ydigits, env=ebase), silent=T)
+      try(assign("year.digits", ydigits, envir=ebase), silent=T)
       dfirst <- ix.code["digit.first"]
-      try(assign("digit.first", dfirst, env=ebase), silent=T)
+      try(assign("digit.first", dfirst, envir=ebase), silent=T)
       
       if(class(ewho) != "try-error"){
-        assign("who.cntry.digits", as.numeric(cdigits), env=ewho)
-        assign("who.age.digits", as.numeric(adigits), env=ewho)
-        assign("who.year.digits",as.numeric(ydigits), env=ewho)
-        assign("who.digit.first", as.numeric(dfirst), env=ewho)
+        assign("who.cntry.digits", as.numeric(cdigits), envir=ewho)
+        assign("who.age.digits", as.numeric(adigits), envir=ewho)
+        assign("who.year.digits",as.numeric(ydigits), envir=ewho)
+        assign("who.digit.first", as.numeric(dfirst), envir=ewho)
       }
         
         
@@ -718,8 +718,8 @@ update.args <- function(input.lst,userfile= NULL, ebase=NULL){
 
 parse.dataobj <- function(dataobj,ebase)
   {
-    rerun <- get("rerun", env=ebase)
-    verbose <- get("verbose", env=ebase)
+    rerun <- get("rerun", envir=ebase)
+    verbose <- get("verbose", envir=ebase)
     if(!is.character(dataobj)){
    
       dataobj <- assign.dataobj(dataobj, ebase)
@@ -734,7 +734,7 @@ parse.dataobj <- function(dataobj,ebase)
     if(!identical(dataobj,rerun) && file.exists(dataobj) && file.info(dataobj)$isdir){
       messout(paste("Reading dataobj from directory ", dataobj,"...",sep=""),verbose)
       dcats <- dataobj
-      dataobj <- yourprep(dpath= dcats,verb=verbose)
+      dataobj <- yourprep(dpath= dcats,verbose=verbose)
       return(dataobj)
     }
     stop("Not a valid dataobj")
@@ -749,7 +749,7 @@ parse.dataobj <- function(dataobj,ebase)
 assign.dataobj <- function(dataobj, ebase)
   {
     
-    ewho <- try(get("env.who", env=ebase), silent=T)
+    ewho <- try(get("env.who", envir=ebase), silent=T)
     data <- try(dataobj$data, silent=T)
     index.code <- try(dataobj$index.code, silent=T)
     G.names <- try(dataobj$G.names, silent=T)
@@ -789,7 +789,7 @@ read.file.input <- function(userfile=NULL, ebase=NULL,
                             datapath=getwd()){
   
   if(length(userfile) <= 0)
-    userfile <- get("userfile", env=ebase)
+    userfile <- get("userfile", envir=ebase)
   
   chu0 <- grep("/", userfile) ### for unix
 
@@ -829,60 +829,60 @@ read.file.input <- function(userfile=NULL, ebase=NULL,
 assign.to.env <- function(lst, mod, prox, ewho){
  
   whocov <- lst$whocov
-  assign("whocov", whocov, env=ewho)
+  assign("whocov", whocov, envir=ewho)
   
   whoinsampx <- lst$whoinsampx
-  assign("whoinsampx", whoinsampx, env=ewho)
+  assign("whoinsampx", whoinsampx, envir=ewho)
                 
   whoutsampx <- lst$whoutsampx
-  assign("whoutsampx", whoutsampx, env=ewho)
+  assign("whoutsampx", whoutsampx, envir=ewho)
   
   whoinsampy <- lst$whoinsampy                 
   whoutsampy <- lst$whoutsampy
   
-  assign("whoinsampy", whoinsampy, env=ewho)
-  assign("whoutsampy", whoutsampy, env=ewho)
+  assign("whoinsampy", whoinsampy, envir=ewho)
+  assign("whoutsampy", whoutsampy, envir=ewho)
   whopopul <- lst$whopopul
-  assign("whopopul", whopopul, env=ewho)
+  assign("whopopul", whopopul, envir=ewho)
                 
   whopopulos <- lst$whopopulos
-  assign("whopopulos", whopopulos, env=ewho)
+  assign("whopopulos", whopopulos, envir=ewho)
                 
   cov.lst <- lst$cov.lst
-  assign("cov.lst", cov.lst, env=ewho)
+  assign("cov.lst", cov.lst, envir=ewho)
                 
   age.vec <- lst$age.vec
-  assign("age.vec", age.vec, env=ewho)
+  assign("age.vec", age.vec, envir=ewho)
                 
   cntry.vec <- lst$cntry.vec
-  assign("cntry.vec", cntry.vec, env=ewho)
+  assign("cntry.vec", cntry.vec, envir=ewho)
   
   geo.index <- lst$geo.index
-  assign("geo.index", geo.index, env=ewho)
+  assign("geo.index", geo.index, envir=ewho)
 
   c.vec <- as.character(cntry.vec)
   cntry.names.lst <- sapply(c.vec, function(ch,geo.index) {geo.index[ch]}, geo.index)
   names(cntry.names.lst) <- c.vec
-  assign("cntry.names.lst", cntry.names.lst, env=ewho)
+  assign("cntry.names.lst", cntry.names.lst, envir=ewho)
   
   log.poiss <- lst$log.poiss
  
-  assign("log.poiss", log.poiss, env=ewho)
+  assign("log.poiss", log.poiss, envir=ewho)
   
   formula <- lst$formula
-  assign("formula", formula, env=ewho)
+  assign("formula", formula, envir=ewho)
  
-  assign("who.Hct.c.deriv", prox, env=ewho)
-  who.Hct.c.deriv <- get("who.Hct.c.deriv", env=ewho)  
+  assign("who.Hct.c.deriv", prox, envir=ewho)
+  who.Hct.c.deriv <- get("who.Hct.c.deriv", envir=ewho)  
    
 }
 ### DESCRIPTION:helper function to yourcast to update values of smoothness parameters
 
 get.param.smooth <- function(env.who)
   {
-    smooth <- c(Ha.sigma=get("who.Ha.sigma", env=env.who),
-                Ht.sigma=get("who.Ht.sigma", env=env.who),
-                Hat.sigma=get("who.Hat.sigma", env=env.who))
+    smooth <- c(Ha.sigma=get("who.Ha.sigma", envir=env.who),
+                Ht.sigma=get("who.Ht.sigma", envir=env.who),
+                Hat.sigma=get("who.Hat.sigma", envir=env.who))
     return(smooth)
   }
 ### DESCRIPTION Given a formula for the simulation such as
@@ -952,18 +952,18 @@ check.depvar <- function(formula)
 
 check.for.files <- function(obj, ebase)
   {
-    ewho <- get("env.who", env=ebase)
-    verbose <- get("verbose", env=ebase)
+    ewho <- get("env.who", envir=ebase)
+    verbose <- get("verbose", envir=ebase)
     ev <- environment()
-    load(obj, env=ev)
-###    print(ls(env=ev))
+    load(obj, envir=ev)
+###    print(ls(envir=ev))
    
     input.lst <- c("whoinsampx", "whoutsampx", "whoinsampy",
                    "whoutsampy", "whopopul", "whopopulos","whocov",
                    "cov.lst","age.vec", "cntry.vec", "geo.index",
                    "log.poiss", "formula", "who.Hct.c.deriv")
  
-   who.Hct.c.deriv <- get("who.Hct.c.deriv", env=ewho)
+   who.Hct.c.deriv <- get("who.Hct.c.deriv", envir=ewho)
     ln <- length(input.lst)
     for(n in 1:ln)
       {     
@@ -971,45 +971,45 @@ check.for.files <- function(obj, ebase)
         val <- try(eval(as.symbol(ch)), silent=T)
         
         if(class(val)!="try-error"  && n <=6 )
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
         else if (n <= 6)
           break;
         
         if(class(val)=="try-error"  && n ==7){
           whocov <- build.whocov(ewho)
-          assign("whocov", whocov, env=ewho)
+          assign("whocov", whocov, envir=ewho)
          
           next;
         }else if (n==7){
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           next;
        }
         
         if (class(val)=="try-error"  && n ==8){
-          whoinsampx <- get("whoinsampx", env=ewho)
+          whoinsampx <- get("whoinsampx", envir=ewho)
           cov.lst <- list.covariates(whoinsampx)
-          assign("cov.lst", cov.lst, env=ewho)
+          assign("cov.lst", cov.lst, envir=ewho)
           next;
         }else if(n==8){
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           next;
         }
         
         if(class(val)=="try-error" && n == 9){
           age.vec <- build.age.cntry.vec(ebase)$age.vec
-          assign("age.vec", age.vec, env=ewho)
+          assign("age.vec", age.vec, envir=ewho)
           next;
         }else if(n==9){
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           next; 
         }
         
         if (class(val)=="try-error" && n == 10){
           cntry.vec <- build.age.cntry.vec(ebase)$cntry.vec
-          assign("cntry.vec", cntry.vec, env=ewho)
+          assign("cntry.vec", cntry.vec, envir=ewho)
           next;
         }else if(n==10){
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           cntry.vec <- val
           next;
        }
@@ -1017,13 +1017,13 @@ check.for.files <- function(obj, ebase)
         if (class(val)=="try-error" && n == 11){
      
           val <- NULL
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           next;
        }else if(n==11 ){
      
           c.vec <- as.character(cntry.vec)
           
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
           geo.index <- val
           if(length(geo.index) > 0){
             cntry.names.lst <- sapply(c.vec,
@@ -1034,13 +1034,13 @@ check.for.files <- function(obj, ebase)
           
           names(cntry.names.lst) <- NULL
           names(cntry.names.lst) <- as.character(c.vec)
-          assign("cntry.names.lst", cntry.names.lst, env=ewho)
+          assign("cntry.names.lst", cntry.names.lst, envir=ewho)
           next; 
         }
         if(class(val) != "try-error")       
-          assign(ch, val, env=ewho)
+          assign(ch, val, envir=ewho)
         else
-          assign(ch, NULL, env=ewho)
+          assign(ch, NULL, envir=ewho)
        
       }
    
@@ -1048,25 +1048,25 @@ check.for.files <- function(obj, ebase)
       messout(paste("Reading parameters from file... ", obj, sep=""),verbose)
 ###                "\nIgnoring yourcast arguments that are not model specific and ", 
 ###                "are not in the userfile", "\n"))
-###      print(ls(env=ev))
+###      print(ls(envir=ev))
 ###      print(dim(who.Hct.c.deriv))
      
       digits <- age.cntry.digits(age.vec, cntry.vec, ebase)
      
-      assign("age.digits", as.numeric(digits$age.digits), env=ebase)
-      assign("cntry.digits", as.numeric(digits$cntry.digits), env=ebase)
-      assign("digit.first", as.numeric(digits$digit.first), env=ebase)
-      assign("who.age.digits", as.numeric(digits$age.digits), env=ewho)
-      assign("who.cntry.digits", as.numeric(digits$cntry.digits), env=ewho)
-      assign("who.digit.first", as.numeric(digits$digit.first), env=ewho)
-      assign("who.Hct.c.deriv", who.Hct.c.deriv, env=ewho)
-      assign("Hct.c.deriv", who.Hct.c.deriv, env=ebase)
+      assign("age.digits", as.numeric(digits$age.digits), envir=ebase)
+      assign("cntry.digits", as.numeric(digits$cntry.digits), envir=ebase)
+      assign("digit.first", as.numeric(digits$digit.first), envir=ebase)
+      assign("who.age.digits", as.numeric(digits$age.digits), envir=ewho)
+      assign("who.cntry.digits", as.numeric(digits$cntry.digits), envir=ewho)
+      assign("who.digit.first", as.numeric(digits$digit.first), envir=ewho)
+      assign("who.Hct.c.deriv", who.Hct.c.deriv, envir=ewho)
+      assign("Hct.c.deriv", who.Hct.c.deriv, envir=ebase)
       return(obj)
     }
     
     if(class(try(dataobj$proximity, silent=T))!= "try-error"){
-        assign("who.Hct.c.deriv", dataobj$proximity, env=ewho)
-        assign("who.Hct.c.deriv", dataobj$proximity, env=ebase)
+        assign("who.Hct.c.deriv", dataobj$proximity, envir=ewho)
+        assign("who.Hct.c.deriv", dataobj$proximity, envir=ebase)
       }
        
     
@@ -1102,21 +1102,21 @@ check.for.files <- function(obj, ebase)
 ##################################################################
 age.cntry.digits <- function(age.vec, cntry.vec, ebase)
   {
-    ewho <- get("env.who", env=ebase)
-    verbose <- get("verbose", env=ebase)
+    ewho <- get("env.who", envir=ebase)
+    verbose <- get("verbose", envir=ebase)
     age.digits <- max(as.numeric(unlist(sapply(as.character(age.vec), nchar))))
     age.digits <- as.numeric(age.digits)
-    assign("who.age.digits", as.numeric(age.digits), env=ewho)
+    assign("who.age.digits", as.numeric(age.digits), envir=ewho)
     cntry.digits <- max(as.numeric(unlist(sapply(as.character(cntry.vec), nchar))))
     cntry.digits <- as.numeric(cntry.digits)
-    assign("who.cntry.digits", as.numeric(cntry.digits), env=ewho)
-    nm <- names(get("whoinsampx", env=ewho))[1]
+    assign("who.cntry.digits", as.numeric(cntry.digits), envir=ewho)
+    nm <- names(get("whoinsampx", envir=ewho))[1]
    
     digit.first <- nchar(nm) - age.digits - cntry.digits
-    assign("who.digit.first", digit.first, env=ewho)
+    assign("who.digit.first", digit.first, envir=ewho)
     if( digit.first < 0)
       digit.first <- 0
-    assign("who.age.digits", age.digits, env=ewho)
+    assign("who.age.digits", age.digits, envir=ewho)
     lst <- list(age.digits=age.digits, cntry.digits=cntry.digits, digit.first=digit.first)
     return(lst)
   }
@@ -1148,12 +1148,12 @@ age.cntry.digits <- function(age.vec, cntry.vec, ebase)
 ###        evillalon@iq.harvard.edu
 ##################################################################
 save.yourcast.file <- function(rerun, ebase = env.base){
-  ebase <- get("env.base", env=parent.frame());
-  verbose <- get("verbose", env=ebase)
+  ebase <- get("env.base", envir=parent.frame());
+  verbose <- get("verbose", envir=ebase)
   env.base <- ebase
  
 ### get the environment where data is located
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
  
 ### create the blank file to store data for directory: whooutpath
  
@@ -1178,11 +1178,11 @@ save.yourcast.file <- function(rerun, ebase = env.base){
     for (i in 1:length(what)){
      
         
-      wi <- try(get(what[i], env=ewho, inherits=T), silent=T)
+      wi <- try(get(what[i], envir=ewho, inherits=T), silent=T)
       if(class(wi) == "try-error")
-         wi <- try(get(what[i], env=ebase, inherits=T), silent=T)
+         wi <- try(get(what[i], envir=ebase, inherits=T), silent=T)
      
-        assign(what[i],wi, env=esave)
+        assign(what[i],wi, envir=esave)
      
          
     }
@@ -1191,20 +1191,20 @@ save.yourcast.file <- function(rerun, ebase = env.base){
  
 ### better to find what to exclude
 ### name of environments that start with "e":    
-    ind.ex <- match(ls(env=esave,patt="^e"), ls(env=esave))
-    ind.ex <- c(ind.ex,  match("filename", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("what", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("ch", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("^esave$", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("^ebase", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("^ev", ls(env=esave)))
-    ind.ex <- c(ind.ex, match("^ewho", ls(env=esave)))
+    ind.ex <- match(ls(envir=esave,pattern="^e"), ls(envir=esave))
+    ind.ex <- c(ind.ex,  match("filename", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("what", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("ch", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("^esave$", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("^ebase", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("^ev", ls(envir=esave)))
+    ind.ex <- c(ind.ex, match("^ewho", ls(envir=esave)))
   
 ### indeces that start with "ind":
-    ind.ex <- c(ind.ex, match(ls(env=esave, patt="^ind"), ls(env=esave)))
+    ind.ex <- c(ind.ex, match(ls(envir=esave, pattern="^ind"), ls(envir=esave)))
     ind.ex <- na.omit(ind.ex)
-### now save everything in env= esave but variables in [indx.ex]:
-###   save(list=ls(env=esave)[-ind.ex], file=filename,compress=T)
+### now save everything in envir= esave but variables in [indx.ex]:
+###   save(list=ls(envir=esave)[-ind.ex], file=filename,compress=T)
 ### Safer to save what you need
       
      save("whocov","whoinsampx", "whoutsampx", "whoinsampy","whoutsampy", 
@@ -1234,8 +1234,8 @@ save.yourcast.file <- function(rerun, ebase = env.base){
 ###################################################################
 build.whocov <- function(ewho=NULL, whoinsampx=NULL, whoutsampx=NULL){
   if(length(ewho)>0){ 
-    whoinsampx <- get("whoinsampx", env=ewho)
-    whoutsampx <- get("whoutsampx", env=ewho)
+    whoinsampx <- get("whoinsampx", envir=ewho)
+    whoutsampx <- get("whoutsampx", envir=ewho)
   }
   ind <- 1:length(whoinsampx)
   names(ind) <- names(whoinsampx)
@@ -1255,11 +1255,11 @@ build.whocov <- function(ewho=NULL, whoinsampx=NULL, whoutsampx=NULL){
 ###        evillalon@iq.harvard.edu
 ###################################################################
 build.age.cntry.vec <- function(ebase){
-  cdigits <- get("cntry.digits", env=ebase)
-  adigits <- get("age.digits", env=ebase)
-  fdigit <- get("digit.first", env=ebase)
+  cdigits <- get("cntry.digits", envir=ebase)
+  adigits <- get("age.digits", envir=ebase)
+  fdigit <- get("digit.first", envir=ebase)
   st <- cdigits + 1 + adigits
-  whoinsampx <- get("whoinsampx", env=get("ewho", env=ebase))
+  whoinsampx <- get("whoinsampx", envir=get("ewho", envir=ebase))
   tag <- names(whoinsampx)
   age.vec  <- unique.default(unlist(sapply(tag, substring, fdigit + cdigits+1, st)))
   cntry.vec <- unique.default(unlist(sapply(tag,substring, fdigit + 1,cdigits)))
@@ -1289,10 +1289,10 @@ build.age.cntry.vec <- function(ebase){
 
  call.yourcast <- function(formlst, callmatch, svtmp, rerun)
     {
-      ebase <- get("env.base", env=parent.frame())
-      formu <- get("formula", env=ebase)
-      dbj <- get("dataobj", env=ebase)
-      hct <- get("Hct.c.deriv", env=ebase)
+      ebase <- get("env.base", envir=parent.frame())
+      formu <- get("formula", envir=ebase)
+      dbj <- get("dataobj", envir=ebase)
+      hct <- get("Hct.c.deriv", envir=ebase)
       ev <- environment()
    
       what <- c("dobj", "formula", "who.Hct.c.deriv") 
@@ -1367,13 +1367,13 @@ build.age.cntry.vec <- function(ebase){
       } )
     }
                
-find.dataobject <- function(env = NULL,
+find.dataobject <- function(envir= NULL,
                             loc="http://gking.harvard.edu/yourcast/dataobj.dat"){
-  ev <- env
-  if(length(env) <= 0)
+  ev <- envir
+  if(length(envir) <= 0)
     ev <- parent.frame()
   
-   load(url(loc), env=ev)
+   load(url(loc), envir=ev)
 }
 
 ### DESCRIPTION it takes the list yhat and rename the rownames with the
@@ -1456,16 +1456,16 @@ elimallna.csid <- function(n, dat,verbose)
 
 proximity.fill <- function(dataobj, who.Hct.c.deriv)
   {
-    ebase <- get("env.base", env=parent.frame())
-    ewho <- get("env.who", env=ebase)
+    ebase <- get("env.base", envir=parent.frame())
+    ewho <- get("env.who", envir=ebase)
    
     
     if((length(who.Hct.c.deriv) <= 0 || class(who.Hct.c.deriv) == "try-error")
        && length(dataobj) >0){
       who.Hct.c.deriv <- dataobj$proximity
            
-      assign("who.Hct.c.deriv", who.Hct.c.deriv, env=ewho)
-      assign("Hct.c.deriv", who.Hct.c.deriv, env=ebase)
+      assign("who.Hct.c.deriv", who.Hct.c.deriv, envir=ewho)
+      assign("Hct.c.deriv", who.Hct.c.deriv, envir=ebase)
     }
          
     if(length(who.Hct.c.deriv) <= 0 ){       
@@ -1485,21 +1485,21 @@ proximity.fill <- function(dataobj, who.Hct.c.deriv)
 ###########################################################
 find.all.args <- function(autoset=NULL)
   {
-    env.base <- get("env.base", env=parent.frame())
-    env.who <- get("env.who", env=env.base)
+    env.base <- get("env.base", envir=parent.frame())
+    env.who <- get("env.who", envir=env.base)
    
     args.ebayes <- c("who.Ha.sigma","who.Ht.sigma","who.Hat.sigma",
                      "graphics.file", "output.file")
-    whomodel <- get("model", env=env.who)
+    whomodel <- get("model", envir=env.who)
     
     
     for(ch in args.ebayes){
       nmch <- ch
      
-      ch <- try(get(ch, env=env.who), silent=T)
+      ch <- try(get(ch, envir=env.who), silent=T)
   
       if(class(ch)=="try-error")
-        ch <- try(get(ch, env=env.base), silent=T)
+        ch <- try(get(ch, envir=env.base), silent=T)
       if(class(ch)=="try-error")
         stop(message("missing variable ", ch))
     
@@ -1511,8 +1511,8 @@ find.all.args <- function(autoset=NULL)
    
     nmauto <- names(autoset)
     if(length(grep("SD", nmauto)) <= 0 && length(nmauto) >0){
-      assign("SD", NA, env=env.who)
-      assign("SD", NA, env=env.base)
+      assign("SD", NA, envir=env.who)
+      assign("SD", NA, envir=env.base)
     }
       
    return(autoset)     
@@ -1538,8 +1538,8 @@ find.all.args <- function(autoset=NULL)
 ###########################################################
 ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
   {
-    env.base <- get("env.base",env=parent.frame())
-    env.who <- get("env.who", env=env.base)
+    env.base <- get("env.base",envir=parent.frame())
+    env.who <- get("env.who", envir=env.base)
 
     if(length(who.Hx.sigma)<= 2){
       stop(paste("Provide either a scalar or a vector of  3 or more elements for ",nmhx))
@@ -1587,12 +1587,12 @@ ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
     hx <- unlist(who.Hx.sigma[1:3])
   
     Hx.sigma.vec <- seq(hx[1], hx[2], length=hx[3])
-    assign(Hx.vec,Hx.sigma.vec, env=env.who)
-    assign(Hx.vec,Hx.sigma.vec, env=env.base)
+    assign(Hx.vec,Hx.sigma.vec, envir=env.who)
+    assign(Hx.vec,Hx.sigma.vec, envir=env.base)
  
     if(length(who.Hx.sigma) <= 3){
-      assign(nmhx, NULL, env=env.who)
-      assign(Hx, NULL, env=env.base)
+      assign(nmhx, NULL, envir=env.who)
+      assign(Hx, NULL, envir=env.base)
       return(autoset)
     }
     
@@ -1606,8 +1606,8 @@ ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
         autoset <- c(autoset, d1.x)
         names(autoset) <- c(nmauto,d1x)
         if(length(who.Hx.sigma) == 4){
-          assign(nmhx, NULL, env=env.who)
-          assign(Hx, NULL, env=env.base)
+          assign(nmhx, NULL, envir=env.who)
+          assign(Hx, NULL, envir=env.base)
           return(autoset)
         }
 
@@ -1616,16 +1616,16 @@ ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
         autoset <- c(autoset, SD=SD)
         names(autoset) <- c(nmauto, "SD")
         if(length(who.Hx.sigma) ==5){
-          assign(nmhx, NULL, env=env.who)
-          assign(Hx, NULL, env=env.base)
+          assign(nmhx, NULL, envir=env.who)
+          assign(Hx, NULL, envir=env.base)
           return(autoset)
         }
 
         sims <- who.Hx.sigma[6]
-        assign("sims", sims, env=env.base)
-        assign("N", sims, env=env.who)
-        assign(nmhx, NULL, env=env.who)
-        assign(Hx, NULL, env=env.base)
+        assign("sims", sims, envir=env.base)
+        assign("N", sims, envir=env.who)
+        assign(nmhx, NULL, envir=env.who)
+        assign(Hx, NULL, envir=env.base)
         return(autoset)
            
       }
@@ -1636,8 +1636,8 @@ ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
       hxixsg <- grep(Hx, hxvec)
       if(length(hxixsg) > 0){
         Hx.sigma.vec <- who.Hx.sigma[hxixsg]
-        assign(Hx.vec,Hx.sigma.vec, env=env.who)
-        assign(Hx.vec,Hx.sigma.vec, env=env.base)
+        assign(Hx.vec,Hx.sigma.vec, envir=env.who)
+        assign(Hx.vec,Hx.sigma.vec, envir=env.base)
       }
       
       if(length(grep(d1.x, hxvec) ) > 0){
@@ -1656,14 +1656,14 @@ ebayesparam.vec <- function(who.Hx.sigma,nmhx, autoset,env.base)
       if(length(grep("sims", hxvec)) > 0){
         
         sims <- who.Hx.sigma["sims"]
-        assign("sims", sims, env=env.base)
-        assign("N", sims, env=env.who)
+        assign("sims", sims, envir=env.base)
+        assign("N", sims, envir=env.who)
        
       }
     }
     
-    assign(nmhx, NULL, env=env.who)
-    assign(Hx, NULL, env=env.base)
+    assign(nmhx, NULL, envir=env.who)
+    assign(Hx, NULL, envir=env.base)
   
     return(autoset)
   }    
@@ -1675,8 +1675,8 @@ zero.mean.age.profile <- function(indbayes, env.who){
     if(length(indbayes) <= 0)
       return(invisible(list()))
     
-    who.zero.mean <- get("who.zero.mean", env=env.who) 
-    age.vec <- sort(get("age.vec", env=env.who))
+    who.zero.mean <- get("who.zero.mean", envir=env.who) 
+    age.vec <- sort(get("age.vec", envir=env.who))
     if(!is.numeric(who.zero.mean))
       return(who.zero.mean)
     ln <- abs(length(who.zero.mean) - length(age.vec))
@@ -1689,16 +1689,16 @@ zero.mean.age.profile <- function(indbayes, env.who){
       stop("Provide zero.mean values for all age groups")
    
       names(who.zero.mean) <- age.vec
-      assign("who.zero.mean", who.zero.mean, env=env.who)
+      assign("who.zero.mean", who.zero.mean, envir=env.who)
     
     return(who.zero.mean)
   
 }
 
-messout <- function(str=NULL, verbose=TRUE, obj=NULL){
-  if(verbose && length(str))
+messout <- function(str=NULL, verb=TRUE, obj=NULL){
+  if(verb && length(str))
   message(str);
-  if(length(obj) >0 && verbose)
+  if(length(obj) >0 && verb)
     print(obj)
 }
  

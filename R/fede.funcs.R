@@ -92,22 +92,22 @@ impute.csts <- function(y){
 
 
 prior.variance <- function(ecxc,N=100,graphics=FALSE){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  whocov <- get("whocov", env=ewho)
-  verbose <- get("verbose", env=ebase)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  ecxc <- get("env.cxc", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  whocov <- get("whocov", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  ecxc <- get("env.cxc", envir=ebase)
   t.list  <- sapply(whoinsampy, function(x){
           x <- na.omit(x)
           nc <- nrow(x)});
   beta.dim  <- sapply(whocov, function(x){nc <- ncol(x)});
-  cntry.vec <- get("cntry.vec", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
-  age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
-  who.mean.age.profile <- get("who.mean.age.profile", env=ecxc)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
+  who.mean.age.profile <- get("who.mean.age.profile", envir=ecxc)
   messout("Running prior.variance..",verbose)
   vlist <- ls(ecxc)
   for (v in vlist){
@@ -150,9 +150,9 @@ prior.variance <- function(ecxc,N=100,graphics=FALSE){
   for (i in 1:length(aux)){
     mu.time <- cbind(mu.time,aux[[i]]+who.mean.age.profile[i])
   }
-  Ha.sigma <- get("who.Ha.sigma", env=ewho)
-  Ht.sigma <- get("who.Ht.sigma", env=ewho)
-  Hat.sigma <- get("who.Ha.sigma", env=ewho)
+  Ha.sigma <- get("who.Ha.sigma", envir=ewho)
+  Ht.sigma <- get("who.Ht.sigma", envir=ewho)
+  Hat.sigma <- get("who.Ha.sigma", envir=ewho)
   
   if(graphics){
     op <- par(cex.lab=1.4,omi=c(0,0.1,0,0),cex.main=1,bg="lavenderblush1",font=2,font.axis=2);
@@ -308,7 +308,7 @@ d1.t.stat <- function(mu.age,mu.time,mu.age.time,mat=NA){
 
 find.best.sigma <- function(G,d1.a,d1.t,dtda,SD,
                             n.row=25,summary.measures=c("SD","d1.a","d1.t","dtda"), verbose=T){
-   verb <- try(get("verbose", env=parent.frame()),silent=T)
+   verb <- try(get("verbose", envir=parent.frame()),silent=T)
    if(class(verb)!="try-error")
      verbose <- verb
   rownames(G) <- 1:nrow(G)
@@ -468,15 +468,15 @@ d1.t.stat.old <- function(y.csid){
 
 
 Xy.only <- function(ebase=env.base){
-   ebase <- get("env.base", env=parent.frame())
+   ebase <- get("env.base", envir=parent.frame())
    env.base <- ebase
-   ewho <- get("env.who", env=ebase)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  whoutsampy <- get("whoutsampy", env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  whoutsampx <- get("whoutsampx", env=ewho)
-  who.zero.mean <- get("who.zero.mean",env=ewho)   
-  who.ols.sigma.param <-  get("who.ols.sigma.param", env=ewho)
+   ewho <- get("env.who", envir=ebase)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  whoutsampy <- get("whoutsampy", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  whoutsampx <- get("whoutsampx", envir=ewho)
+  who.zero.mean <- get("who.zero.mean",envir=ewho)   
+  who.ols.sigma.param <-  get("who.ols.sigma.param", envir=ewho)
   clist <- vector(mode="list",length=length(whoinsampy));
   names(clist) <- names(whoinsampy)
   coeff <- clist; 
@@ -568,12 +568,12 @@ prior.param <- function(Ha.sigma.vec=seq(0.1,1.5,length=5), Ht.sigma.vec=seq(0.1
   
 {
  
- ebase <- get("env.base", env=parent.frame())
+ ebase <- get("env.base", envir=parent.frame())
  ewho <- get("env.who",ebase)
  env.base <- ebase
  env.who <- ewho
- verbose <- get("verbose", env=ebase)
- summary.measures <- get("summary.measures", env=env.base)
+ verbose <- get("verbose", envir=ebase)
+ summary.measures <- get("summary.measures", envir=env.base)
  if(is.list(autoset) && length(autoset) > 0){
    names(autoset) <- NULL
    autoset <- unlist(autoset)
@@ -597,9 +597,9 @@ prior.param <- function(Ha.sigma.vec=seq(0.1,1.5,length=5), Ht.sigma.vec=seq(0.1
    Hat.sigma <- G[i,"Hat.sigma"]
   messout(paste("Ha.sigma = ",Ha.sigma, " Ht.sigma = ",Ht.sigma," Hat.sigma = ", Hat.sigma, sep=""),verbose)
    
-   assign("who.Ha.sigma",Ha.sigma,env=env.who)
-   assign("who.Ht.sigma",Ht.sigma,env=env.who)
-   assign("who.Hat.sigma",Hat.sigma,env=env.who)    
+   assign("who.Ha.sigma",Ha.sigma,envir=env.who)
+   assign("who.Ht.sigma",Ht.sigma,envir=env.who)
+   assign("who.Hat.sigma",Hat.sigma,envir=env.who)    
    
    m <- cxc()
    ecxc <- m$ecxc
@@ -630,9 +630,9 @@ prior.param <- function(Ha.sigma.vec=seq(0.1,1.5,length=5), Ht.sigma.vec=seq(0.1
     }
  }
 
-   n.row    <- get("n.row", env=ewho)
-   digits   <- get("digits", env=ewho)
-   filename <- get("filename", env=ewho)
+   n.row    <- get("n.row", envir=ewho)
+   digits   <- get("digits", envir=ewho)
+   filename <- get("filename", envir=ewho)
  
    gsmall <- find.best.sigma(G,d1.a.target,d1.t.target,dtda.target,SD.target,
                           n.row=n.row,summary.measures=summary.measures)
@@ -649,15 +649,15 @@ consistent.checks.ebayes <- function(autoset0, summary.measures0,
       autoset <- autoset0
       summary.measures <- summary.measures0
       
-      if(class(autoset0 <- try(get("autoset", env=env.who), silent=T)) !="try-error")
+      if(class(autoset0 <- try(get("autoset", envir=env.who), silent=T)) !="try-error")
         autoset <- autoset0
       else
-        assign("autoset", autoset0, env=env.who)
+        assign("autoset", autoset0, envir=env.who)
   
-      if(class(summary.measures0 <- try(get("summary.measures", env=env.who), silent=T)) !="try-error")
+      if(class(summary.measures0 <- try(get("summary.measures", envir=env.who), silent=T)) !="try-error")
         summary.measures <- summary.measures0
       else
-        assign("summary.measures", summary.measures0, env=env.who)
+        assign("summary.measures", summary.measures0, envir=env.who)
   
       if(length(na.omit(autoset)) != length(summary.measures))
         stop("You  must provide target values for summary measures")
@@ -721,7 +721,7 @@ histograph <- function(d1.a, d1.t, dt.da, SD, depvar=" ",
     par(op)
     if(identical(graphics.file,NA)) graphics.file <- paste("empirical",depvar,strata,model,sep = "_")
     if (is.character(graphics.file)){
-      try(savePlot(file=paste(whooutpath,graphics.file,sep=""),type="pdf"), silent=T)
+      try(savePlot(filename=paste(whooutpath,graphics.file,sep=""),type="pdf"), silent=T)
     }
   }
 
@@ -759,9 +759,9 @@ histograph <- function(d1.a, d1.t, dt.da, SD, depvar=" ",
 empirical.bayes <- function(m, formula, depvar, graphics.file=NA,verbose=T)
   {
    
-    env.base <- get("env.base", env=parent.frame())
+    env.base <- get("env.base", envir=parent.frame())
     ebase <- env.base
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
     messout("Running empirical bayes...",verbose)
     m <- conversion.cntry.mat(m);
     insampy <- m$insampy
@@ -809,10 +809,10 @@ empirical.bayes <- function(m, formula, depvar, graphics.file=NA,verbose=T)
                              
   {
     
-    ebase <- get("env.base", env=parent.frame())
-    env.who <- get("env.who", env=ebase)
+    ebase <- get("env.base", envir=parent.frame())
+    env.who <- get("env.who", envir=ebase)
     env.base <- ebase
-    model <- get("model", env=ebase)
+    model <- get("model", envir=ebase)
     
  ###initialization
     summary <- c(SD=autoset$SD,d1.a=autoset$d1.a,d1.t=autoset$d1.t,dtda=autoset$dtda)
@@ -861,8 +861,8 @@ build.prior.param <- function(smooth,count.cntry, Ha.sigma.vec,
                               Ht.sigma.vec, Hat.sigma.vec, sims,
                               stats, autoset, model, env.who)
   {
-    env.base <- get("env.base", env=parent.frame())
-    verbose <- get("verbose", env=env.base)
+    env.base <- get("env.base", envir=parent.frame())
+    verbose <- get("verbose", envir=env.base)
     G <- NULL
     vsigma <- c("Ha.sigma", "Ht.sigma", "Hat.sigma")
     ln.smooth <- length(smooth)
@@ -882,7 +882,7 @@ build.prior.param <- function(smooth,count.cntry, Ha.sigma.vec,
         for(n in 1:length(smooth)){
           ass <- paste("who.",names(smooth)[n], sep="")
           if(n > ln.smooth)
-            assign(ass,smooth[n], env=env.who)
+            assign(ass,smooth[n], envir=env.who)
         }
       }
     if(length(G) <= 0)
@@ -901,12 +901,12 @@ build.prior.param <- function(smooth,count.cntry, Ha.sigma.vec,
 ##############################################################
 onecntry.bayes.empirical <- function(G)
   {
-    ebase <- get("env.base", env=parent.frame())
-    env.who <- get("env.who", env=ebase)
+    ebase <- get("env.base", envir=parent.frame())
+    env.who <- get("env.who", envir=ebase)
     env.base <- ebase
     m <- list()
     
-    maxprint <- get("maxprint", env=env.who)
+    maxprint <- get("maxprint", envir=env.who)
     flag <- 0 
     for(i in   1:(min(nrow(G),maxprint)))
       {
@@ -916,15 +916,15 @@ onecntry.bayes.empirical <- function(G)
         Hat.sigma <- try(G[i,"Hat.sigma"], silent=T)
         smooth <- NULL
         if(class(Ha.sigma) != "try-error"){
-          assign("who.Ha.sigma", Ha.sigma, env=env.who)
+          assign("who.Ha.sigma", Ha.sigma, envir=env.who)
           smooth <- c(smooth, Ha.sigma=Ha.sigma)
         }
         if(class(Ht.sigma) != "try-error"){
-          assign("who.Ht.sigma", Ht.sigma, env=env.who)
+          assign("who.Ht.sigma", Ht.sigma, envir=env.who)
           smooth <- c(smooth, Ht.sigma=Ht.sigma)
         }
         if(class(Hat.sigma) != "try-error"){
-          assign("who.Hat.sigma", Hat.sigma, env=env.who)
+          assign("who.Hat.sigma", Hat.sigma, envir=env.who)
           smooth <- c(smooth, Hat.sigma=Hat.sigma)
         }
        
@@ -1016,13 +1016,13 @@ diag.mat <- function(matlist){
 ## ***********************************************************************
 
 covdel <- function(xmat, tol=tol, ebase=env.base) {
-  ebase <- get("env.base", env=parent.frame());
+  ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase;
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <- get("who.digit.first", env=ewho) 
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits",env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <- get("who.digit.first", envir=ewho) 
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits",envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
 if (dim(xmat)[2] <= 1)
   return(list(covx=xmat,covind=NULL,covnam = NULL))
   

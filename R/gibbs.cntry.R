@@ -34,31 +34,31 @@
 ## *************************************************************************
 
 gibbs.cntry.cnst <- function(ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  verbose <- get("verbose", envir=ebase)
 ### if the priors are not used then who.Hct.sigma = NA; same for all others
 ### the average standard deviation of the prior. If NA the prior is not ### used
 ### (it is like having an infinite standard deviation )
-  who.Hct.sigma <- get("who.Hct.sigma", env=ewho)
-  who.Hct.t.deriv <- get("who.Hct.t.deriv", env=ewho)
-  who.Hct.time.weight <- get("who.Hct.time.weight", env=ewho)
+  who.Hct.sigma <- get("who.Hct.sigma", envir=ewho)
+  who.Hct.t.deriv <- get("who.Hct.t.deriv", envir=ewho)
+  who.Hct.time.weight <- get("who.Hct.time.weight", envir=ewho)
   if ( is.na(who.Hct.sigma))
     return(0);
   
 ############### PRIOR OVER CNTRY AND TIME GROUPS (for same age)################
 ######
   
-  age.vec <- get("age.vec", env=ewho)
-  whoinsampy <- get("whoinsampy", env =ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  whocov <- get("whocov", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.cntry.digits  <- get("who.cntry.digits", env=ewho)
-  who.digit.first   <- get("who.digit.first", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.cntry.digits  <- get("who.cntry.digits", envir=ewho)
+  who.digit.first   <- get("who.digit.first", envir=ewho)
   digit.cntry.end   <- who.digit.first + who.cntry.digits; 
   digit.cntry.begin <- who.digit.first + 1
   digit.age.begin <- digit.cntry.end + 1
@@ -77,7 +77,7 @@ gibbs.cntry.cnst <- function(ebase=env.base){
 ### For who.C.cntry elements cntry1+cntry2+age correlation cntry1, cntry2;
 ### each elemnt is a matrix with multiplication among covariates
 ### 
-  age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")  
+  age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")  
 if(length(cntry.vec)>1){
   messout("Preparing for smoothing of time trend over countries", verbose);
   time.prior.param <- list(time.der=who.Hct.t.deriv,time.weight=who.Hct.time.weight)
@@ -128,7 +128,7 @@ if(length(cntry.vec)>1){
  
   age.age  <- sapply(age.char,function(x) paste(x,x,sep=""));
 ### include in cntry.char only correlated cntry's; isolated cntry's are excluded
-  cntry.char <- formatC(cntry.related, wid=who.cntry.digits,format="d", flag="0")
+  cntry.char <- formatC(cntry.related, width=who.cntry.digits,format="d", flag="0")
   ctr.ctr<- sapply(cntry.char, function(x) paste(x,x,sep=""))
 ### cntry matrices
   alist <- vector(mode="list",length=length(age.vec));
@@ -230,7 +230,7 @@ if(length(cntry.vec)>1){
 ###
 ##  print(proc.time()-ttmp)   
   env.gibbs.cntry <- environment();
-  assign("env.gibbs.cntry",  env.gibbs.cntry, env=ebase); 
+  assign("env.gibbs.cntry",  env.gibbs.cntry, envir=ebase); 
 }
 
 
@@ -282,19 +282,19 @@ gibbs.cntry.beta <- function(age,cntry.select, cxc.beta =NULL, Hct.theta=NULL) {
 ### CXC model coefficients for covariates given age and all cntrys
 ### ols.beta.csid <- ols.beta[grep(ctr,names(ols.beta))]
 ##  ttmp <- proc.time()
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  egibbs  <- get("env.gibbs.cntry", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.vec  <- get("cntry.vec", env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.cntry.digits  <- get("who.cntry.digits", env=ewho)
-  who.digit.first   <- get("who.digit.first", env=ewho)
-  who.Hct.sigma <- get("who.Hct.sigma", env = ewho)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  egibbs  <- get("env.gibbs.cntry", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.vec  <- get("cntry.vec", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.cntry.digits  <- get("who.cntry.digits", envir=ewho)
+  who.digit.first   <- get("who.digit.first", envir=ewho)
+  who.Hct.sigma <- get("who.Hct.sigma", envir= ewho)
+  verbose <- get("verbose", envir=ebase)
    if ( is.na(who.Hct.sigma))
      return (0); 
   digit.cntry.end   <- who.digit.first + who.cntry.digits; 
@@ -302,21 +302,21 @@ gibbs.cntry.beta <- function(age,cntry.select, cxc.beta =NULL, Hct.theta=NULL) {
   digit.age.begin   <- digit.cntry.end + 1
   digit.age.end     <- digit.cntry.end + who.age.digits
   if (length(Hct.theta) <= 0)
-    Hct.theta <- get("Hct.theta", env=ecxc)
+    Hct.theta <- get("Hct.theta", envir=ecxc)
   if (Hct.theta == 0)
     return (0);
   
-  Hct.wc.lst <- get("Hct.wc.lst", env=egibbs)
-  omega.Cc1c2.cntry.lst <- get("omega.Cc1c2.cntry.lst", env=egibbs)
-  beta.dim.lst <- get("beta.dim.lst", env=egibbs)
-  isle.cntry <- get("isle.cntry", env=egibbs)
+  Hct.wc.lst <- get("Hct.wc.lst", envir=egibbs)
+  omega.Cc1c2.cntry.lst <- get("omega.Cc1c2.cntry.lst", envir=egibbs)
+  beta.dim.lst <- get("beta.dim.lst", envir=egibbs)
+  isle.cntry <- get("isle.cntry", envir=egibbs)
 ### the vector numeric form of cntry.char with only the subset of
 ### correlated cntry's of cntry.vec 
-  cntry.related <- get("cntry.related", env=egibbs)
+  cntry.related <- get("cntry.related", envir=egibbs)
 ### cntry.char is character (string) with correlated cntry's
-  cntry.char <- get("cntry.char", env=egibbs)
+  cntry.char <- get("cntry.char", envir=egibbs)
   
-  age.str <- formatC(age, wid=who.age.digits, format="d", flag="0")
+  age.str <- formatC(age, width=who.age.digits, format="d", flag="0")
   atr <- paste(age.str, "$", sep="")
   csid <- paste(cntry.char,age.str, sep="")
   Hct.wc  <- Hct.wc.lst[[age.str]]
@@ -324,7 +324,7 @@ gibbs.cntry.beta <- function(age,cntry.select, cxc.beta =NULL, Hct.theta=NULL) {
 ####
    
   if(length(cxc.beta) <= 0)
-    cxc.beta <- get("coeff", env=ecxc)
+    cxc.beta <- get("coeff", envir=ecxc)
   
     cxc.beta.csid <- cxc.beta[grep(atr,names(cxc.beta))]
 ### subscript ".csid" denotes a list of covariates matrices,
@@ -351,7 +351,7 @@ gibbs.cntry.beta <- function(age,cntry.select, cxc.beta =NULL, Hct.theta=NULL) {
     names.beta <- unlist(names.beta, recursive=T)
 ### the .age denotes one matrix of 1 col and length =no covariates X cntry's
 ### so all covariates for specific age group and all cntry
-    beta.hat.cntry <- as.matrix(unlist(beta.hat.csid, recursive = T, use.name=T));
+    beta.hat.cntry <- as.matrix(unlist(beta.hat.csid, recursive = T, use.names=T));
     rownames(beta.hat.cntry) <- names.beta;
 ### first estimation for beta.hat.cntry is from OLS
 ### cntry prior 
@@ -404,13 +404,13 @@ gibbs.cntry.beta <- function(age,cntry.select, cxc.beta =NULL, Hct.theta=NULL) {
 ## *************************************************************************       
 
 build.super.cntry.mat  <- function(omega,agch,ctr){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  who.digit.first <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits <- get("who.year.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits <- get("who.year.digits", envir=ewho)
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -419,8 +419,8 @@ build.super.cntry.mat  <- function(omega,agch,ctr){
   digit.year.begin  <- digit.age.end   + 1 
   digit.year.end    <- digit.age.end   + who.year.digits
   if(length(ctr) <= 0){
-    cntry.vec <- get("cntry.vec", env=ewho)
-    ctr <- formatC(cntry.vec, wid=who.cntry.digits, format="d", flag="0")}
+    cntry.vec <- get("cntry.vec", envir=ewho)
+    ctr <- formatC(cntry.vec, width=who.cntry.digits, format="d", flag="0")}
 ### omega is a list of matrices to be joined to form large mat
 ### agech a vector with age groups as chars
 ### id a vector with csid's identifiers= cntry+age.char (one cntry and all ages)
@@ -515,9 +515,9 @@ build.super.cntry.mat  <- function(omega,agch,ctr){
 ## 
 ## ************************************************************************
   make.Lambda.age.lst <- function(Lambda, agech,cntrych, verbose=T){
-    ebase <- try(get("env.base", env=parent.frame()),silent=T)
+    ebase <- try(get("env.base", envir=parent.frame()),silent=T)
     if(class(ebase)!="try-error")
-    verbose <- get("verbose", env=ebase)
+    verbose <- get("verbose", envir=ebase)
       findx.c.r <- lapply(1:length(cntrych), function(x,Lambda){
       ctr <- cntrych[x]
       ctr <- paste("^", ctr, sep="")

@@ -118,14 +118,14 @@ digitpull <- function(v, startdig, stopdig) {
 
  
  modify.age.profiles <- function(y,func,param){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  df <- get("who.digit.first", env=ewho)
-  dc <- get("who.cntry.digits", env=ewho)
-  da <- get("who.age.digits", env=ewho)
-  dy <- get("who.year.digits", env=ewho)
-  agev <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  df <- get("who.digit.first", envir=ewho)
+  dc <- get("who.cntry.digits", envir=ewho)
+  da <- get("who.age.digits", envir=ewho)
+  dy <- get("who.year.digits", envir=ewho)
+  agev <- get("age.vec", envir=ewho)
   n.age <- length(agev)
   insampy <- list.by.cntry(y,who.digit.first=df,who.cntry.digits=dc, who.age.digits=da, who.year.digits=dy);
   
@@ -263,13 +263,13 @@ bind.list <-  function(x,y,bycol=FALSE,namex=TRUE,colname=NULL) {
 ## ************************************************************************
 
 make.average.age.profile <- function(y,bycntry=FALSE, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  df <- get("who.digit.first", env=ewho)
-  dc <- get("who.cntry.digits", env=ewho)
-  da <- get("who.age.digits", env=ewho)
-  dy <- get("who.year.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  df <- get("who.digit.first", envir=ewho)
+  dc <- get("who.cntry.digits", envir=ewho)
+  da <- get("who.age.digits", envir=ewho)
+  dy <- get("who.year.digits", envir=ewho)
 
   insampy <- list.by.cntry(y,who.digit.first=df,who.cntry.digits=dc, who.age.digits=da, who.year.digits=dy);
   age.profile.list <- lapply(insampy,FUN=function(x){return(mean(as.data.frame(x),na.rm=TRUE))});
@@ -327,16 +327,16 @@ list.by.cntry <- function(x, ebase=1,
 {
   if (!identical(.GlobalEnv, parent.frame()) && length(ebase) > 0 ){
     
-    ebase <- get("env.base", env=parent.frame());
+    ebase <- get("env.base", envir=parent.frame());
     env.base <- ebase;
-    ewho <- get("env.who", env=ebase)
-    cntry.vec <- get("cntry.vec", env=ewho)
-    age.vec <- get("age.vec", env=ewho)
+    ewho <- get("env.who", envir=ebase)
+    cntry.vec <- get("cntry.vec", envir=ewho)
+    age.vec <- get("age.vec", envir=ewho)
       
-    who.digit.first  <- get("who.digit.first", env=ewho) 
-    who.cntry.digits <- get("who.cntry.digits", env=ewho)
-    who.age.digits   <- get("who.age.digits",env=ewho)
-    who.year.digits  <- get("who.year.digits", env=ewho)
+    who.digit.first  <- get("who.digit.first", envir=ewho) 
+    who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+    who.age.digits   <- get("who.age.digits",envir=ewho)
+    who.year.digits  <- get("who.year.digits", envir=ewho)
   }
 ### Structure of dataset cstsid:
 
@@ -410,11 +410,11 @@ list.by.csid <- function(insampy.c,col.name="dth", ebase=1){
       message("Setting the number of age digits equal to 2") 
       who.age.digits   <- 2
     }else{
-      ebase <- get("env.base", env=parent.frame());
+      ebase <- get("env.base", envir=parent.frame());
       env.base <- ebase;
-      ewho <- get("env.who", env=ebase)
+      ewho <- get("env.who", envir=ebase)
   ### Structure of dataset cstsid: 
-      who.age.digits   <- get("who.age.digits",env=ewho)
+      who.age.digits   <- get("who.age.digits",envir=ewho)
     }
  
     cntry.vec <- as.numeric(names(insampy.c));
@@ -532,7 +532,7 @@ split.matrix <- function(x,blocks){
 ## ************************************************************************
 
 make.forecast <- function(coeff,X, verbose=T){
-   verb <- try(get("verbose", env=get("env.base", env=parent.frame())),silent=T)
+   verb <- try(get("verbose", envir=get("env.base", envir=parent.frame())),silent=T)
     if(class(verb)!="try-error")
       verbose <- verb
   indx <- seq(1,length(X));
@@ -628,11 +628,11 @@ death.from.logmortality <- function(logm,popu){
 
 
 model.string <- function(ebase=env.base){
-ebase <- get("env.base", env=parent.frame());
+ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase;
-  ewho <- get("env.who", env=ebase)
-  whomodel <- get("whomodel", env= ewho)
-  who.ols.sigma.param <- get("who.ols.sigma.param", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  whomodel <- get("whomodel", envir= ewho)
+  who.ols.sigma.param <- get("who.ols.sigma.param", envir=ewho)
   s <-  whomodel;
   if (whomodel == "OLS"){
     if (who.ols.sigma.param$use.deaths == TRUE && who.ols.sigma.param$average == FALSE){
@@ -705,7 +705,7 @@ strpad <- function(x){
 ##         age.vec: (vector) vector of age groups represented in the list coeff
 ##
 ##         if either of cntry.vec or age.vec are not defined, get them from the
-##         ewho environmnet: ewho= get("env.who", env = env.base); ebase= env.base
+##         ewho environmnet: ewho= get("env.who", envir= env.base); ebase= env.base
 ##
 ## OUTPUT:       s: (list) a cross-sectional list indexed by countries.
 ##                  For each county the regression coefficients corresponding
@@ -725,16 +725,16 @@ strpad <- function(x){
 
 
 list.coeff.by.cntry <- function(coeff,cntry.vec=NULL,age.vec=NULL, ebase = env.base){
-ebase <- get("env.base", env=parent.frame());
+ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase;
-  ewho <- get("env.who", env=ebase)
-  who.age.digits <- get("who.age.digits", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  who.age.digits <- get("who.age.digits", envir=ewho)
   if(length(cntry.vec) <= 0)
-    cntry.vec <- get("cntry.vec", env=ewho)
+    cntry.vec <- get("cntry.vec", envir=ewho)
   if(length(age.vec) <= 0)
-    age.vec <- get("age.vec", env=ewho)
+    age.vec <- get("age.vec", envir=ewho)
   
-  age.char <- formatC(age.vec,wid= who.age.digits,format="d", flag="0")
+  age.char <- formatC(age.vec,width= who.age.digits,format="d", flag="0")
 
 ### cov.list is the vector of covariates in the n-th cross-section;
   names(cntry.vec) <- cntry.vec;
@@ -747,14 +747,14 @@ ebase <- get("env.base", env=parent.frame());
 
 
 list.by.cntry.long <- function(x, ebase=env.base){
-ebase <- get("env.base", env=parent.frame());
+ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase;
 ### In terms of the global, the structure of dataset cstsid:
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <- get("who.digit.first", env=ewho) 
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits",env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho) 
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <- get("who.digit.first", envir=ewho) 
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits",envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho) 
 ### Structure of dataset cstsid:
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -790,14 +790,14 @@ ebase <- get("env.base", env=parent.frame());
 ######################################################################
 
 unlist.by.cntry.long <- function(y, ebase= env.base){
-ebase <- get("env.base", env=parent.frame());
+ebase <- get("env.base", envir=parent.frame());
   env.base <- ebase;
 ### In terms of the global, the structure of dataset cstsid:
-  ewho <- get("env.who", env=ebase)
-  who.digit.first  <- get("who.digit.first", env=ewho) 
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits",env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho) 
+  ewho <- get("env.who", envir=ebase)
+  who.digit.first  <- get("who.digit.first", envir=ewho) 
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits",envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho) 
 ### Structure of dataset cstsid: 
   digit.cntry.begin <- who.digit.first + 1 
   digit.cntry.end   <- who.digit.first + who.cntry.digits
@@ -1069,9 +1069,9 @@ ebase <- get("env.base", env=parent.frame());
 
 
 save.file.WHO <- function(mm, covname, ncol, type,whocovpath, verbose=T){
-   ebase <- try(get("env.base", env=parent.frame()), silent=T)
+   ebase <- try(get("env.base", envir=parent.frame()), silent=T)
    if(class(ebase)!="try-error")
-     verbose <- get("verbose", env=ebase)
+     verbose <- get("verbose", envir=ebase)
  
 
 ###colnames(mat) <-  c(covname, "cstsid","gender")
@@ -1208,11 +1208,11 @@ sort.dataobj <- function(dataobj){
 cntry.names <- function(filename=NULL, flag= F, ebase=parent.frame()) {
  
   if(length(filename) <= 0 ){  
-    ebase <- get("env.base", env = parent.frame())
+    ebase <- get("env.base", envir= parent.frame())
     env.base <- ebase
-    ewho <- get("env.who", env=ebase)
-    whodatapath <- get("whodatapath", env=ewho)
-    codes.names <- get("codes.names", env=ewho)
+    ewho <- get("env.who", envir=ebase)
+    whodatapath <- get("whodatapath", envir=ewho)
+    codes.names <- get("codes.names", envir=ewho)
 
     filename <-  paste(whodatapath,codes.names,sep="")
   }

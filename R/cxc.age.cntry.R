@@ -29,25 +29,25 @@
 cxc <- function(Hct.only=F,  ebase=env.base){
 
  
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  whoutsampx <- get("whoutsampx", env=ewho)
-  who.zero.mean <- get("who.zero.mean", env=ewho)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  whoutsampy <- get("whoutsampy", env=ewho)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  whoutsampx <- get("whoutsampx", envir=ewho)
+  who.zero.mean <- get("who.zero.mean", envir=ewho)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  whoutsampy <- get("whoutsampy", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
   insampy  <- whoinsampy
   outsampy <- whoutsampy
   model <- model.string(); 
 
 ### the following are needed to output it yourcast
 
-  whoyrest <- get("whoyrest", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.names.lst <- get("cntry.names.lst", env=ewho)
-  whomodel <- get("whomodel", env=ewho)
+  whoyrest <- get("whoyrest", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.names.lst <- get("cntry.names.lst", envir=ewho)
+  whomodel <- get("whomodel", envir=ewho)
   whomodel <- toupper(trim.blanks(whomodel))
    
   ix <- NULL
@@ -56,8 +56,8 @@ cxc <- function(Hct.only=F,  ebase=env.base){
 ### this is the main call, which computes the coefficients and other quantities of interest
     ecxc <- cxc.model(Hct.only,env.base);
 
-    coeff <-  get("coeff", env=ecxc)
-      S.list <- get("S.list",env=ecxc)
+    coeff <-  get("coeff", envir=ecxc)
+      S.list <- get("S.list",envir=ecxc)
   
     ix <- check.coeff.na(coeff)
    
@@ -111,7 +111,7 @@ cxc <- function(Hct.only=F,  ebase=env.base){
               coeff=coeff,yhatin=yhatin,yhatout=yhatout,
               insampy=insampy,outsampy=outsampy, ecxc=ecxc, std=std);
 ### make the assignment to ewho to build output
-  assign("lst.output", lst, env=ewho)
+  assign("lst.output", lst, envir=ewho)
 ###  lstout <<- lst
   return(lst);
 }
@@ -123,41 +123,41 @@ cxc <- function(Hct.only=F,  ebase=env.base){
 ######################################################################
 
 cxc.model <- function(Hct.only=F, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
   n.age <- length(age.vec)
   
-  svdonly <- get("svdonly", env=ewho)
-  who.Ha.time.weight <- get("who.Ha.time.weight", env=ewho)
-  who.Ha.deriv <- get("who.Ha.deriv", env=ewho)
-  who.Ha.age.weight <- get("who.Ha.age.weight", env=ewho)
-  who.Hat.t.deriv <- get("who.Hat.t.deriv",env=ewho)
-  who.Hat.time.weight <- get("who.Hat.time.weight", env=ewho)
-  who.Hat.a.deriv <- get("who.Hat.a.deriv", env=ewho)
-  who.Hat.age.weight <- get("who.Hat.age.weight", env=ewho)
-  who.Ht.deriv <- get("who.Ht.deriv", env=ewho)
-  who.Ht.time.weight <- get("who.Ht.time.weight", env=ewho)
-  who.Ht.age.weight <- get("who.Ht.age.weight", env=ewho)
-  who.Hct.t.deriv <- get("who.Hct.t.deriv", env=ewho)
-  who.Hct.time.weight <- get("who.Hct.time.weight", env=ewho)
-  whoinsampy <- get("whoinsampy", env =ewho)
-  who.zero.mean <- get("who.zero.mean",env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
- verbose <- get("verbose", env=ebase)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  whocov <- get("whocov", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  whomodel <- get("whomodel", env=ewho)
+  svdonly <- get("svdonly", envir=ewho)
+  who.Ha.time.weight <- get("who.Ha.time.weight", envir=ewho)
+  who.Ha.deriv <- get("who.Ha.deriv", envir=ewho)
+  who.Ha.age.weight <- get("who.Ha.age.weight", envir=ewho)
+  who.Hat.t.deriv <- get("who.Hat.t.deriv",envir=ewho)
+  who.Hat.time.weight <- get("who.Hat.time.weight", envir=ewho)
+  who.Hat.a.deriv <- get("who.Hat.a.deriv", envir=ewho)
+  who.Hat.age.weight <- get("who.Hat.age.weight", envir=ewho)
+  who.Ht.deriv <- get("who.Ht.deriv", envir=ewho)
+  who.Ht.time.weight <- get("who.Ht.time.weight", envir=ewho)
+  who.Ht.age.weight <- get("who.Ht.age.weight", envir=ewho)
+  who.Hct.t.deriv <- get("who.Hct.t.deriv", envir=ewho)
+  who.Hct.time.weight <- get("who.Hct.time.weight", envir=ewho)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  who.zero.mean <- get("who.zero.mean",envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+ verbose <- get("verbose", envir=ebase)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  whocov <- get("whocov", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  whomodel <- get("whomodel", envir=ewho)
   if(identical(toupper(whomodel),"EBAYES"))
     whomodel <- "MAP"
   
-  who.Ha.sigma <- get("who.Ha.sigma", env=ewho)
-  who.Hat.sigma <- get("who.Hat.sigma", env=ewho)
-  who.Ht.sigma <- get("who.Ht.sigma", env=ewho)
-  who.Hct.sigma <- get("who.Hct.sigma", env=ewho)
+  who.Ha.sigma <- get("who.Ha.sigma", envir=ewho)
+  who.Hat.sigma <- get("who.Hat.sigma", envir=ewho)
+  who.Ht.sigma <- get("who.Ht.sigma", envir=ewho)
+  who.Hct.sigma <- get("who.Hct.sigma", envir=ewho)
   param <- list(Ha.sigma=who.Ha.sigma,Hat.sigma=who.Hat.sigma,
                 Ht.sigma=who.Ht.sigma, Hct.sigma=who.Hct.sigma);
   Ha.theta <- 0
@@ -198,24 +198,24 @@ if(Ha.theta != 0){
  
   
  }
-###  assign("W.age", W.age, env=ewho)
-###  assign("who.C.age", who.C.age, env=ewho)
+###  assign("W.age", W.age, envir=ewho)
+###  assign("who.C.age", who.C.age, envir=ewho)
  if(Hat.theta != 0){ 
   messout("Preparing for smoothing of time trend over age groups", verbose);  
   time.prior.param <- list(time.der=who.Hat.t.deriv,time.weight=who.Hat.time.weight)
   W.age.time <- derivative.prior(n.age,who.Hat.a.deriv,who.Hat.age.weight)
   who.C.age.time <- build.C.age.time(W.age.time,time.prior.param, env.base);}
 
-###  assign("W.age.time", W.age.time, env=ewho)
-###  assign("who.C.age.time", who.C.age.time, env=ewho)
+###  assign("W.age.time", W.age.time, envir=ewho)
+###  assign("who.C.age.time", who.C.age.time, envir=ewho)
   if(Ht.theta != 0){
   messout("Preparing for smoothing over time", verbose);  
   time.prior.param <- list(time.der=who.Ht.deriv,time.weight=who.Ht.time.weight)
   W.time <- derivative.prior(n.age,1,who.Ht.age.weight);
   who.C.time <- build.C.age.time(W.time,time.prior.param, env.base);}
 
-###  assign("W.time", W.time, env=ewho)
-###  assign("who.C.time", who.C.time, env=ewho)
+###  assign("W.time", W.time, envir=ewho)
+###  assign("who.C.time", who.C.time, envir=ewho)
  
 if(length(cntry.vec) && Hct.theta !=0 ){
   messout("Preparing for smoothing of time trend over countries", verbose);
@@ -269,8 +269,8 @@ if(length(cntry.vec) && Hct.theta !=0 ){
   
   indx <- seq(1,length(insampy));
     names(indx) <- names(insampy);
-### assign("ols.result", ols.result, env=ewho)
-### assign("sigma.ols", sigma, env=ewho)
+### assign("ols.result", ols.result, envir=ewho)
+### assign("sigma.ols", sigma, envir=ewho)
 ### likelihood.weights is a list like insampy, with the weights
 ### of each individual observation. Missing observations have 0 weight
   likelihood.weights <- lapply(indx,FUN=function(n,insampy,sigma){y <- insampy[[n]];
@@ -323,7 +323,7 @@ if(length(cntry.vec) && Hct.theta !=0 ){
 #######################################################################################
   
   
-  age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+  age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
   age.prior <- (!is.na(who.Ha.sigma) || !is.na(who.Ht.sigma) || !is.na(who.Hat.sigma))
   beta.dim.all <- list()
   t.list.all <- list()
@@ -499,7 +499,7 @@ if(length(cntry.vec) && Hct.theta !=0 ){
   }# end for loop over cntry
 } ## if (any age, time, age-time Ha.theta, Ht.theta, Hat.theta !0)
   env.cxc <- environment();
-  assign("env.cxc", env.cxc, env=env.base)  
+  assign("env.cxc", env.cxc, envir=env.base)  
   
     D.cntry.lst <- as.list(1:length(age.vec));
     names(D.cntry.lst) <- age.char

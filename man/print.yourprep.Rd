@@ -5,7 +5,7 @@
 
 \description{yourprep class print function}
 
-\usage{print.yourprep(x, ...)}
+\usage{\method{print}{yourprep}(x, ...)}
 
 \arguments{
   \item{x}{\code{\link{yourprep}} output object to be printed}

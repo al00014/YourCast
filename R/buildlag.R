@@ -169,7 +169,7 @@ lagdataobj <- function(formula, dataobj)
 lag.datamat <- function(ff, datamat, dlst, cvnm,fix, verbose=T)
 {
 ###  cat("Inside lag.datamat...","\n")
- verb <- try(get("verbose", env=get("env.base",env=parent.frame())),silent=T)
+ verb <- try(get("verbose", envir=get("env.base",envir=parent.frame())),silent=T)
     if(class(verb)!="try-error")
       verbose <- verb
   lst <- findlag(ff)
@@ -331,7 +331,7 @@ lag.datamat <- function(ff, datamat, dlst, cvnm,fix, verbose=T)
 ### evillalon@iq.harvard.edu
 ##################################################################
 lag.cov <- function(lag, cov, mat, fix, verbose=T){   
- verb <- try(get("verbose", env=get("env.base",env=parent.frame())),silent=T)
+ verb <- try(get("verbose", envir=get("env.base",envir=parent.frame())),silent=T)
     if(class(verb)!="try-error")
       verbose <- verb
   nr  <- nrow(mat)

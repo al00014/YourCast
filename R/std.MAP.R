@@ -9,13 +9,13 @@
 ###        girosi@rand.org
 
 std.MAP <- function(S.list){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   whocov <- get("whocov",ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.digit.first <- get("who.digit.first", env=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.digit.first <- get("who.digit.first", envir=ewho)
   digit.cntry.begin <- who.digit.first + 1
   digit.cntry.end <- who.cntry.digits + who.digit.first
   digit.age.begin <- who.digit.first + who.cntry.digits + 1;

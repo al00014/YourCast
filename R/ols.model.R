@@ -38,11 +38,11 @@
 ## ************************************************************************
 
     inverse.trans <- function(yin,yout,y, whotransform=NULL, ebase) {
-      ebase <- get("env.base", env=parent.frame())
+      ebase <- get("env.base", envir=parent.frame())
       env.base <- ebase
-      ewho <- get("env.who",env=ebase) 
+      ewho <- get("env.who",envir=ebase) 
       if(length(whotransform) <= 0)
-        whotransform <- get("whotransform", env =ewho)
+        whotransform <- get("whotransform", envir=ewho)
     if (whotransform == 1){
 ### retp <- log(dthvec)  
         yhatin  <- yin
@@ -161,33 +161,33 @@ svd.inv <-  function(x,svdtol=1e-10){
                     
 
 ols <- function(ebase){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
  
-  whoinsampy <- get("whoinsampy", env=ewho)
-  whoutsampy <- get("whoutsampy", env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  whoutsampx <- get("whoutsampx", env=ewho)
-  who.ols.sigma.param <-  try(get("who.ols.sigma.param", env=ewho), silent=T)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  whoutsampy <- get("whoutsampy", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  whoutsampx <- get("whoutsampx", envir=ewho)
+  who.ols.sigma.param <-  try(get("who.ols.sigma.param", envir=ewho), silent=T)
   if(class(who.ols.sigma.param) == "try-error")
-    who.ols.sigma.param <- get("ols.sigma.param", env=ebase)
+    who.ols.sigma.param <- get("ols.sigma.param", envir=ebase)
   
-  whoyrest <- try(get("whoyrest", env=ewho), silent=T)
+  whoyrest <- try(get("whoyrest", envir=ewho), silent=T)
   if(class(whoyrest) == "try-error")
-    whoyrest <- get("yrest", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
+    whoyrest <- get("yrest", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
   
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  whomodel <- get("whomodel", env=ewho)
-  svdtol <- get("svdtol", env=ewho)
-  verbose <- get("verbose", env=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  whomodel <- get("whomodel", envir=ewho)
+  svdtol <- get("svdtol", envir=ewho)
+  verbose <- get("verbose", envir=ewho)
   digit.year.begin <- who.digit.first + who.cntry.digits + who.age.digits + 1;  
 ####
-  cntry.names.lst <- get("cntry.names.lst", env=ewho)
+  cntry.names.lst <- get("cntry.names.lst", envir=ewho)
   if(toupper(trim.blanks(whomodel)) == "OLS")
     messout("Running OLS model...", verbose);
   clist <- vector(mode="list",length=length(whoinsampy));
@@ -241,8 +241,8 @@ ols <- function(ebase){
   }
 
   
-   assign("XX", XX, env=get("env.who", env=env.base));
-   assign("Xy",Xy, env=get("env.who", env=env.base));
+   assign("XX", XX, envir=get("env.who", envir=env.base));
+   assign("Xy",Xy, envir=get("env.who", envir=env.base));
 
 ### now we make the forecasts of the dependent variable
    yhatin <- make.forecast(coeff,whoinsampx);
@@ -258,7 +258,7 @@ ols <- function(ebase){
   lst <- list(yrest=whoyrest,model=model,age.vec=age.vec, cntry.lst=cntry.names.lst,
               coeff=coeff,yhatin=yhatin,yhatout=yhatout,std=std,
               insampy =whoinsampy, outsampy=whoutsampy)
-  assign("lst.output", lst, env=ewho)
+  assign("lst.output", lst, envir=ewho)
   return(invisible(lst));       
 }
 

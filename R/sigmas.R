@@ -70,13 +70,13 @@
 
 
 plot.sigmas <- function(ols.result,show.adjusted=FALSE,graphdir=NA,compact=TRUE, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  popul <- get("whopopul", env=ewho)
-  ages <- get("age.vec", env=ewho)
-  disease <- get("whodisease", env=ewho)
-  gender <- get("whogender", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  popul <- get("whopopul", envir=ewho)
+  ages <- get("age.vec", envir=ewho)
+  disease <- get("whodisease", envir=ewho)
+  gender <- get("whogender", envir=ewho)
                 
   std <- ols.result$std;       ### standard deviations from OLS (cross-sectional list)
   yhatin <- ols.result$yhatin; ### insample prediction from ols (cross-sectional time series)
@@ -301,20 +301,20 @@ plot.sigmas <- function(ols.result,show.adjusted=FALSE,graphdir=NA,compact=TRUE,
 ## ************************************************************************
 
 estimate.standard.deviations <- function(ols.result, ctr = NULL,ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  popul <- get("whopopul", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  popul <- get("whopopul", envir=ewho)
   if(length(ctr) > 0)
     popul <- popul[grep(ctr,names(popul))]
-  insampy <- get("whoinsampy", env=ewho)
+  insampy <- get("whoinsampy", envir=ewho)
   if(length(ctr) > 0)
     insampy <- insampy[grep(ctr,names(insampy))]               
-  age.vec <- get("age.vec", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)
-  who.digit.first  <- get("who.digit.first", env=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
   digit.year.begin <- who.digit.first + who.cntry.digits + who.age.digits + 1;  
   ages <- age.vec 
   std <- ols.result$std;       ### standard deviations from OLS (cross-sectional list)
@@ -438,9 +438,9 @@ estimate.standard.deviations <- function(ols.result, ctr = NULL,ebase=env.base){
 ## ************************************************************************
 
 poisson.sigma.profile <- function(death.cs,bycntry=FALSE, ebase=env.base){
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   sigma.cs <- lapply(death.cs,FUN=function(x){sqrt(log(1+1/x))});
   sigma.average.profile <- make.average.age.profile(sigma.cs,bycntry=bycntry);
   return(sigma.average.profile)
@@ -453,12 +453,12 @@ poisson.sigma.profile <- function(death.cs,bycntry=FALSE, ebase=env.base){
 ######################################################################
 
 sigma.profile.from.ols <- function(std,bycntry=FALSE, ebase=parent.frame()){
-  ebase <- get("env.base", env =parent.frame())
-    ewho <- get("env.who", env=ebase)
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.age.digits   <- get("who.age.digits", env=ewho)
-  who.year.digits  <- get("who.year.digits", env=ewho)  
+  ebase <- get("env.base", envir=parent.frame())
+    ewho <- get("env.who", envir=ebase)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.age.digits   <- get("who.age.digits", envir=ewho)
+  who.year.digits  <- get("who.year.digits", envir=ewho)  
     digit.cntry.begin <- who.digit.first + 1 
     digit.cntry.end   <- who.digit.first + who.cntry.digits
     digit.age.begin   <- digit.cntry.end + 1

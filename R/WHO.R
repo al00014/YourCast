@@ -1,19 +1,19 @@
 ##
-## USED GLOBALS: env=env.base, our base environment, which for working purposes we
+## USED GLOBALS: envir=env.base, our base environment, which for working purposes we
 ##               designated it to be the .GlobalEnv.  It is now the environment for function main()
 ##               that wraps up all programs and functions.
-##               Also, env=env.who (an environment), which we create to stores all
+##               Also, envir=env.who (an environment), which we create to stores all
 ##               static variables to be shared by all functions and programs.  
-##               We assign env.who to the env.base as, assign("env.who", env=env.base)
-##               if you want to see what is in env.who:  >  ls(env=get("env.who", env=env.base)); 
+##               We assign env.who to the env.base as, assign("env.who", envir=env.base)
+##               if you want to see what is in env.who:  >  ls(envir=get("env.who", envir=env.base)); 
 ##
 ## DESCRIPTION:  The programs static variables, are given default values with
 ##               the function WHO(); variables are stored in the environment env.who,
 ##               which belongs to env.base. Any variables belonging to env.who,
 ##               may be retreived from env.base as:
-##               get("whodisease",env=get("env.who", env=env.base)); 
+##               get("whodisease",envir=get("env.who", envir=env.base)); 
 ##               and you may change its value as
-#               assign("whodisease",newdisease, env=get("env.who", env=env.base))
+#               assign("whodisease",newdisease, envir=get("env.who", envir=env.base))
 ##
 ## FORMAT: WHO(ebase=env.base) 
 ##
@@ -30,18 +30,18 @@
 ## ************************************************************************
 
 ### env.base is the environmnet for function main, which may be globalized 
-### assign("env.base", env.base, env= get(".GlobalEnv", env=.GlobalEnv))
-##ebase = get("env.base", env=.GlobalEnv)
+### assign("env.base", env.base, envir= get(".GlobalEnv", envir=.GlobalEnv))
+##ebase = get("env.base", envir=.GlobalEnv)
 
 WHO.yourcast <- function(input.lst, ebase=NULL,env.who=NULL){
 ### we are not attaching ewho to env.base but returning it
 ### because we need to make it available to stand alone functions.
-###  ebase <- get("env.base", env=parent.frame())
+###  ebase <- get("env.base", envir=parent.frame())
 ### find the environment to store variables
 ### the parent.frame() is env.base (driver environment),
 ### but if driver does not exist then default is .GlobalEnv
 
-  ebase <- get("env.base", env=parent.frame())
+  ebase <- get("env.base", envir=parent.frame())
 
   chk.env <- T ### checking if you are assigning to input env.who or to the local env.  
   if(length(env.who) <= 0){
@@ -55,29 +55,29 @@ WHO.yourcast <- function(input.lst, ebase=NULL,env.who=NULL){
 ### Enter all variables as vectors; such as whousercntrylist <- c(2450, 4280)
 ### cause of death we want to predict
 
-whoyrest <- try(get("yrest",env=ebase), silent=T)
+whoyrest <- try(get("yrest",envir=ebase), silent=T)
 delta.tol <- .Machine$double.eps
 
 ########################### DEFINE STRUCTURES OF cstsid ###############################
 ###
 
- who.cntry.digits <- try(get("cntry.digits", env=ebase), silent=T)
- who.year.digits  <- try(get("year.digits", env=ebase), silent=T)
- who.digit.first  <- try(get("digit.first", env=ebase), silent=T)
+ who.cntry.digits <- try(get("cntry.digits", envir=ebase), silent=T)
+ who.year.digits  <- try(get("year.digits", envir=ebase), silent=T)
+ who.digit.first  <- try(get("digit.first", envir=ebase), silent=T)
 
   ## the covariates specified in who.cov.select will be deleted from the
 ### age groups specified in who.age.select
-who.age.digits <- try(get("age.digits", env=ebase), silent=T)
+who.age.digits <- try(get("age.digits", envir=ebase), silent=T)
 
 
-whomodel <- get("model",env=ebase)
+whomodel <- get("model",envir=ebase)
 
 ### if 1 the covariates (as stored in whocov) are standardized to zero mean and std 1
-whostandardize <- get("standardize", env=ebase)
+whostandardize <- get("standardize", envir=ebase)
 
 ### if 1 during the preprocessing we search for collinearities and delete redundant
 ### covariates if necessary
-whoelim.collinear <- get("elim.collinear", env=ebase) 
+whoelim.collinear <- get("elim.collinear", envir=ebase) 
 
 
 ### BELOW WE HAVE QUANTITIES RELATED TO THE PRIORS
@@ -86,112 +86,112 @@ whoelim.collinear <- get("elim.collinear", env=ebase)
 ### and it is centered around who.mean.age.profile. Having a non-zero mean is achieved by
 ### subtracting the mean from the dependet variable and adding it back after the forecast
 ### has been done. If TRUE no action is taken.
-who.zero.mean <- get("zero.mean", env=ebase)
+who.zero.mean <- get("zero.mean", envir=ebase)
 
 who.zero.mean <- check.zero.mean(who.zero.mean, whomodel)
 
     
 ############################ CHOICES FOR OLS ##################################
-who.ols.sigma.param <- try(get("ols.sigma.param", env=ebase), silent=T)
+who.ols.sigma.param <- try(get("ols.sigma.param", envir=ebase), silent=T)
 if(class(who.ols.sigma.param)== "try-error")
   who.ols.sigma.param <- list(sigma.bar=1,use.deaths=FALSE,average=TRUE,model.based=FALSE)
 
 ############################ PRIOR OVER AGE GROUPS  ###############################
 
 ###
-who.Ha.deriv <- get("Ha.deriv",env=ebase);
+who.Ha.deriv <- get("Ha.deriv",envir=ebase);
 
 ### If 0 or NA then all age groups are weighted equally. If scalar, then the weight
 ### of age group a is proportional to a^who.Ha.age.weight. If vector of length A
 ### then it is taken as the weight vector.
-who.Ha.age.weight <- get("Ha.age.weight",env=ebase);
-who.Ha.time.weight <- get("Ha.time.weight",env=ebase);
+who.Ha.age.weight <- get("Ha.age.weight",envir=ebase);
+who.Ha.time.weight <- get("Ha.time.weight",envir=ebase);
 
 ### the average standard deviation of the prior. If NA the prior is not used
 ### (it is like having an infinite standard deviation 
-who.Ha.sigma <- try(get("Ha.sigma", env=ebase),silent = T)
+who.Ha.sigma <- try(get("Ha.sigma", envir=ebase),silent = T)
  
 if(class(who.Ha.sigma)=="try-error")
   who.Ha.sigma <- NA
 
 
-who.Ha.sigma.sd <- get("Ha.sigma.sd", env=ebase)
+who.Ha.sigma.sd <- get("Ha.sigma.sd", envir=ebase)
 
 
 ############################ PRIOR OVER AGE AND TIME GROUPS  ###############################
 
 ### the "age part" of the age/time prior
-who.Hat.a.deriv <- get("Hat.a.deriv", env=ebase);
+who.Hat.a.deriv <- get("Hat.a.deriv", envir=ebase);
 
 ### the "time part" of the age/time prior
-who.Hat.t.deriv <- get("Hat.t.deriv",env=ebase);
+who.Hat.t.deriv <- get("Hat.t.deriv",envir=ebase);
 
 ### If 0 or NA then all age groups are weighted equally. If scalar, then the weight
 ### of age group a is proportional to a^who.Ha.age.weight. If vector of length A
 ### then it is taken as the weight vector.
-who.Hat.age.weight <- get("Hat.age.weight", env=ebase);
+who.Hat.age.weight <- get("Hat.age.weight", envir=ebase);
 
-who.Hat.time.weight <- get("Hat.time.weight", env=ebase);
+who.Hat.time.weight <- get("Hat.time.weight", envir=ebase);
 
-who.Hat.sigma <- try(get("Hat.sigma", env=ebase), silent=T)
+who.Hat.sigma <- try(get("Hat.sigma", envir=ebase), silent=T)
 
 if(class(who.Hat.sigma) == "try-error")
   who.Hat.sigma <- NA
   
-who.Hat.sigma.sd <- get("Hat.sigma.sd", env=ebase)
+who.Hat.sigma.sd <- get("Hat.sigma.sd", envir=ebase)
 
 ############################ PRIOR OVER  TIME GROUPS  ###############################
 
 ### 
-who.Ht.deriv <- get("Ht.deriv", env=ebase)
+who.Ht.deriv <- get("Ht.deriv", envir=ebase)
 
-who.Ht.age.weight <- get("Ht.age.weight", env=ebase)
+who.Ht.age.weight <- get("Ht.age.weight", envir=ebase)
 
-who.Ht.time.weight <- get("Ht.time.weight",env=ebase)
+who.Ht.time.weight <- get("Ht.time.weight",envir=ebase)
 
-who.Ht.sigma <- try(get("Ht.sigma", env=ebase), silent=T)
+who.Ht.sigma <- try(get("Ht.sigma", envir=ebase), silent=T)
 
 if(class(who.Ht.sigma) == "try-error")
   who.Ht.sigma <- NA
    
-who.Ht.sigma.sd <- get("Ht.sigma.sd", env=ebase)
+who.Ht.sigma.sd <- get("Ht.sigma.sd", envir=ebase)
                                        
 ############################ PRIOR OVER CNTRY GROUPS  ###############################
-who.Hct.t.deriv <- get("Hct.t.deriv", env=ebase); ### smooths trend over cntry's
+who.Hct.t.deriv <- get("Hct.t.deriv", envir=ebase); ### smooths trend over cntry's
 ### who.Hct.t.deriv <- c(1)  ### smooths mortality
 ### we do not offer the option of setting who.Hct.time.weight != NA
 ### because it gets messy when different countries have different
 ### length of time series.
 ### Uniform weighting is the only option we have now
 ### Not implemented in the code                  
-##who.Hct.cntry.weight <- get("Hct.cntry.weight", env=ebase)
+##who.Hct.cntry.weight <- get("Hct.cntry.weight", envir=ebase)
 ##
-who.Hct.c.deriv <- try(get("Hct.c.deriv", env=ebase), silent=T)
+who.Hct.c.deriv <- try(get("Hct.c.deriv", envir=ebase), silent=T)
 if(class(who.Hct.c.deriv) == "try-error") who.Hct.c.deriv <- NA
-who.Hct.sigma   <-  get("Hct.sigma", env=ebase)
+who.Hct.sigma   <-  get("Hct.sigma", envir=ebase)
 if(class(who.Hct.sigma) == "try-error")
   who.Hct.sigma <- NA
 
-who.Hct.sigma.sd <- get("Hct.sigma.sd", env= ebase)
-who.Hct.time.weight <- get("Hct.time.weight", env=ebase)
-LI.sigma.mean <- try(get("LI.sigma.mean", env=ebase), silent=T)
+who.Hct.sigma.sd <- get("Hct.sigma.sd", envir= ebase)
+who.Hct.time.weight <- get("Hct.time.weight", envir=ebase)
+LI.sigma.mean <- try(get("LI.sigma.mean", envir=ebase), silent=T)
 if(class(LI.sigma.mean)=="try-error")
   LI.sigma.mean <- 0.2
-LI.sigma.sd <- try(get("LI.sigma.sd", env=ebase), silent=T)
+LI.sigma.sd <- try(get("LI.sigma.sd", envir=ebase), silent=T)
 if(class(LI.sigma.sd)=="try-error")
   LI.sigma.sd <- 0.1
 
-N <- try(get("sims", env=ebase), silent=T)
+N <- try(get("sims", envir=ebase), silent=T)
 if(class(N)=="try-error")
   N <- 120
   
-n.row <- try(get("n.row", env=ebase), silent=T)
+n.row <- try(get("n.row", envir=ebase), silent=T)
 if(class(n.row)=="try-error")
   n.row <- 1000
-filename <- try(get("filename", env=ebase), silent=T)
+filename <- try(get("filename", envir=ebase), silent=T)
 if(class(filename) =="try-error")
   filename <- "smalltable.tex"
-digits <- try(get("digits", env=ebase), silent=T)
+digits <- try(get("digits", envir=ebase), silent=T)
 if(class(digits)=="try-error")
   digits <- 3
 
@@ -223,11 +223,11 @@ svdonly <- 0
 if(chk.env){ ### env.who is not the local environmnet
   ev <- environment()
  
-  lstfile <- ls(env=ev)
+  lstfile <- ls(envir=ev)
   for(nm in lstfile){
-    val <- get(nm, env=ev)
+    val <- get(nm, envir=ev)
     if(!is.environment(val))
-    assign(nm, val, env=env.who)
+    assign(nm, val, envir=env.who)
   }
 }
   
@@ -256,11 +256,11 @@ args.of.yourcast <- function(input.lst, ebase=NULL, ind=1,ewho=NULL)
       if(trim.blanks(input.lst[[i]]) == "formula")
         next;
        
-      val <- get(input.lst[[i]], env=ebase, inherits=T)
+      val <- get(input.lst[[i]], envir=ebase, inherits=T)
      
       inlst <- input.lst[[i]]
       if(length(val) > 0 )
-        assign(inlst, val, env=ewho)
+        assign(inlst, val, envir=ewho)
        
     }
    
@@ -272,37 +272,37 @@ WHO.userfile <- function(ebase)
   {
 ### Enter all variables as vectors; such as whousercntrylist <- c(2450, 4280)
 ### cause of death we want to predict
-ewho <- get("env.who", env=ebase)
+ewho <- get("env.who", envir=ebase)
 
-whoyrest <- try(get("yrest",env=ebase), silent=T)
-assign("whoyrest", whoyrest, env=ewho)
-delta.tol <- try(get("delta.tol", env=ebase), silent=T)
-assign("delta.tol", delta.tol, env=ewho)
+whoyrest <- try(get("yrest",envir=ebase), silent=T)
+assign("whoyrest", whoyrest, envir=ewho)
+delta.tol <- try(get("delta.tol", envir=ebase), silent=T)
+assign("delta.tol", delta.tol, envir=ewho)
 
 ########################### DEFINE STRUCTURES OF cstsid ###############################
 ###
 
- who.cntry.digits <- try(get("cntry.digits", env=ebase), silent=T)
- who.year.digits  <- try(get("year.digits", env=ebase), silent=T)
- who.digit.first  <- try(get("digit.first", env=ebase), silent=T)
- assign("who.cntry.digits", who.cntry.digits, env=ewho)
- assign("who.year.digits", who.year.digits, env=ewho)
- assign("who.digit.first", who.digit.first, env=ewho)
+ who.cntry.digits <- try(get("cntry.digits", envir=ebase), silent=T)
+ who.year.digits  <- try(get("year.digits", envir=ebase), silent=T)
+ who.digit.first  <- try(get("digit.first", envir=ebase), silent=T)
+ assign("who.cntry.digits", who.cntry.digits, envir=ewho)
+ assign("who.year.digits", who.year.digits, envir=ewho)
+ assign("who.digit.first", who.digit.first, envir=ewho)
 
 ### the covariates specified in who.cov.select will be deleted from the
 ### age groups specified in who.age.select
-who.age.digits <- try(get("age.digits", env=ebase), silent=T)
-assign("who.age.digits", who.age.digits, env=ewho)
+who.age.digits <- try(get("age.digits", envir=ebase), silent=T)
+assign("who.age.digits", who.age.digits, envir=ewho)
 
-whomodel <- get("model",env=ebase)
-assign("whomodel", whomodel, env=ewho)
+whomodel <- get("model",envir=ebase)
+assign("whomodel", whomodel, envir=ewho)
 ### if 1 the covariates (as stored in whocov) are standardized to zero mean and std 1
-whostandardize <- get("standardize", env=ebase)
-assign("whostandardize", whostandardize, env=ewho)
+whostandardize <- get("standardize", envir=ebase)
+assign("whostandardize", whostandardize, envir=ewho)
 
 ### if 1 during the preprocessing we search for collinearities and delete redundant
 ### covariates if necessary
-whoelim.collinear <- get("elim.collinear", env=ebase) 
+whoelim.collinear <- get("elim.collinear", envir=ebase) 
 
 
 ### BELOW WE HAVE QUANTITIES RELATED TO THE PRIORS
@@ -311,73 +311,73 @@ whoelim.collinear <- get("elim.collinear", env=ebase)
 ### and it is centered around who.mean.age.profile. Having a non-zero mean is achieved by
 ### subtracting the mean from the dependet variable and adding it back after the forecast
 ### has been done. If TRUE no action is taken.
-who.zero.mean <- get("zero.mean", env=ebase)
+who.zero.mean <- get("zero.mean", envir=ebase)
 
 who.zero.mean <- check.zero.mean(who.zero.mean, whomodel)
 ############################ CHOICES FOR OLS ##################################
-who.ols.sigma.param <- try(get("ols.sigma.param", env=ebase), silent=T)
+who.ols.sigma.param <- try(get("ols.sigma.param", envir=ebase), silent=T)
 
 ############################ PRIOR OVER AGE GROUPS  ###############################
 
 ###
-who.Ha.deriv <- get("Ha.deriv",env=ebase);
+who.Ha.deriv <- get("Ha.deriv",envir=ebase);
 
 ### If 0 or NA then all age groups are weighted equally. If scalar, then the weight
 ### of age group a is proportional to a^who.Ha.age.weight. If vector of length A
 ### then it is taken as the weight vector.
-who.Ha.age.weight <- get("Ha.age.weight",env=ebase);
-who.Ha.time.weight <- get("Ha.time.weight",env=ebase);
+who.Ha.age.weight <- get("Ha.age.weight",envir=ebase);
+who.Ha.time.weight <- get("Ha.time.weight",envir=ebase);
 
 ### the average standard deviation of the prior. If NA the prior is not used
 ### (it is like having an infinite standard deviation 
-who.Ha.sigma <- get("Ha.sigma", env=ebase)
-who.Ha.sigma.sd <- get("Ha.sigma.sd", env=ebase)
+who.Ha.sigma <- get("Ha.sigma", envir=ebase)
+who.Ha.sigma.sd <- get("Ha.sigma.sd", envir=ebase)
 
 ############################ PRIOR OVER AGE AND TIME GROUPS  ###############################
 
 ### the "age part" of the age/time prior
-who.Hat.a.deriv <- get("Hat.a.deriv", env=ebase);
+who.Hat.a.deriv <- get("Hat.a.deriv", envir=ebase);
 
 ### the "time part" of the age/time prior
-who.Hat.t.deriv <- get("Hat.t.deriv",env=ebase);
+who.Hat.t.deriv <- get("Hat.t.deriv",envir=ebase);
 
 ### If 0 or NA then all age groups are weighted equally. If scalar, then the weight
 ### of age group a is proportional to a^who.Ha.age.weight. If vector of length A
 ### then it is taken as the weight vector.
-who.Hat.age.weight <- get("Hat.age.weight", env=ebase);
+who.Hat.age.weight <- get("Hat.age.weight", envir=ebase);
 
-who.Hat.time.weight <- get("Hat.time.weight", env=ebase);
+who.Hat.time.weight <- get("Hat.time.weight", envir=ebase);
 
-who.Hat.sigma <- get("Hat.sigma", env=ebase)
-who.Hat.sigma.sd <- get("Hat.sigma.sd", env=ebase)
+who.Hat.sigma <- get("Hat.sigma", envir=ebase)
+who.Hat.sigma.sd <- get("Hat.sigma.sd", envir=ebase)
 
 ############################ PRIOR OVER  TIME GROUPS  ###############################
 
 ### 
-who.Ht.deriv <- get("Ht.deriv", env=ebase)
+who.Ht.deriv <- get("Ht.deriv", envir=ebase)
 
-who.Ht.age.weight <- get("Ht.age.weight", env=ebase)
+who.Ht.age.weight <- get("Ht.age.weight", envir=ebase)
 
-who.Ht.time.weight <- get("Ht.time.weight",env=ebase)
+who.Ht.time.weight <- get("Ht.time.weight",envir=ebase)
 
-who.Ht.sigma <- get("Ht.sigma", env=ebase)
-who.Ht.sigma.sd <- get("Ht.sigma.sd", env=ebase)
+who.Ht.sigma <- get("Ht.sigma", envir=ebase)
+who.Ht.sigma.sd <- get("Ht.sigma.sd", envir=ebase)
                                        
 ############################ PRIOR OVER CNTRY GROUPS  ###############################
-who.Hct.t.deriv <- get("Hct.t.deriv", env=ebase); ### smooths trend over cntry's
+who.Hct.t.deriv <- get("Hct.t.deriv", envir=ebase); ### smooths trend over cntry's
 ### who.Hct.t.deriv <- c(1)  ### smooths mortality
 ### we do not offer the option of setting who.Hct.time.weight != NA
 ### because it gets messy when different countries have different
 ### length of time series.
 ### Uniform weighting is the only option we have now
 ### Not implemented in the code                  
-##who.Hct.cntry.weight <- get("Hct.cntry.weight", env=ebase)
+##who.Hct.cntry.weight <- get("Hct.cntry.weight", envir=ebase)
 ##
-who.Hct.c.deriv <- try(get("Hct.c.deriv", env=ebase), silent=T)
+who.Hct.c.deriv <- try(get("Hct.c.deriv", envir=ebase), silent=T)
 
-who.Hct.sigma   <-  get("Hct.sigma", env=ebase)
-who.Hct.sigma.sd <- get("Hct.sigma.sd", env= ebase)
-who.Hct.time.weight <- get("Hct.time.weight", env=ebase)
+who.Hct.sigma   <-  get("Hct.sigma", envir=ebase)
+who.Hct.sigma.sd <- get("Hct.sigma.sd", envir= ebase)
+who.Hct.time.weight <- get("Hct.time.weight", envir=ebase)
 
 ### directory where mortality data are
 datapath <-  getwd()

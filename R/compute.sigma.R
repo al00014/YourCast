@@ -23,21 +23,21 @@
 ## 
 ## ***************************************
 compute.sigma <-  function(beta = NULL,ebase = env.base){
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  age.vec <- get("age.vec", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  verbose <- get("verbose", env=ebase)
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  age.vec <- get("age.vec", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
   if(length(beta) <=0 )
-     beta  <- get("coeff", env=ecxc)
+     beta  <- get("coeff", envir=ecxc)
   
   cntry.char <- as.character(cntry.vec)
-  age.char  <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+  age.char  <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
   sigma.ag.lst <- as.list(1:length(age.vec))
   names(sigma.ag.lst) <- age.char
   sigma.csid.lst <- as.list(1:length(whoinsampy))
@@ -53,7 +53,7 @@ compute.sigma <-  function(beta = NULL,ebase = env.base){
 ### insample period
    sumTc <- sumTc();  ##number
    for(a in 1:length(age.vec)){
-      age.str <-  formatC(age.vec[a], wid=who.age.digits, format="d", flag="0")
+      age.str <-  formatC(age.vec[a], width=who.age.digits, format="d", flag="0")
       calst <- kronecker(as.character(cntry.vec), age.str,paste,sep="")
       agend <- paste(age.str,"$", sep="")
 ## a number for each age group, after adding for all cntry's
@@ -108,11 +108,11 @@ compute.sigma <-  function(beta = NULL,ebase = env.base){
 ## 
 ## ***************************************
 sumTc <-  function(ebase=env.base){
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
   
   csid <- as.list(1:length(whoinsampy))
   names(csid) <- names(whoinsampy)
@@ -155,14 +155,14 @@ sumTc <-  function(ebase=env.base){
 ## ***************************************
 
     sigma.vc <- function(ebase=env.base){
-             ebase    <- get("env.base", env=parent.frame())
+             ebase    <- get("env.base", envir=parent.frame())
              env.base <- ebase
-             ewho <- get("env.who", env=ebase)
-             whoinsampy <- get("whoinsampy", env=ewho)
-             cntry.vec  <- get("cntry.vec", env=ewho)
-             age.vec <- get("age.vec", env=ewho)
-             who.age.digits <- get("who.age.digits", env=ewho)
-             age.char <-  formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+             ewho <- get("env.who", envir=ebase)
+             whoinsampy <- get("whoinsampy", envir=ewho)
+             cntry.vec  <- get("cntry.vec", envir=ewho)
+             age.vec <- get("age.vec", envir=ewho)
+             who.age.digits <- get("who.age.digits", envir=ewho)
+             age.char <-  formatC(age.vec, width=who.age.digits, format="d", flag="0")
              ct <- paste("^", as.character(cntry.vec), sep="")
              ct <- as.list(ct)
              names(ct) <- as.character(cntry.vec)
@@ -248,13 +248,13 @@ sumTc <-  function(ebase=env.base){
 
 
 sigma.param <- function(m=NULL,std=NULL, ebase = env.base){
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
+  ewho <- get("env.who", envir=ebase)
   if (length(m) <= 0)
-    m <- get("LI.sigma.mean", env=ewho)
+    m <- get("LI.sigma.mean", envir=ewho)
   if (length(std) <= 0)
-    std <- get("LI.sigma.sd", env=ewho)
+    std <- get("LI.sigma.sd", envir=ewho)
 ##  cat(m,"\n")
 ##  cat(std, "\n")
   v <- std^2
@@ -294,21 +294,21 @@ return(list(e=e,d=d))
 ## 
 ## ***************************************
 sigma.SSE <- function(age,beta.ca,vc,vc.csid) {
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  whoinsampx <- get("whoinsampx", env=ewho)
-  whoinsampy <- get("whoinsampy", env=ewho)
-  who.cntry.digits <- get("who.cntry.digits", env=ewho)
-  who.digit.first  <- get("who.digit.first", env=ewho)
-  verbose <- get("verbose", env=ebase)
-  age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
-  age.str <-  formatC(age, wid=who.age.digits, format="d", flag="0")
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  whoinsampx <- get("whoinsampx", envir=ewho)
+  whoinsampy <- get("whoinsampy", envir=ewho)
+  who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+  who.digit.first  <- get("who.digit.first", envir=ewho)
+  verbose <- get("verbose", envir=ebase)
+  age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
+  age.str <-  formatC(age, width=who.age.digits, format="d", flag="0")
   agend  <- paste(age.str,"$", sep="")
   whoiny <- whoinsampy[grep(agend,names(whoinsampy))]
   whoinx <- whoinsampx[grep(agend,names(whoinsampx))]                    
@@ -365,28 +365,28 @@ sigma.SSE <- function(age,beta.ca,vc,vc.csid) {
 ## ***************************************                      
     
 theta.age.priors <- function(beta.csid=NULL, ebase=env.base){
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
   if(length(beta.csid) <= 0)
-    beta.csid <- get("coeff", env=ecxc)
-  who.Ha.sigma  <- get("who.Ha.sigma", env=ecxc)
-  who.Hat.sigma <- get("who.Hat.sigma", env=ecxc)
-  who.Ht.sigma  <- get("who.Ht.sigma", env=ecxc) 
-  Ha.wc.list  <-  get("Ha.wc.list", env=ecxc)
-  Hat.wc.list <-  get("Hat.wc.list", env=ecxc)
-  Ht.wc.list  <-  get("Ht.wc.list", env=ecxc)
-  D.age.lst <-  get("D.age.lst", env=ecxc)
-  D.age.time.lst <-  get("D.age.time.lst", env=ecxc)
-  D.time.lst <-  get("D.time.lst", env=ecxc)
+    beta.csid <- get("coeff", envir=ecxc)
+  who.Ha.sigma  <- get("who.Ha.sigma", envir=ecxc)
+  who.Hat.sigma <- get("who.Hat.sigma", envir=ecxc)
+  who.Ht.sigma  <- get("who.Ht.sigma", envir=ecxc) 
+  Ha.wc.list  <-  get("Ha.wc.list", envir=ecxc)
+  Hat.wc.list <-  get("Hat.wc.list", envir=ecxc)
+  Ht.wc.list  <-  get("Ht.wc.list", envir=ecxc)
+  D.age.lst <-  get("D.age.lst", envir=ecxc)
+  D.age.time.lst <-  get("D.age.time.lst", envir=ecxc)
+  D.time.lst <-  get("D.time.lst", envir=ecxc)
   beta.cntry <- lapply(as.character(cntry.vec), function(x,beta.csid){
          ctr <- paste("^",x,sep="")
          ind <- grep(ctr, names(beta.csid))
          beta.c <- beta.csid[ind]
-         beta.c <-  matrix(unlist(beta.c, recursive = T, use.name=T));
+         beta.c <-  matrix(unlist(beta.c, recursive = T, use.names=T));
          return(beta.c)}, beta.csid)
   names(beta.cntry) <- as.character(cntry.vec)
   
@@ -468,21 +468,21 @@ theta.age.priors <- function(beta.csid=NULL, ebase=env.base){
 ## ***************************************                      
     
 theta.cntry.prior <- function(beta.csid=NULL, isle.cntry=NULL, ebase=env.base){
-  ebase    <- get("env.base", env=parent.frame())
+  ebase    <- get("env.base", envir=parent.frame())
   env.base <- ebase
-  ewho <- get("env.who", env=ebase)
-  ecxc <- get("env.cxc", env=ebase)
-  age.vec <- get("age.vec", env=ewho)
-  cntry.vec <- get("cntry.vec", env=ewho)
-  who.age.digits <- get("who.age.digits", env=ewho)
-  who.Hct.sigma   <- get("who.Hct.sigma", env=ecxc)
-  Hct.wc.lst  <- get("Hct.wc.lst", env=ecxc)
-  D.cntry.lst <- get("D.cntry.lst", env=ecxc)
+  ewho <- get("env.who", envir=ebase)
+  ecxc <- get("env.cxc", envir=ebase)
+  age.vec <- get("age.vec", envir=ewho)
+  cntry.vec <- get("cntry.vec", envir=ewho)
+  who.age.digits <- get("who.age.digits", envir=ewho)
+  who.Hct.sigma   <- get("who.Hct.sigma", envir=ecxc)
+  Hct.wc.lst  <- get("Hct.wc.lst", envir=ecxc)
+  D.cntry.lst <- get("D.cntry.lst", envir=ecxc)
   if(length(beta.csid) <= 0)
-    beta.csid <- get("coeff", env=ecxc)
+    beta.csid <- get("coeff", envir=ecxc)
   if(length(isle.cntry) <= 0)
-    isle.cntry <- get("isle.cntry", env=ecxc)
-  age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")
+    isle.cntry <- get("isle.cntry", envir=ecxc)
+  age.char <- formatC(age.vec, width=who.age.digits, format="d", flag="0")
   if(length(isle.cntry) > 0){
      n.age <- length(age.vec)
     ln <- length(isle.cntry) * n.age

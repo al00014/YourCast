@@ -1,12 +1,12 @@
 
 
 ##
-## USED GLOBALS: env=env.base, our base environment,is now the environment for yourcast()
+## USED GLOBALS: envir=env.base, our base environment,is now the environment for yourcast()
 ##               that wraps up all programs and functions, and also drives the simulation.
-##               Also, env=env.who (an environment), which we create to store all
+##               Also, envir=env.who (an environment), which we create to store all
 ##               static variables to be shared by functions and programs.  
-##               We assign env.who to the env.base, assign("env.who", env=env.base)
-##               if you want to see what is in env.who:  >  ls(env=get("env.who", env=env.base));
+##               We assign env.who to the env.base, assign("env.who", envir=env.base)
+##               if you want to see what is in env.who:  >  ls(envir=get("env.who", envir=env.base));
 ##
 ## USED: make.output.filename()
 ##
@@ -61,14 +61,14 @@ build.file.output <- function(lst= NULL, whomodel=NULL, depv=NULL){
 ###
    n.lst <- length(names(lst))
    for(i in 1:n.lst)
-     assign(names(lst)[i], lst[[i]],env=esave)
+     assign(names(lst)[i], lst[[i]],envir=esave)
 
    
      save("whomodel", "coeff", "yhat", "call","sigma","formula",  
         file=filename, compress=T);
   
 ### this also save the environmnet esave with all in it 
-###  save(esave,file=paste(whooutpath,"evenv",sep=""), compress=T, env=esave); 
+###  save(esave,file=paste(whooutpath,"evenv",sep=""), compress=T, envir=esave); 
 }
 
 
@@ -115,20 +115,20 @@ build.file.output <- function(lst= NULL, whomodel=NULL, depv=NULL){
 conversion.cntry.mat <- function(obj=NULL, ebase=env.base){
 ### I do not think that we need to check for obj and environmnets
 ### since obj will be passed when we call the function, but
-    ebase <- get("env.base", env=parent.frame())
+    ebase <- get("env.base", envir=parent.frame())
     env.base <- ebase
-    ewho <- get("env.who", env=ebase)
-    whomodel <- get("whomodel", env=ewho)
-    who.digit.first <- get("who.digit.first", env=ewho)
-    who.cntry.digits <- get("who.cntry.digits", env=ewho)
-    who.year.digits <- get("who.year.digits", env=ewho)
-    who.age.digits <- get("who.age.digits", env=ewho)
-    whopopul <- get("whopopul", env=ewho)
-    whopopulos <- get("whopopulos", env=ewho)
+    ewho <- get("env.who", envir=ebase)
+    whomodel <- get("whomodel", envir=ewho)
+    who.digit.first <- get("who.digit.first", envir=ewho)
+    who.cntry.digits <- get("who.cntry.digits", envir=ewho)
+    who.year.digits <- get("who.year.digits", envir=ewho)
+    who.age.digits <- get("who.age.digits", envir=ewho)
+    whopopul <- get("whopopul", envir=ewho)
+    whopopulos <- get("whopopulos", envir=ewho)
     
   
     if(length(obj) <= 0)
-      obj <- get("lst.output", env=ewho)
+      obj <- get("lst.output", envir=ewho)
 ### obj should come when the function is called.
   insampy  <- obj$insampy
   outsampy <- obj$outsampy
@@ -158,7 +158,7 @@ if(!is.na(whomodel)){
                                    who.age.digits, who.year.digits)
    
   }
-  assign("lst.output",obj,env=ewho)
+  assign("lst.output",obj,envir=ewho)
   return(obj)}
 
 ### DESCRIPTION Takes the insample and outsample for depvar and estimation
@@ -168,12 +168,12 @@ if(!is.na(whomodel)){
 yhat.mat <- function(obj=NULL, ebase=env.base){
 ### I do not think that we need to check for obj and environmnets
 ### since obj will be passed when we call the function, but
-    ebase <- get("env.base", env=parent.frame())
+    ebase <- get("env.base", envir=parent.frame())
     env.base <- ebase
-    ewho <- get("env.who", env=ebase)
+    ewho <- get("env.who", envir=ebase)
        
     if(length(obj) <= 0)
-      obj <- get("lst.output", env=ewho)
+      obj <- get("lst.output", envir=ewho)
 ### obj should come when the function is called.
     insampy  <- obj$insampy
     outsampy <- obj$outsampy
