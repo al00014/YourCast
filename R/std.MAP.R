@@ -34,10 +34,12 @@ std.MAP <- function(S.list){
     Z <- diag.mat(zlist)
     S <- S.list[[as.character(c)]]
     std.list.by.cntry[[as.character(c)]] <- NULL
-    
-    tmp  <- try(sqrt(diag(Z%*%S%*%t(Z))), silent=T)
-    if(class(tmp)!= "try-error")
-      std.list.by.cntry[[as.character(c)]] <- tmp
+###  tmp  <- try(sqrt(diag(Z%*%S%*%t(Z))), silent=T)
+    tmp <-try (diag(Z%*%S%*%t(Z)), silent=TRUE)
+    if(class(tmp)!= "try-error"){
+    tmp <- sqrt(abs(tmp))
+    std.list.by.cntry[[as.character(c)]] <- tmp
+  }
   }
 
 ### now convert to same format as whocov

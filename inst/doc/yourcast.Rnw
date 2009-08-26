@@ -44,9 +44,11 @@
 
 \title{\YourCast: Software for Simultaneous Time Series Forecasting
   with Your Assumptions\thanks{Available from
-    http://GKing.Harvard.Edu/yourcast.  For expert programming
-    assistance and many helpful comments, our thanks goes to Jon
-    Bishof, Elena Villalon, and Nirmala Ravishankar.}}
+    http://GKing.Harvard.Edu/yourcast via a Creative Commons
+    Attribution-Noncommercial-No Derivative Works 3.0, for academic
+    use only.  For expert programming assistance and many helpful
+    comments, our thanks goes to Jon Bishof, Elena Villalon, and
+    Nirmala Ravishankar.}}
 
 \author{Federico Girosi\thanks{Senior Policy Researcher, RAND
     Corporation, (1700 Main Street, PO Box 2138, Santa Monica, CA

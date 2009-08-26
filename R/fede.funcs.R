@@ -103,7 +103,7 @@ prior.variance <- function(ecxc,N=100,graphics=FALSE){
   t.list  <- sapply(whoinsampy, function(x){
           x <- na.omit(x)
           nc <- nrow(x)});
-  beta.dim  <- sapply(whocov, function(n){nc <- ncol(whocov[[n]])});
+  beta.dim  <- sapply(whocov, function(x){nc <- ncol(x)});
   cntry.vec <- get("cntry.vec", env=ewho)
   age.vec <- get("age.vec", env=ewho)
   age.char <- formatC(age.vec, wid=who.age.digits, format="d", flag="0")

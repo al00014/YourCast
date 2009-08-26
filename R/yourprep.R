@@ -33,24 +33,24 @@ reader <- function(filename,dpath,year.var,sample.frame,
                 "' does not have rownames or merely has index ('1'...'N') rownames. Please add rownames that reflect year of time series.",
                 sep=""))}
 
-  # make sure cross section ends at last predicted year
-  if(!is.null(sample.frame)) {
-    if(as.integer(rownames(cs[nrow(cs),]))!=sample.frame[4])
-      {stop(paste("Cross section '",filename,"' ends at year '",
-                  as.integer(rownames(cs[nrow(cs),])),"' and not '",
-                  sample.frame[4],"'",
-                  ". Be sure to include all years up to last predicted year.",
-                  sep=""))
-     }
-                
-  # check whether all years after first observed year are included in
-  # dataframe
-  if(as.integer(rownames(cs[nrow(cs),]))-as.integer(rownames(cs[1,]))
-     +1!=nrow(cs))
-    {stop(paste("Missing years in cross section '",filename,
-                "'. Be sure to include all years from first observed year to last predicted year, even if NA.",
-                sep=""))}
-                               }
+#  # make sure cross section ends at last predicted year
+#  if(!is.null(sample.frame)) {
+#    if(as.integer(rownames(cs[nrow(cs),]))!=sample.frame[4])
+#      {stop(paste("Cross section '",filename,"' ends at year '",
+#                  as.integer(rownames(cs[nrow(cs),])),"' and not '",
+#                  sample.frame[4],"'",
+#                  ". Be sure to include all years up to last predicted year.",
+#                  sep=""))
+#     }
+#                
+#  # check whether all years after first observed year are included in
+#  # dataframe
+#  if(as.integer(rownames(cs[nrow(cs),]))-as.integer(rownames(cs[1,]))
+#     +1!=nrow(cs))
+#    {stop(paste("Missing years in cross section '",filename,
+#                "'. Be sure to include all years from first observed year to last predicted year, even if NA.",
+#                sep=""))}
+#                               }
   return(cs)
 }
 
@@ -105,7 +105,10 @@ splitter <- function(string,tag,index.code) {
 yourprep <- function(dpath=getwd(),tag="csid",index.code="ggggaa",
                      datalist=NULL,G.names=NULL,A.names=NULL,
                      T.names=NULL,adjacency=NULL,year.var=FALSE,
-                     sample.frame=NULL,summary=FALSE,verbose=FALSE) {
+                     sample.frame=NULL,summary=FALSE,verbose=FALSE,
+
+                     #lagging utility
+                     lag=NULL,formula=NULL) {
   
   # grab the names of all the objects in the dpath with tag in
   # the name
@@ -169,40 +172,81 @@ in R workspace.",sep=""))
                 "' does not have rownames or merely has index ('1'...'N') rownames. Please add rownames that reflect year of time series.",
                 sep=""))}
 
-    # make sure cross section ends at last predicted year
-    if(!is.null(sample.frame)) {
-    if(as.integer(rownames(datalist[[i]][nrow(datalist[[i]]),]))!=
-       sample.frame[4])
-      {stop(paste("Cross section '",listnames[i],"' ends at year '",
-                  as.integer(rownames(datalist[[i]][nrow(datalist[[i]]),])),
-                  "' and not '",
-                  sample.frame[4],"'",
-                  ". Be sure to include all years up to last predicted year.",
-                  sep=""))
-        }
-                
-    # check whether all years after first observed year are included in
-    # dataframe
-    if(as.integer(rownames(datalist[[i]][nrow(datalist[[i]]),]))-
-       as.integer(rownames(datalist[[i]][1,]))+1!=nrow(datalist[[i]]))
-      {stop(paste("Missing years in cross section '",listnames[i],
-                  "'. Be sure to include all years from first observed year to last predicted year, even if NA.",
-                  sep=""))}
-                              }
     if(verbose) {cat(listnames[i],"\n")}
                                
-    }
+    }}
     
-   # add data from workspace to data from directory
-    data <- c(data,datalist)
-                        }
-  
+  # add data from workspace to data from directory
+  data <- c(data,datalist)
+    
   # Determine number of characters in rownames to complete
   # 'index.code' variable for yourcast()
   nt <- nchar(rownames(data[[1]])[1])
   t <- paste(rep("t",nt),sep="",collapse="")
   index.code <- paste(index.code,t,sep="",collapse="")
+
   
+  # If lag requested, create lag structure of 'lag' years within every
+  # geographical area
+  if(!is.null(lag) && !is.na(lag)) {
+
+    # What is the response variable?
+    formula <- as.formula(formula)
+    response <- all.vars(formula)[1]
+
+    # What are covariates?
+    covars <- all.vars(formula)[-1]
+    if(length(grep("^index$",covars))>0) {index.add <- TRUE}
+    covars <- covars[-grep("index",covars)]
+
+    years.tot <- sample.frame[1]:sample.frame[4]
+    years.insamp <- sample.frame[1]:sample.frame[2]
+    years.pred <- sample.frame[3]:sample.frame[4]
+    years.lag <- years.tot-lag
+    
+    # Determine unique geographical areas
+    split.index <- strsplit(index.code,"")[[1]]
+    N.g <- length(split.index[split.index=="g"])
+    csids <- names(data)
+    geo.codes <- sapply(csids,substr,start=1,stop=N.g)
+    geolist <- unique(geo.codes)
+
+    # Now have to separate out geographic areas and create lag
+    # within each geographical area
+    data.geo <- lapply(geolist,lag.gen,data,split.index,N.g,lag,years.insamp,
+                       years.pred,years.lag,years.tot,sample.frame,response,
+                       covars,index.add)
+
+    data <- data.geo[[1]]
+    if(length(data.geo)>1) {
+    for(i in 2:length(data.geo)) {data <- append(data,data.geo[[i]])}}
+  }
+
+
+  # Final error checks for correct years in cross sections
+  if(!is.null(sample.frame)) {
+    for(i in 1:length(data)) {
+     # Make sure cross section ends at last predicted year
+      if(as.integer(rownames(data[[i]])[nrow(data[[i]])])!=
+         sample.frame[4])
+        {stop(paste("Cross section '",csids[i],"' (and possibly others) ends at year '",
+                    rownames(data[[i]])[nrow(data[[i]])],
+                    "' and not '",
+                    sample.frame[4],"'",
+                    ". Be sure to include all years up to last predicted year and no years past that year.",
+                    sep=""))}
+    
+                
+    # Check whether all years after first observed year are included in
+    # dataframe
+    if(as.integer(rownames(data[[i]])[nrow(data[[i]])])-
+       as.integer(rownames(data[[i]])[1])+1!=nrow(data[[i]]))
+      {stop(paste("Missing years in cross section '",csids[i],
+                  "'. Be sure to include all years from first observed year to last predicted year, even if NA.",
+                  sep=""))}
+    }}
+      
+       
   # Create data object
   dataobj <- list(data=data,index.code=index.code)
 

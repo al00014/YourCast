@@ -1,6 +1,6 @@
 
-R version 2.8.1 (2008-12-22)
-Copyright (C) 2008 The R Foundation for Statistical Computing
+R version 2.9.2 (2009-08-24)
+Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,7 +21,7 @@ Type 'q()' to quit R.
 > dir.create(file.path(wd,"Rd"))
 Warning message:
 In dir.create(file.path(wd, "Rd")) :
-  '/tmp/rbuild_12296/yourcast/YourCast/inst/doc/Rd' already exists
+  '/tmp/rbuild_25562/yourcast/YourCast/inst/doc/Rd' already exists
 > setwd(file.path(R.home(),"share/texmf"))
 > file.copy(dir(), file.path(wd,"Rd"),TRUE)
 [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE

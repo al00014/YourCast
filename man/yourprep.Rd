@@ -7,10 +7,13 @@
      function from files in working directory or other specified
      directory and checks for errors}
 
-\usage{yourprep(dpath=getwd(), tag="csid", index.code="ggggaa",
-                     datalist=NULL, G.names=NULL, A.names=NULL,
-                     T.names=NULL, adjacency=NULL, year.var=FALSE,
-                     sample.frame=NULL, summary=FALSE, verbose=FALSE) }
+\usage{yourprep(dpath=getwd(),tag="csid",index.code="ggggaa",
+                     datalist=NULL,G.names=NULL,A.names=NULL,
+                     T.names=NULL,adjacency=NULL,year.var=FALSE,
+                     sample.frame=NULL,summary=FALSE,verbose=FALSE,
+
+                     #lagging utility
+                     lag=NULL,formula=NULL)}
 
 
 \arguments{
@@ -107,7 +110,8 @@
           automatically if the out-of-sample data are
           included. \code{yourprep()} uses this information only to
           verify that cross sections are correctly
-          constructed. Default: \code{NULL}}
+          constructed, but it should also be included if one wants to
+	  use the lag utility. Default: \code{NULL}}
 
 \item{summary}{Boolean. If \code{TRUE}, means for available
           observations on each variable are displayed for the cross
@@ -115,7 +119,24 @@
 
 \item{verbose}{Boolean. If \code{TRUE}, function prints name of each
           cross section or auxiliary file as it is read into the
-          \code{dataobj}. Default: \code{FALSE}} }
+          \code{dataobj}. Default: \code{FALSE}}
+
+\item{lag}{Number of years covariate data needs to be lagged from
+  current position is cross section files. See \sQuote{Details} for more
+  information. Default: \code{NULL}}
+
+\item{formula}{The formula that one will use in the subsequent run of
+  \code{yourcast()}. This helps the lagging utility distinguish between
+  the response variable (which will not be shifted between cross
+  sections) and the covariates of interest that should be lagged and
+  included in the final cross sections of the dataobj. If the covariate
+  \sQuote{index} is included in the formula, the lagging utility will
+  include a variable in the cross sections that starts from 1 and counts
+  the number of time periods since the start of the cross section.
+  If a lag is requested, the formula argument must be specified.
+  Default: \code{NULL}}
+
+      }
 
 \details{Creates \code{dataobj} input for \code{\link{yourcast}} from
      files in working directory or other specified directory. Checks
@@ -171,7 +192,26 @@
      will load this
      automatically and save the input as the \code{G.names} element of
      the \sQuote{dataobj} list. \code{yourprep()} arguments such as
-     \code{G.names} take precedence over \file{TAG.*} files in the\code{dpath}.}
+     \code{G.names} take precedence over \file{TAG.*} files in
+     the\code{dpath}.
+
+     \code{yourprep()} also includes a lagging utility (activated once
+     one specifies a lag length with the \sQuote{lag} argument). This
+     utility is useful for when the data in each cross section is, for
+     example, the response and covariates for 50 year olds in each year
+     but the desired content for each cross section is the response for
+     50 year olds and the covariates for 25 year olds 25 years prior to
+     each year (implying a lag of 25 years). In order to have
+     \code{yourprep()} perform this lagging automatically, include cross
+     sections for each age group with data starting the same number of
+     years before the first observation year as the requested lag
+     period. Thus if \code{lag=25} and the first observation year is
+     1950, then the cross sections should all start at 1925. Age groups
+     younger than the length of the lag will not retain covariate data
+     (except perhaps an \sQuote{index} variable) in the output
+     object. The covariates lagged are the predictor variables specified
+     in the formula argument. 
+   }
 
 
 
@@ -216,7 +256,7 @@ in the input data.}}}}
 #Old working directory to be restored later
 oldwd <- getwd()
 # Now setting wd to 'data' folder in YourCast library
-setwd(paste(.libPaths()[1],"/YourCast/data",sep=""))
+setwd(paste(.find.package("YourCast"),"/data",sep=""))
 
 # Simple run of the function, using option that turns year variable
 # into label in each cs. Use sample.frame argument for all diagnostics

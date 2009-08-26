@@ -13,7 +13,7 @@ Girosi</a> and <a href="http://GKing.Harvard.edu">Gary King</a>
 <br /><br />
 
 <!-- rbuild: replace 'Version:' '</b>' version -->
-<b>Version:0.9-7</b>
+<b>Version:1.1-1</b>
 
 <table border='0' cellpadding='0' cellspacing='8'><tr><td valign='top' width='300'>
 <p> <span !style="float:left;padding:4px"> <img src="stoch.jpg"
@@ -77,10 +77,16 @@ or <a href="http://lists.hmdc.harvard.edu/lists/yourcast/" target="gkingext">Bro
 Archives</a>
 
 <li><a
-href="http://webapps.sph.harvard.edu/content/DeansDis.Lecture_9-29-05_2005-09-29_04-08-PM.htm" target="gkingext">Full
-Length Video introducing the book to a general audience without
-math</a> (if you
-    don't have Real Player installed, you'll get audio and slides only)
+href="http://webapps.sph.harvard.edu/content/DeansDis.Lecture_9-29-05_2005-09-29_04-08-PM.htm"
+target="gkingext">Full Length Video introducing the book to a general
+audience without math</a> (if you don't have Real Player installed,
+you'll get audio and slides only)</li>
+
+<li>
+<span class="orange"><strong>License:</strong></span> Creative Commons
+Attribution- Noncommercial-No Derivative Works 3.0 License, for
+academic use only.</li>
+
 </ul>
 
 </td>

@@ -73,7 +73,12 @@ timeplot <- function(x,geoname,dvlabel,cntryname,
   xp <- rep(c(as.integer(rownames(geoname$yhat))[nrow(geoname$yhat)],
             as.integer(rownames(geoname$yhat))[nrow(geoname$yhat)]+0.05*(max(as.integer(rownames(geoname$yhat)))-min(as.integer(rownames(geoname$yhat))))),
                 ncol(geoname$yhat)/2)
-  text(x=xp,y=yp,labels=colnames(geoname$yhat)[order(unlist(geoname$yhat[nrow(geoname$yhat),]))],
+  # If the age group labels are numeric, use numeric version to get
+  # rid of leading zeroes 
+  if(!any(is.na(try(as.numeric(colnames(geoname$yhat)))))) {
+    labels <- as.numeric(colnames(geoname$yhat))}
+  else{labels <- colnames(geoname$yhat)}
+  text(x=xp,y=yp,labels=labels[order(unlist(geoname$yhat[nrow(geoname$yhat),]))],
        pos=4,cex=0.85,col=rainbow(ncol(geoname$yhat))[order(unlist(geoname$yhat[nrow(geoname$yhat),]))])
 }
 
@@ -279,7 +284,6 @@ for(i in 1:length(geonames)) {
     if(!is.null(G.names)) {
        cntryname <- G.names[grep(uniquecsid[i],
                           G.names[,1]),2]}
-    #get(getOption("device"))()
     par(...)
     ageplot(x,get(geonames[i]),dvlabel,cntryname,
             age.insamp.predict,age.xlab,age.ylab)
@@ -347,7 +351,7 @@ for(i in 1:length(geonames)) {
     if(!is.null(G.names)) {
        cntryname <- G.names[grep(uniquecsid[i],
                           G.names[,1]),2]}
-    get(getOption("device"))(height=7,width=14)
+    dev.new(height=7,width=14)
     par(mfrow=c(1,2),...)
     timeplot(x,get(geonames[i]),dvlabel,cntryname,
              time.insamp.obs,time.insamp.predict,time.xlab,time.ylab)
@@ -390,7 +394,6 @@ for(i in 1:length(geonames)) {
                              screen=screen,
                              threedim.xlab,threedim.ylab,
                              threedim.zlab)
-    #get(getOption("device"))()
     par(...)
     plot(out.plot)
     if(i != length(geonames)) {

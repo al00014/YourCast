@@ -95,10 +95,11 @@ yourcast <- function(formula=NULL, dataobj=NULL,
                      low.pow=T, verbose=TRUE)
 {
  #USER INPUT ERROR CHECKING
+ # sma is not really needed (Ferdi) 
  #Load lpSolve package and print error if it is not available
-  if (!require(sma, quietly = TRUE))  {
-    stop("The sma package is required.\nInstall it from CRAN.")
-  }
+  #if (!require(sma, quietly = TRUE))  { 
+  #  stop("The sma package is required.\nInstall it from CRAN.")
+  #}
   guirun <- NULL ###provision to run the simulation with a GUI
 ### done with data input check model  
    
