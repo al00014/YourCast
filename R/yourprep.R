@@ -188,7 +188,9 @@ in R workspace.",sep=""))
   
   # If lag requested, create lag structure of 'lag' years within every
   # geographical area
-  if(!is.null(lag) && !is.na(lag)) {
+  if(!is.null(lag)) {
+
+    if(!is.numeric(lag)){stop("'lag' must be numeric")}
 
     # What is the response variable?
     formula <- as.formula(formula)
