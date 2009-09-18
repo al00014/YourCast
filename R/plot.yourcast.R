@@ -58,7 +58,7 @@ timeplot <- function(x,geoname,dvlabel,cntryname,
                   min(as.integer(rownames(geoname$yhat))))),
           ylim=ylim,
           main=paste(if(!is.null(dvlabel)){dvlabel},
-            if(!is.null(dvlabel)){", "},
+            if(!is.null(dvlabel) & !is.null(cntryname)){", "},
             if(!is.null(cntryname)){cntryname},sep=""))
  )
   
@@ -126,7 +126,7 @@ ageplot <- function(x,geoname,dvlabel,cntryname,
          col=col,xlab=age.xlab,ylab=age.ylab,
         ylim=ylim,
          main=paste(if(!is.null(dvlabel)){dvlabel},
-            if(!is.null(dvlabel)){", "},
+            if(!is.null(dvlabel) & !is.null(cntryname)){", "},
             if(!is.null(cntryname)){cntryname},sep=""))
                   )
 
@@ -197,7 +197,7 @@ threedimplot <- function(x,geoname,dvlabel,cntryname,
                    shade=TRUE,scales=list(arrows=F),
                    screen = screen,
                    main=paste(if(!is.null(dvlabel)){dvlabel},
-                     if(!is.null(dvlabel)){", "},
+                     if(!is.null(dvlabel) & !is.null(cntryname)){", "},
                      if(!is.null(cntryname)){cntryname},sep=""))
   return(out)
 }

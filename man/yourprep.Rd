@@ -256,7 +256,7 @@ in the input data.}}}}
 #Old working directory to be restored later
 oldwd <- getwd()
 # Now setting wd to 'data' folder in YourCast library
-setwd(paste(.find.package("YourCast"),"/data",sep=""))
+setwd(system.file("data",package="YourCast"))
 
 # Simple run of the function, using option that turns year variable
 # into label in each cs. Use sample.frame argument for all diagnostics
