@@ -249,6 +249,7 @@ in the input data.}}}}
 (\code{help(yourcast)})}
 
 \examples{
+\dontrun{
 # Working directory automatically set to directory with cross
 # section and auxiliary files to begin. Files for this example
 # in 'data' folder of YourCast library.
@@ -268,9 +269,10 @@ year.var=TRUE,verbose=TRUE,sample.frame=c(1950,2000,2001,2030))
 
 # With summary output (means of variables in each cross section) 
 
-\dontrun{dta <- yourprep(G.names="cntry.codes.txt",adjacency="adjacency.txt",
-year.var=TRUE,summary=TRUE)}
-
+%\dontrun{
+dta <- yourprep(G.names="cntry.codes.txt",adjacency="adjacency.txt",
+year.var=TRUE,summary=TRUE)
+%}
 
 # Function can also add datafiles already loaded into R as objects in
 # the workspace with "datalist" option if put into a list and properly
@@ -294,4 +296,5 @@ year.var=TRUE,verbose=TRUE,datalist=datalist)
 # Setting working directory back
 setwd(oldwd)
 rm(oldwd)
+}
 }
