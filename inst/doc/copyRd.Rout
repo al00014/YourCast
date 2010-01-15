@@ -1,5 +1,5 @@
 
-R version 2.9.2 (2009-08-24)
+R version 2.10.1 (2009-12-14)
 Copyright (C) 2009 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -21,7 +21,7 @@ Type 'q()' to quit R.
 > dir.create(file.path(wd,"Rd"))
 Warning message:
 In dir.create(file.path(wd, "Rd")) :
-  '/tmp/rbuild_18703/yourcast/YourCast/inst/doc/Rd' already exists
+  '/tmp/rbuild_17441/yourcast/YourCast/inst/doc/Rd' already exists
 > setwd(file.path(R.home(),"share/texmf"))
 > file.copy(dir(), file.path(wd,"Rd"),TRUE)
 [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
