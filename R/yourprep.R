@@ -15,7 +15,7 @@ reader <- function(filename,dpath,year.var,sample.frame,
     cs <- read.dta(paste(dpath,"/",filename,sep=""))
   }
   
-  else {stop(paste("File type for '",filename,"' not recognized. Please make sure your file is in '.txt', '.csv', or '.dta' format and has the extension in the filename. If using '.RData' format, please load objecs into list on workspace and use 'datalist' option",
+  else {stop(paste("File type for '",filename,"' not recognized. Please make sure your file is in '.txt', '.csv', or '.dta' format and has the extension in the filename. If using '.RData' format, please load objects into list on workspace and use 'datalist' option",
                    sep=""))}
 
   if(verbose) {cat(filename,"\n")}
@@ -62,11 +62,13 @@ reader <- function(filename,dpath,year.var,sample.frame,
 readerlite <- function(filename,dpath,verbose) {
   # What type of file is that data?
   if (length(grep(".txt",filename,ignore.case=TRUE))>0) {
-    cs <- read.table(paste(dpath,"/",filename,sep=""),header=TRUE)
+    cs <- read.table(paste(dpath,"/",filename,sep=""),header=TRUE,
+                     colClasses="character")
   }
 
   else if (length(grep(".csv",filename,ignore.case=TRUE))>0) {
-    cs <- read.csv(paste(dpath,"/",filename,sep=""),header=TRUE)
+    cs <- read.csv(paste(dpath,"/",filename,sep=""),header=TRUE,
+                   colClasses="character")
   }
 
   else if (length(grep(".dta",filename,ignore.case=TRUE))>0) {
@@ -76,6 +78,7 @@ readerlite <- function(filename,dpath,verbose) {
   else {stop(paste("File type for '",filename,"' not recognized. Please make sure your file is in '.txt', '.csv', or '.dta' format and has the extension in the filename.",
                    sep=""))}
   if(verbose) {cat(filename,"\n")}
+
   return(cs)
 }
 
@@ -85,13 +88,19 @@ readerlite <- function(filename,dpath,verbose) {
 
 splitter <- function(string,tag,index.code) {
 
-  # splitting object name
-  code <- as.numeric(gsub("[^[:digit:]^]","",string))
+  # splitting digits in center from rest of file name
+  code <- gsub("[^[:digit:]^]","",string)
   code <- substr(code,nchar(code)-nchar(index.code)+1,nchar(code))
+
+  # Check to see if have numeric code portion
+  if(is.na(as.numeric(code))){stop(paste("Cross section name after '",tag,
+                 "' tag and before extension is not numeric.",
+                 sep=""))}
+  
   
   # check whether cross section label is number with correct number
   # of digits
-   if(nchar(code)!=nchar(index.code) || is.na(as.numeric(code)))
+   if(nchar(code)!=nchar(index.code))
      {stop(paste("Cross section name after '",tag,
                  "' tag and before extension not ",
                  nchar(index.code),
@@ -108,7 +117,7 @@ yourprep <- function(dpath=getwd(),tag="csid",index.code="ggggaa",
                      sample.frame=NULL,summary=FALSE,verbose=FALSE,
 
                      #lagging utility
-                     lag=NULL,formula=NULL) {
+                     lag=NULL,formula=NULL,vars.nolag=NULL) {
   
   # grab the names of all the objects in the dpath with tag in
   # the name
@@ -201,6 +210,12 @@ in R workspace.",sep=""))
     if(length(grep("^index$",covars))>0) {index.add <- TRUE}
     covars <- covars[-grep("index",covars)]
 
+    # Are there any covariates that should not be lagged?
+    if(!is.null(vars.nolag)){
+      pos.nolag <- unlist(sapply(vars.nolag,grep,x=covars))
+      if(length(pos.nolag)>0){covars <- covars[-c(pos.nolag)]}
+    }
+
     years.tot <- sample.frame[1]:sample.frame[4]
     years.insamp <- sample.frame[1]:sample.frame[2]
     years.pred <- sample.frame[3]:sample.frame[4]
@@ -215,9 +230,13 @@ in R workspace.",sep=""))
 
     # Now have to separate out geographic areas and create lag
     # within each geographical area
-    data.geo <- lapply(geolist,lag.gen,data,split.index,N.g,lag,years.insamp,
-                       years.pred,years.lag,years.tot,sample.frame,response,
-                       covars,index.add)
+    data.geo <- lapply(geolist,lag.gen,data=data,
+                       split.index=split.index,N.g=N.g,
+                       lag,years.insamp=lag.years.insamp,
+                       years.pred=years.pred,years.lag=years.lag,
+                       years.tot=years.tot,sample.frame=sample.frame,
+                       response=response,covars=covars,index.add=index.add,
+                       vars.nolag=vars.nolag)
 
     data <- data.geo[[1]]
     if(length(data.geo)>1) {

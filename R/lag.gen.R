@@ -1,6 +1,6 @@
 lag.gen <- function(geolist.i,data,split.index,N.g,lag,years.insamp,
                     years.pred,years.lag,years.tot,sample.frame,response,
-                    covars,index.add) {
+                    covars,index.add,vars.nolag) {
   index.geo.i <- grep(paste("^",geolist.i,sep=""),names(data))
   geo.i <- data[index.geo.i]
   csids.i <- names(geo.i)
@@ -16,8 +16,19 @@ lag.gen <- function(geolist.i,data,split.index,N.g,lag,years.insamp,
   ages.lag[ages.lag<min(ages)] <- NA
   agelag.loc <- c()
   for(a in 1:length(ages)) {
-    if(is.na(ages.lag[a])) {agelag.loc <- NA}
-    else{agelag.loc[a] <- which(ages==ages.lag[a])}
+    if(is.na(ages.lag[a])){agelag.loc <- NA}
+    if(!is.na(ages.lag[a])){
+      find.age <- which(ages==ages.lag[a])
+      if(length(find.age)>0){agelag.loc[a] <- find.age}
+      if(length(find.age)==0){age.close <- which.min(abs(ages-ages.lag[a]))
+                              agelag.loc[a] <- age.close
+                              warning(paste("Could not find age",
+                                            ages.lag[a],
+                                            "data for age",ages[a],
+                                            "cohort in covariates to be lagged. Used data from age",
+                                            ages[age.close],"cohort instead."))
+                            }
+    }
   }
 
   # Isolate the response for each cross section in insample years
@@ -51,16 +62,39 @@ lag.gen <- function(geolist.i,data,split.index,N.g,lag,years.insamp,
                 grab <- unlist(sapply(covars,function(y){which(colnames(x)==y)}))
                 out <- x[as.character(years.lag),grab]
                 year.lag <- as.numeric(rownames(out))
-                out <- cbind(out,year.lag=years.lag)
+                out <- cbind(out,years.lag)
                 rownames(out) <- years.tot
+                colnames(out) <- c(covars,"year.lag")
                 return(out)},index.add=index.add)
 
   # Now take covariates from each cross section from lag period years
   # and put them in spot necessary to match with relevant response data
   covars.i.lag <- covars.i[agelag.loc]
 
+  # Deal with any covariates that will not be lagged
+  covars.nolag.i <- NULL
+  if(!is.null(vars.nolag)){
+    covars.nolag.i <- lapply(geo.i,function(x,vars.nolag){
+      grab <- unlist(sapply(vars.nolag,function(y){which(colnames(x)==y)}))
+      year.max <- max(as.numeric(rownames(x)))
+      if(year.max>=sample.frame[4]){
+        out <- x[as.character(years.tot),grab]}
+      if(year.max<sample.frame[4]){
+        years.have <- sample.frame[1]:year.max
+        nyears.miss <- length(years.tot)-length(years.have)
+        out <- x[as.character(years.have),grab]
+        na.add <- matrix(NA,nrow=nyears.list,ncol=length(grab))
+        out <- cbind(out,na.add)}
+       out <- as.matrix(out)
+      colnames(out) <- vars.nolag
+      rownames(out) <- years.tot
+      return(out)},
+                             vars.nolag=vars.nolag)
+  }
+
   # Now merge response data and lagged covariates
-  data.geo <- mapply(cbind,response.i,covars.i.lag,SIMPLIFY=FALSE)
+data.geo <- mapply(cbind,response.i,covars.i.lag,
+                   covars.nolag.i,SIMPLIFY=FALSE)
   # If 'index' variable included in formula, add an index to every
   # cross section
   if(index.add) {data.geo <- lapply(X=data.geo,FUN=cbind,

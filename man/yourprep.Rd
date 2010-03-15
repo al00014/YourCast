@@ -7,13 +7,13 @@
      function from files in working directory or other specified
      directory and checks for errors}
 
-\usage{yourprep(dpath=getwd(),tag="csid",index.code="ggggaa",
+   \usage{yourprep(dpath=getwd(),tag="csid",index.code="ggggaa",
                      datalist=NULL,G.names=NULL,A.names=NULL,
                      T.names=NULL,adjacency=NULL,year.var=FALSE,
                      sample.frame=NULL,summary=FALSE,verbose=FALSE,
 
                      #lagging utility
-                     lag=NULL,formula=NULL)}
+                     lag=NULL,formula=NULL,vars.nolag=NULL)}
 
 
 \arguments{
@@ -125,7 +125,7 @@
   current position is cross section files. See \sQuote{Details} for more
   information. Default: \code{NULL}}
 
-\item{formula}{The formula that one will use in the subsequent run of
+\item{formula}{Formula. The formula that one will use in the subsequent run of
   \code{yourcast()}. This helps the lagging utility distinguish between
   the response variable (which will not be shifted between cross
   sections) and the covariates of interest that should be lagged and
@@ -135,6 +135,11 @@
   the number of time periods since the start of the cross section.
   If a lag is requested, the formula argument must be specified.
   Default: \code{NULL}}
+
+\item{vars.nolag}{Vector of strings. Vector of variables to be included
+  in the dataobj but not lagged. These variables do not need to be
+  included in the formula, and if found there will not ignored when the
+  other covariates are lagged.}
 
       }
 
@@ -210,7 +215,11 @@
      younger than the length of the lag will not retain covariate data
      (except perhaps an \sQuote{index} variable) in the output
      object. The covariates lagged are the predictor variables specified
-     in the formula argument. 
+     in the formula argument.
+
+     If data for a cohort 25 years (in this case) younger is not
+     available for some cohort over age 25, \code{yourprep()} will look
+     for the closest cohort available and issue a warning message. 
    }
 
 

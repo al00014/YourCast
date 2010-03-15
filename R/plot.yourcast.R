@@ -146,7 +146,9 @@ ageplot <- function(x,geoname,dvlabel,cntryname,
                   )
 
   # plot legend
- range.xp <- quantile(as.numeric(ages),probs=c(0.08,0.33))
+ range.ages <- range(as.numeric(ages))
+ spread.ages <- range.ages[2]-range.ages[1]
+ range.xp <- c(range.ages[1]+spread.ages*0.08,range.ages[1]+spread.ages*0.33)
  xp <- seq(range.xp[1],range.xp[2],length=nrow(geoname$yhat))
  #xp <- seq(as.integer(ages)[2],
  #          as.integer(ages)[round(ncol(geoname$yhat)/3)],

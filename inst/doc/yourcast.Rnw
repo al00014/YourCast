@@ -5,6 +5,7 @@
 \usepackage{Rd/upquote}
 
 \usepackage[reqno]{amsmath}
+\usepackage{inputenc}
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{amssymb}

@@ -29,7 +29,7 @@ Rdfiles=`ls ../../man/*.Rd`
 for rd in ${Rdfiles}
   do
     newname=`basename ${rd} .Rd`
-    ${R_CMD} CMD Rdconv -t=latex ${rd} -o Rd/${newname}.tex
+    ${R_CMD} CMD Rdconv --type=latex ${rd} -o Rd/${newname}.tex
   
     ### basically replace "HeaderA" with "section*" 
     perl -i -pe 's#HeaderA{(.*)}{(.*)}{(.*)}#subsection{{\\tt \1}: \2}\\label{ss:\3}#i' Rd/${newname}.tex 
