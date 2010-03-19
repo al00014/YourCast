@@ -13,7 +13,8 @@ cat("Forecast period: ",sample.frame[3],"-",sample.frame[4],"\n",
     sep="")
 cat("\n")
 cat("Smoothing parameters:\n")
-print(x$params)
+names(x$params) <- c("Ha.sigma","Ht.sigma","Hat.sigma")
+print(round(x$params,4))
 
 cat("\n")
 cat("See 'help(plot.yourcast)' for instructions on how to plot observed and predicted 'y' values\n") }

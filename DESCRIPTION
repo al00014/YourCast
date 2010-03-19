@@ -1,6 +1,6 @@
 Package: YourCast
-Version: 1.1-7
-Date: 2010-03-15
+Version: 1.1-8
+Date: 2010-03-19
 Title: YourCast
 Author: Federico Girosi <girosi@rand.org> Gary King <king@harvard.edu>
         Jon Bischof <jbischof@fas.harvard.edu>
@@ -16,6 +16,6 @@ Description: YourCast makes time series cross-sectional forecasts with
         http://gking.harvard.edu/files/smooth/
 License: file LICENSE
 URL: http://gking.harvard.edu/yourcast
-Packaged: 2010-03-15 20:10:39 UTC; rbuild
+Packaged: 2010-03-19 19:37:16 UTC; rbuild
 Repository: CRAN
-Date/Publication: 2010-03-16 17:06:15
+Date/Publication: 2010-03-20 10:07:28

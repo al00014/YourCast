@@ -13,7 +13,7 @@ cat("Forecast period: ",x$sample.frame[3],"-",
 
 cat("\n")
 cat("Smoothing parameters:\n")
-print(x$params)
+print(round(x$params,4))
 
 cat("\n")
 cat("Geo units included:\n")

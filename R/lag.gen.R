@@ -93,8 +93,10 @@ lag.gen <- function(geolist.i,data,split.index,N.g,lag,years.insamp,
   }
 
   # Now merge response data and lagged covariates
-data.geo <- mapply(cbind,response.i,covars.i.lag,
-                   covars.nolag.i,SIMPLIFY=FALSE)
+  if(!is.null(covars.nolag.i)){data.geo <- mapply(cbind,response.i,covars.i.lag,
+                   covars.nolag.i,SIMPLIFY=FALSE)}
+  if(is.null(covars.nolag.i)){data.geo <- mapply(cbind,response.i,covars.i.lag,
+                   SIMPLIFY=FALSE)}
   # If 'index' variable included in formula, add an index to every
   # cross section
   if(index.add) {data.geo <- lapply(X=data.geo,FUN=cbind,
