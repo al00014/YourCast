@@ -8,7 +8,9 @@ geographical unit and prints to the device window or a .pdf file in
 the specified directory}
 
 \usage{
-\method{plot}{yourcast}(x, dpath=getwd(), dvlabel=NULL, family="agetime",
+\method{plot}{yourcast}(x, dpath=getwd(), dvlabel=NULL,
+                          family="agetime",
+                          args.matplot=list(),args.wireframe=list(),
                           time.insamp.obs=TRUE, time.insamp.predict=TRUE,
                           age.insamp.predict=TRUE,
                           threedim.insamp.predict=TRUE,
@@ -41,6 +43,24 @@ the specified directory}
      \code{"threedim"} creates a three-dimensional plot of the
      information in the \sQuote{"age"} and \sQuote{"time"}
      plots. Default: \code{"agetime"}}
+
+\item{args.matplot}{List. A list of arguments (must be labeled) to be
+  passed to \code{matplot}. For example, if wanted to turn change line
+  weight, could add \code{args.matplot=list(lwd=2)}. Does not apply to
+  plots of family \code{threedim}. In most cases users will
+  have to launch \code{age} and \code{time} plots separately for this
+  feature to work well. Note that some arguments to \code{matplot}
+  such as \code{xlab} and \code{main} should be made as arguments to
+  \code{plot.yourcast}; they will be overwritten if found in
+  \code{args.matplot}. For the moment, \code{main} is specified via the
+  \code{dvlabel} argument.}
+
+\item{args.wireframe}{List. A list of arguments (must be labeled) to be
+  passed to \code{wireframe}. This only applies to plots of the
+  \code{threedim} family. Note that some arguments to \code{wireframe}
+  such as \code{zlab} and \code{screen} should be made as arguments to
+  \code{plot.yourcast}; they will be overwritten if found in
+  \code{args.wireframe}.}
 
 \item{time.insamp.obs}{Logical. For \code{"time"} and \sQuote{time} plots in
      \code{"agetime"} plots, specifies whether observed values should be

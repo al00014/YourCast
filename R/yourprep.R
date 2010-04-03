@@ -232,7 +232,7 @@ in R workspace.",sep=""))
     # within each geographical area
     data.geo <- lapply(geolist,lag.gen,data=data,
                        split.index=split.index,N.g=N.g,
-                       lag,years.insamp=years.insamp,
+                       lag=lag,years.insamp=years.insamp,
                        years.pred=years.pred,years.lag=years.lag,
                        years.tot=years.tot,sample.frame=sample.frame,
                        response=response,covars=covars,index.add=index.add,

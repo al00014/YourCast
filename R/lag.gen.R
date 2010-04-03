@@ -83,7 +83,7 @@ lag.gen <- function(geolist.i,data,split.index,N.g,lag,years.insamp,
         years.have <- sample.frame[1]:year.max
         nyears.miss <- length(years.tot)-length(years.have)
         out <- x[as.character(years.have),grab]
-        na.add <- matrix(NA,nrow=nyears.list,ncol=length(grab))
+        na.add <- matrix(NA,nrow=nyears.miss,ncol=length(grab))
         out <- cbind(out,na.add)}
        out <- as.matrix(out)
       colnames(out) <- vars.nolag
