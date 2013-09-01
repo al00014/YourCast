@@ -25,8 +25,8 @@ chapter11.2 <- function()
     user.prompt()
     
     cat("\n")
-    cat("> plot(ylc, dvlabel=\"Respiratory Infections\",age.insamp.predict=FALSE)\n")
-    plot(ylc, dvlabel="Respiratory Infections",age.insamp.predict=FALSE)
+    cat("> plot(ylc, title=\"Respiratory Infections\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc, title="Respiratory Infections",age.opts=list(insamp.predict=FALSE))
    
     message("Now running yourcast with MAP model...")
     user.prompt()
@@ -45,8 +45,8 @@ chapter11.2 <- function()
     message("Generating the graphics for MAP...")
     user.prompt()
     
-    cat("> plot(ymap, dvlabel=\"Respiratory Infections\",age.insamp.predict=FALSE)\n")
-    plot(ymap, dvlabel="Respiratory Infections",age.insamp.predict=FALSE)
+    cat("> plot(ymap, title=\"Respiratory Infections\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ymap, title="Respiratory Infections",age.opts=list(insamp.predict=FALSE))
     
   }
 

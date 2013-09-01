@@ -51,7 +51,7 @@ counter to reach 500...")
   
   message("Generating the graphics for BAYES...")
   user.prompt()
-  plot(ybayes, dvlabel="Transportation Accidents")
+  plot(ybayes, title="Transportation Accidents")
   
   }
 

@@ -465,7 +465,7 @@ find.zero.eigen <- function(wcntry,only.values=T, eps= .Machine$double.eps){
 ###    res <- La.svd(wcntry,nv=0) 
 ###     eig.w <- res$d
 ###     eig.v <- res$u}
-       res <- eigen(wcntry,symmetric=TRUE,EISPACK=TRUE)
+       res <- eigen(wcntry,symmetric=TRUE)
        eig.w <- res$values;
        eig.w[eig.w <= 0] <-  .Machine$double.eps;
        eig.v <- res$vectors;
@@ -729,7 +729,7 @@ mean.age.profile <- function(ebase){
   ap.mean <- rep(0,n.age);
   for (i in 1:length(insampy)){
     y <- insampy[[i]];
-    ap <- mean(as.data.frame(y),na.rm=TRUE);
+    ap <- colMeans(as.data.frame(y),na.rm=TRUE);
     ap.mean <- ap.mean + ap;
   }
   ap.mean <- ap.mean/length(insampy);

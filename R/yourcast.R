@@ -262,7 +262,17 @@ yourcast <- function(formula=NULL, dataobj=NULL,
        dataobj <- parse.dataobj(rerun,env.base)
        objread <- TRUE
        load(rerun)
+       if(is.na(callst$formula)){
+         callst$formula <- formula
+       }
      }
+
+### check to make sure that formula is either NULL or formula class
+  if(class(formula) %in% c("formula")==FALSE){
+    stop("Please make sure that formula is either a 'formula' object (or set to 'NULL' if you are using a formula from a saved file).")
+  }
+
+
  
 ### done with data input check model  
   if(is.character(model))

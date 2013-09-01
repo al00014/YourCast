@@ -135,7 +135,7 @@ lc.model <-  function(mat,horizon){
 ### matbar is the centered log mortality matrix , and mbar is the centered
 ### log mortality matrix with  NA removed
 ###
-  mb <- mean(as.data.frame(m),na.rm=TRUE);
+  mb <- colMeans(as.data.frame(m),na.rm=TRUE);
   mbar <- scale(m,center = mb,scale=FALSE);
   matbar <-  scale(mat,center = mb,scale=FALSE);
 ###

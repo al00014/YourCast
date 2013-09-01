@@ -23,8 +23,8 @@ chapter11.11 <- function()
   
   message("Generating the graphics for OLS...")
   user.prompt()
-  cat("> plot(yols, dvlabel=\"Transportation Accidents\")\n")
-  plot(yols, dvlabel="Transportation Accidents")
+  cat("> plot(yols, title=\"Transportation Accidents\")\n")
+  plot(yols, title="Transportation Accidents")
  
   }
 

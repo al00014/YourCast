@@ -102,8 +102,8 @@ sections with more than 20 yearly observations used...")
    message("Generating the graphics for MAP...")
    user.prompt()
    
-   cat("> plot(ymap, dvlabel=\"Lung Cancer\")\n")
-   plot(ymap, dvlabel="Lung Cancer")
+   cat("> plot(ymap, title=\"Lung Cancer\")\n")
+   plot(ymap, title="Lung Cancer")
        
    
  }

@@ -41,8 +41,8 @@ chapter11.3 <- function()
     message("Generating the graphics for MAP...")
     user.prompt()
     
-    cat("> plot(ymap, dvlabel=\"Respiratory Infections\",age.insamp.predict=FALSE)\n")
-    plot(ymap, dvlabel="Respiratory Infections",age.insamp.predict=FALSE)
+    cat("> plot(ymap, title=\"Respiratory Infections\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ymap,title="Respiratory Infections",age.opts=list(insamp.predict=FALSE))
 
   }
 

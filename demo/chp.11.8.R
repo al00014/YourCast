@@ -104,8 +104,8 @@ time when using 'ebayes'...")
    message("Generating the graphics for MAP...")
    user.prompt()
    
-   cat("> plot(ymap, dvlabel=\"Lung Cancer\")\n")
-   plot(ymap, dvlabel="Lung Cancer")
+   cat("> plot(ymap, title=\"Lung Cancer\")\n")
+   plot(ymap, title="Lung Cancer")
 
    cat("\n")
    message("Loading Trinidad and Tobago data only; only can run one country at a
@@ -141,8 +141,8 @@ time when using 'ebayes'...")
    message("Generating the graphics for MAP...")
    user.prompt()
    
-   cat("> plot(ymap, dvlabel=\"Lung Cancer\")\n")
-   plot(ymap, dvlabel="Lung Cancer")
+   cat("> plot(ymap, title=\"Lung Cancer\")\n")
+   plot(ymap, title="Lung Cancer")
 
   }
 

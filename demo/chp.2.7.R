@@ -24,8 +24,8 @@ chapter2.7 <- function()
     message("Generating the graphics for LC...")
     user.prompt()
 
-    cat("> plot(ylc.suic,dvlabel=\"Male suicide\",age.insamp.predict=FALSE)\n")
-    plot(ylc.suic,dvlabel="Male suicide",age.insamp.predict=FALSE)
+    cat("> plot(ylc.suic,title=\"Male suicide\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc.suic,title="Male suicide",age.opts=list(insamp.predict=FALSE))
 
       
     message("Part 2: Female digestive disease, Hungary...\n")
@@ -50,8 +50,8 @@ chapter2.7 <- function()
     message("Generating the graphics for LC...")
     user.prompt()
 
-    cat("> plot(ylc.dgst,dvlabel=\"Female digestive disease\",age.insamp.predict=FALSE)\n")
-    plot(ylc.dgst,dvlabel="Female digestive disease",age.insamp.predict=FALSE)    
+    cat("> plot(ylc.dgst,title=\"Female digestive disease\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc.dgst,title="Female digestive disease",age.opts=list(insamp.predict=FALSE))    
     
     message("Part 3: Female cervix cancer, United Kingdom")
     user.prompt()
@@ -75,8 +75,8 @@ chapter2.7 <- function()
     message("Generating the graphics for LC...")
     user.prompt()
 
-    cat("> plot(ylc.cerv,dvlabel=\"Female cervix cancer\",age.insamp.predict=FALSE)\n")
-    plot(ylc.cerv,dvlabel="Female cervix cancer",age.insamp.predict=FALSE)
+    cat("> plot(ylc.cerv,title=\"Female cervix cancer\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc.cerv,title="Female cervix cancer",age.opts=list(insamp.predict=FALSE))
 
   }
 

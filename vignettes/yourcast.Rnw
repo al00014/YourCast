@@ -13,7 +13,7 @@
 \usepackage{stmaryrd}
 \usepackage{bbm}
 \usepackage{epsf}
-\usepackage{psfig}
+%\usepackage{psfig}
 %\usepackage{wcolor}
 \usepackage{textcomp} % for \texttrademark
 \usepackage{makeidx}
@@ -51,16 +51,21 @@
     comments, our thanks goes to Jon Bishof, Elena Villalon, and
     Nirmala Ravishankar.}}
 
-\author{Federico Girosi\thanks{Senior Policy Researcher, RAND
-    Corporation, (1700 Main Street, PO Box 2138, Santa Monica, CA
-    90407-2138; \texttt{http://www.ai.mit.edu/people/girosi/},
-    \texttt{girosi@rand.org}, (310) 393-0411 x7794)} \and
+\author{Federico Girosi\thanks{Associate Professor in Population Health, University of Western Sidney
+    , (Centre for Health Research, Building 3, Campbelltown Campus, Locked Bag 1797, Penrith NSW 2751, Australia;
+    \texttt{F.Girosi@uws.edu.au}, +61 2 9852 5222 x3605).},
 %
-Gary King\thanks{David Florence Professor of Government, Harvard
+Gary King\thanks{Albert J. Weatherhead III University Professor, Harvard
   University (Institute for Quantitative Social Science, 1737
   Cambridge Street, Harvard University, Cambridge MA 02138;
   \texttt{http://GKing.Harvard.Edu}, \texttt{King@Harvard.edu}, (617)
-  495-2027).}}
+  495-2027).}, and
+%
+Konstantin Kashin\thanks{Ph.D. Candidate, Harvard
+  University (Institute for Quantitative Social Science, 1737
+  Cambridge Street, Harvard University, Cambridge MA 02138;
+  \texttt{http://konstantinkashin.com}, \texttt{kkashin@fas.harvard.edu}, (617)
+  871-9884).}}
 
 \makeindex
 
@@ -484,32 +489,33 @@ information not printed automatically is available by typing
 We're now ready to plot the observed and predicted values to study the
 model output. This can be done simply by typing \code{plot(ylc)}, but
 we have added a few arguments here to enhance the graphical
-output. The argument \code{dvlabel} gives a title for the plots by
-describing the dependent variable. The second argument,
-\code{age.insamp.predict}, tells the function not to plot predicted
-\sQuote{yhat} values in sample in the \code{age} plots. You can see
+output. The argument \code{title} gives a title for the plots by
+describing the dependent variable. The argument
+\code{age.opts} allows us to pass options to the \code{age} plot in the form of a list object. For example, we can choose to not plot the predicted
+\sQuote{yhat} values in-sample through the \code{insamp.predict=FALSE} option. You can see
 more of these options by typing \code{help(plot.yourcast)}.
 
 \begin{verbatim}
-plot(ylc, dvlabel="Respiratory Infections", age.insamp.predict=FALSE)
+plot(ylc, title="Respiratory Infections", age.opts=list(insamp.predict=FALSE))
 \end{verbatim}
 
-Since we did not specify which type of plot we wanted, the program
-gave us the default combination of \code{age} and \code{time}
-plots. However, the plotting function can also do either of these
-plots separately, as well as three dimensional plots. To see these, we
-need to use the \code{family} argument. For example, here is a call
+Since we did not specify which type of plot we wanted, the default combination of
+\code{age} and \code{time} plots is returned.
+However, the plotting function can also do either of these
+plots separately, as well as three dimensional age-time plots, total count plots, and life expectancy at birth plots. To see these, we
+need to use the \code{plots} argument. For example, here is a call
 for the three dimensional plot:
 
 \begin{verbatim}
-plot(ylc, dvlabel="Respiratory Infections", family="threedim")
+plot(ylc,title="Respiratory Infections", plots="threedim")
 \end{verbatim}
 
 Finally, if your analysis includes a large number of geographic areas
 such that viewing output sequentially on the device is inconvenient,
 there an option in the plotting function to save the output for each
 geographic code as a \file{.pdf} file in the working directory rather
-than printing it to the device window. Just set \code{print="pdf"}.
+than printing it to the device window. Just set \code{print="pdf"} and pass
+filename and output directory options to the function as a list object using the \code{print.args} argument.
 
 This ends the example section of the users guide. Please visit the
 help files for individual functions or send an email to the YourCast
@@ -552,10 +558,11 @@ with the standard help command, such as \code{help(yourprep)}.
 \include{man-plot.yourcast}
 \include{man-histograph}
 \include{man-summary.yourcast}
+\include{man-lifetable}
+\include{man-array.yourcast}
 
 \bibliographystyle{plain}
 %\bibsep=0in
-\bibliography{gk.bib,gkpubs.bib}
+\bibliography{gk,gkpubs}
 
 \end{document}
-

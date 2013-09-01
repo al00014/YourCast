@@ -83,8 +83,8 @@ time when using 'ebayes'...")
   cat("\n") 
   message("Generating the graphics for OLS...")
   user.prompt()
-  cat("> plot(yols, dvlabel=\"Breast cancer\")\n")
-  plot(yols, dvlabel="Breast cancer")
+  cat("> plot(yols, title=\"Breast cancer\")\n")
+  plot(yols, title="Breast cancer")
 
   cat("\n")
   message("Now running yourcast with 'map' model; this may take several minutes")
@@ -116,8 +116,8 @@ time when using 'ebayes'...")
 
   message("Generating the graphics for MAP...")
   user.prompt()
-  cat("plot(ymap,dvlabel=\"Breast cancer\")\n")
-  plot(ymap,dvlabel="Breast cancer")
+  cat("plot(ymap,title=\"Breast cancer\")\n")
+  plot(ymap,title="Breast cancer")
  
   }
 

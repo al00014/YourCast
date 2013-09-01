@@ -23,8 +23,8 @@ chapter2.6 <- function()
     message("Generating the graphics for LC...")
     user.prompt()
 
-    cat("> plot(ylc.allc,dvlabel=\"All causes of death\",age.insamp.predict=FALSE)\n")
-    plot(ylc.allc,dvlabel="All causes of death",age.insamp.predict=FALSE)
+    cat("> plot(ylc.allc,title==\"All causes of death\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc.allc,title="All causes of death",age.opts=list(insamp.predict=FALSE))
    
 
     message("Part 2: Transportation accidents for males, Portugal")
@@ -48,8 +48,8 @@ chapter2.6 <- function()
     
     message("Generating the graphics for LC...")
     user.prompt()
-    cat("> plot(ylc.trns,dvlabel=\"Transportation accidents\",age.insamp.predict=FALSE)\n")
-    plot(ylc.trns,dvlabel="Transportation accidents",age.insamp.predict=FALSE)
+    cat("> plot(ylc.trns,title=\"Transportation accidents\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(ylc.trns,title="Transportation accidents", age.opts=list(insamp.predict=FALSE))
  
   }
 

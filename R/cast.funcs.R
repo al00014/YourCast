@@ -272,7 +272,7 @@ make.average.age.profile <- function(y,bycntry=FALSE, ebase=env.base){
   dy <- get("who.year.digits", envir=ewho)
 
   insampy <- list.by.cntry(y,who.digit.first=df,who.cntry.digits=dc, who.age.digits=da, who.year.digits=dy);
-  age.profile.list <- lapply(insampy,FUN=function(x){return(mean(as.data.frame(x),na.rm=TRUE))});
+  age.profile.list <- lapply(insampy,FUN=function(x){return(colMeans(as.data.frame(x),na.rm=TRUE))});
   result <- age.profile.list;
  
   if (!bycntry){

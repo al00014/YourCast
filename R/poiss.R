@@ -101,7 +101,7 @@ glm.poisson <- function(ebase=env.base){
     y0 <- yna[yna <= zero.tol]
     ly0 <- length(y0)
 ### obtain useful quantities for testing
-    ymean   <- mean(as.data.frame(ypop), na.rm=T)
+    ymean   <- colMeans(as.data.frame(ypop), na.rm=T)
     ypopbar <- rep(ymean, length(y))
 ### for testing
 ### yoff <- matrix(1, nrow=length(ypop))

@@ -25,8 +25,8 @@ chapter11.4 <- function()
     user.prompt()
     
     cat("\n")
-    cat("> plot(yols, dvlabel=\"Lung Cancer\",age.insamp.predict=FALSE)\n")
-    plot(yols, dvlabel="Lung Cancer",age.insamp.predict=FALSE)
+    cat("> plot(yols, title=\"Lung Cancer\",age.opts=list(insamp.predict=FALSE))\n")
+    plot(yols, title="Lung Cancer",age.opts=list(insamp.predict=FALSE))
    
   }
 

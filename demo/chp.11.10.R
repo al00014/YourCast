@@ -41,8 +41,8 @@ chapter11.10 <- function()
   message("Generating the graphics for MAP...")
   user.prompt()
 
-  cat("> plot(ymap, dvlabel=\"Breast Cancer\",family=\"time\")\n")
-  plot(ymap, dvlabel="Breast Cancer",family="time")
+  cat("> plot(ymap, title=\"Breast Cancer\",plots=\"age\")\n")
+  plot(ymap, title="Breast Cancer",plots="age")
   
   }
 

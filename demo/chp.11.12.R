@@ -46,8 +46,8 @@ chapter11.12 <- function()
   
   message("Generating the graphics for map...")
   user.prompt()
-  cat("> plot(ymap, dvlabel=\"Transportation Accidents\")\n")
-  plot(ymap, dvlabel="Transportation Accidents")
+  cat("> plot(ymap, title=\"Transportation Accidents\")\n")
+  plot(ymap, title="Transportation Accidents")
 
   }
 

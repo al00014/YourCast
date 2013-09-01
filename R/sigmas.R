@@ -232,7 +232,7 @@ plot.sigmas <- function(ols.result,show.adjusted=FALSE,graphdir=NA,compact=TRUE,
   ### the opposite so we can use the function mean, which explains the following contorsion:
   ###
 
-  err <- mean(as.data.frame(t(as.data.frame(err))));
+  err <- colMeans(as.data.frame(t(as.data.frame(err))));
 
   ###
   ### Now err is simply an age profile, with names given by age groups.
