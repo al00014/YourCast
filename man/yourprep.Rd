@@ -9,7 +9,7 @@
 
    \usage{yourprep(dpath=getwd(),tag="csid",index.code="ggggaa",
                      datalist=NULL,G.names=NULL,A.names=NULL,
-                     T.names=NULL,adjacency=NULL,year.var=FALSE,
+                     T.names=NULL,proximity=NULL,year.var=FALSE,
                      sample.frame=NULL,summary=FALSE,verbose=FALSE,
 
                      #lagging utility
@@ -69,7 +69,7 @@
 	  infromation. Default: \code{NULL}}
 
 
-\item{adjacency}{Data file with codes to construct the symmetric
+\item{proximity}{Data file with codes to construct the symmetric
           matrix (geographic region by geographic region) of proximity
           scores for geographic smoothing used by the \sQuote{map} and \sQuote{bayes}
           methods. The larger the relative score, the more proximate
@@ -191,7 +191,7 @@
      files will be automatically loaded by \code{yourprep()} if they are
      saved in the \code{dpath} and labeled with the tag specified by the
      user. The default names for these files must be used (e.g.,
-     \sQuote{G.names} and \sQuote{adjacency}). For example,
+     \sQuote{G.names} and \sQuote{proximity}). For example,
      if the \code{tag} is left as the default and there is a file in the
      \code{dpath} labeled \file{csid.G.names.txt}, \code{yourprep()}
      will load this
@@ -231,14 +231,10 @@
 
 \item{data}{A list with the cross-sectional data matrices as elements.}
 
-\item{proximity}{A symmetric matrix (geographic region by geographic
-region) of proximity scores for geographic smoothing used by the \sQuote{map}
-and \sQuote{bayes} methods. The larger each element of the matrix, the more
+\item{proximity}{A three-column matrix of proximity scores for geographic smoothing used by the \sQuote{map}
+and \sQuote{bayes} methods. For each row, the first two columns indicate the country pair. The third column indicates the proximity score. The larger each score, the more
 proximate that pair of countries is in the prior; a zero element means
-the two geographic areas are unrelated (the diagonal is ignored).
-Each element of the symmetric matrix is created from one row of the
-proximity input to \code{yourprep()} (which is two country codes and a
-proximity score).}
+the two geographic areas are unrelated (the diagonal is ignored).}
 
 \item{G.names, A.names, T.names}{Optional two-column dataframes that
 list all valid numerical codes (in the first column, labeled codes)
@@ -272,14 +268,14 @@ setwd(system.file("data",package="YourCast"))
 # into label in each cs. Use sample.frame argument for all diagnostics
 # to work
  
-dta <- yourprep(G.names="cntry.codes.txt",adjacency="adjacency.txt",
+dta <- yourprep(G.names="cntry.codes.txt", proximity="proximity.txt",
 year.var=TRUE,verbose=TRUE,sample.frame=c(1950,2000,2001,2030))
 
 
 # With summary output (means of variables in each cross section) 
 
 %\dontrun{
-dta <- yourprep(G.names="cntry.codes.txt",adjacency="adjacency.txt",
+dta <- yourprep(G.names="cntry.codes.txt", proximity ="proximity.txt",
 year.var=TRUE,summary=TRUE)
 %}
 
@@ -299,7 +295,7 @@ datalist <- list("123456"=csid204545,"234567"=csid204550,
 
 # Verbose option turned on and datalist argument added 
 
-dta <- yourprep(G.names="cntry.codes.txt",adjacency="adjacency.txt",
+dta <- yourprep(G.names="cntry.codes.txt", proximity="proximity.txt",
 year.var=TRUE,verbose=TRUE,datalist=datalist)
 
 # Setting working directory back

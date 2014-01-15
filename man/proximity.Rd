@@ -1,5 +1,5 @@
-\name{adjacency}
-\alias{adjacency}
+\name{proximity}
+\alias{proximity}
 
 \title{Proximity data for yourprep example}
 
@@ -9,7 +9,7 @@
   hdl:1902.1/UOVMCPSWOL UNF:3:9JU+SmVyHgwRhAKclQ85Cg== Murray Research Archive  
 }
 
-\usage{data(adjacency)}
+\usage{data(proximity)}
 
 \format{
   A fixed width \file{.txt} file.}
