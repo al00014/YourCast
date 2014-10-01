@@ -1,6 +1,6 @@
 Package: YourCast
-Version: 1.6.1
-Date: 2014-01-15
+Version: 1.6.2
+Date: 2014-10-01
 Title: Forecasting age-sex-country-cause mortality rates
 Author: Federico Girosi <girosi@rand.org>  
          Gary King <king@harvard.edu>
@@ -18,7 +18,7 @@ Description: Software accompanying the book by Girosi and King: Demographic Fore
 License: GPL (>= 2)
 URL: http://gking.harvard.edu
 Copyright: (C) 2007-2013. Federico Girosi and Gary King.
-Packaged: 2014-01-16 18:47:39 UTC; Kostya
+Packaged: 2014-10-06 12:10:54 UTC; Kostya
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2014-01-16 20:17:49
+Date/Publication: 2014-10-06 15:09:16

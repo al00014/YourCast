@@ -1,7 +1,7 @@
-822d965ba960d9afc88bfadaa590dfd2 *DESCRIPTION
+74e399111e85ef677957805189dbc09e *DESCRIPTION
 8de44bfaea764a7fb79d4a47caefab4a *NAMESPACE
 09e6e6a22cfd21fbbc094c7b5bb82efc *R/WHO.R
-2aad0c4ccf0a2b74273ddd3e69e35f6b *R/array.yourcast.R
+6fc6a2fd06ccdd5967de23636d02d808 *R/array.yourcast.R
 1966157e527437a2e853f58c12ce01e9 *R/build.from.formula.R
 a942bb05742e945cdc8902a590907d6a *R/buildlag.R
 e4e17887a073b82f05d7da0a33f0fa0a *R/cast.funcs.R
@@ -90,8 +90,8 @@ a8e287b779e44016aad94e695cef118e *demo/chp.11.2.R
 2dd5e523ff521d8f7339eec8c9137080 *demo/chp.2.6.R
 1c82787a2ae4f4f696bce46e6cfb13d4 *demo/chp.2.7.R
 e541b633d2e6d69ed21fa8b30b1566e5 *inst/doc/YourCast.Rnw
-6a3eedeb14053bbfc5822fcc5eea2241 *inst/doc/YourCast.pdf
-a774b08973d2c389398333f3f0b96dde *man/array.yourcast.Rd
+6c5f3aaf07828c3b40096e1f61aa88d3 *inst/doc/YourCast.pdf
+dd599e56619e33e5ed7227027b6ca1a4 *man/array.yourcast.Rd
 58f4068d80c5a8cafc56c77fc9b8973d *man/chp.11.1.Rd
 df33648a41ef72c458228a5fbb400a04 *man/chp.11.10.Rd
 ad771dd49673794e8f65c80f8540f800 *man/chp.11.11.Rd
@@ -133,7 +133,7 @@ b3905719a9ad392bd397c21f56662702 *man/csid204570.Rd
 1c2e51a1f0f4fd0cfa8f436e9307ea93 *man/csid204580.Rd
 21247ee21099bd96e4e125b072e386bb *man/histograph.Rd
 ad4febdc55480c905fe73e9ac1ed20ff *man/lifetable.Rd
-a509db0846340078d67d59934baacd53 *man/plot.yourcast.Rd
+a34a24dcc25381a78f92babdbdde8758 *man/plot.yourcast.Rd
 a23df0a3225faa645f51dc2924f9bf09 *man/print.summary.yourcast.Rd
 30096707d4b06798c249f7ae94473fd3 *man/print.yourcast.Rd
 070130032fa8677964ce6f010a76239a *man/print.yourprep.Rd
